@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "movie-ticket-booking-webapp": {
+      "hosting": {
+        "movie-ticket-booking-webapp": [
+          "movie-ticket-booking-webapp"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "movie-ticket-booking-webapp"
+  }
+}

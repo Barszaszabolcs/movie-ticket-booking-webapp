@@ -1,0 +1,15 @@
+<div class="flex flex-col justify-center items-center text-center h-screen bg-black">
+    <h1 class="text-white text-3xl">Login my boi!</h1>
+    <mat-form-field class="m-3 w-1/2">
+        <mat-label for="email">Email: </mat-label>
+        <input matInput type="text" [formControl]="email">
+    </mat-form-field>
+    <mat-form-field class="m-3 w-1/2">
+        <mat-label for="password">Jelszó: </mat-label>
+        <input matInput type="password" [formControl]="password">
+    </mat-form-field>
+    <span>
+        <button mat-raised-button color="primary" class="mx-3" (click)="login()">Bejelentkezés</button>
+        <button mat-raised-button color="primary" class="mx-3" [routerLink]="'/registration'">Regisztráció</button>
+    </span>
+</div>

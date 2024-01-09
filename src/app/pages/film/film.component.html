@@ -1,0 +1,45 @@
+<div class="h-screen bg-black">
+    <div class="flex items-center justify-center flex-wrap h-full" *ngIf="chosenFilm">
+        <mat-card class="w-full h-5/6 m-3" fxLayout>
+            <div class="h-full w-1/2" fxLayout="column" fxFlex="1 1 50%">
+                <mat-card-header class="h-full">
+                    <mat-card-title>{{chosenFilm}}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="basis-full h-0"></div>
+                    <img class="w-3/4 h-auto" [src]="'assets/images/' + chosenFilm + '.jpg'" alt="">
+                    <div class="basis-full h-0"></div>
+                </mat-card-content>
+            </div>
+            <mat-card-actions fxFlex="1 1 50%">
+                <form class="w-full m-10" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
+                    <mat-form-field class="my-2 w-full">
+                        <mat-label for="username">Felhasználónév: </mat-label>
+                        <input matInput type="text" formControlName="username"/>
+                    </mat-form-field>
+                    <mat-form-field class="my-2 w-full">
+                        <mat-label for="comment">Vélemény: </mat-label>
+                        <textarea matInput cols="50" rows="10" formControlName="comment"></textarea>
+                    </mat-form-field>
+                    <span>
+                        <button mat-raised-button color="primary" type="submit">ADD</button>
+                    </span>
+                </form>
+            </mat-card-actions>
+        </mat-card>
+        <div class="text-white" *ngIf="comments.length > 0">
+            <table class="border border-solid border-white">
+                <tr>
+                    <th class="border border-solid border-white">Felhasználó</th>
+                    <th class="border border-solid border-white">Komment</th>
+                    <th class="border border-solid border-white">Dátum</th>
+                </tr>
+                <tr *ngFor="let comment of comments; let i = index;" [ngClass]="i % 2 === 0 ? 'bg-slate-300' : 'bg-orange-600'">
+                <td class="border border-solid border-white">{{comment.username}}</td> 
+                <td class="border border-solid border-white">{{comment.comment}}</td> 
+                <td class="border border-solid border-white">{{comment.date | dateFormat}}</td> 
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

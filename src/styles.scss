@@ -1,4 +1,121 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "../node_modules/@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$my-red-palette: (
+ 50: #ffe7e6,
+ 100:  #ffc7b8,
+ 200: #ffa28a,
+ 300: #ff795b,
+ 400: #FF2626,
+ 500: #ff200c,
+ 600: #ff1507,
+ 700: #ff0000,
+ 800: #f10000,
+ 900: #da0000,
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: rgba(black, 0.87),
+   400: white,
+   500: white,
+   600: white,
+   700: white,
+   800: white,
+   900: white,
+ )
+);
+
+$my-gold-palette: (
+ 50: #fffde5,
+ 100:  #fff9c0,
+ 200: #fff595,
+ 300: #fef167,
+ 400: #fcec3f,
+ 500: #fae700,
+ 600: #ffd900,
+ 700: #ffc000,
+ 800: #ffa700,
+ 900: #fe7a00,
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: rgba(black, 0.87),
+   400: rgba(black, 0.87),
+   500: rgba(black, 0.87),
+   600: rgba(black, 0.87),
+   700: rgba(black, 0.87),
+   800: white,
+   900: white,
+ )
+);
+
+$my-black-palette: (
+ 50: #f5f5f5,
+ 100:  #e9e9e9,
+ 200: #d9d9d9,
+ 300: #c4c4c4,
+ 400: #9d9d9d,
+ 500: #7b7b7b,
+ 600: #555555,
+ 700: #434343,
+ 800: #262626,
+ 900: #000000,
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: rgba(black, 0.87),
+   400: white,
+   500: white,
+   600: white,
+   700: white,
+   800: white,
+   900: white,
+ )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$my-primary: mat-palette($my-gold-palette, 700);
+$my-accent: mat-palette($my-black-palette, 600);
+
+// The warn palette is optional (defaults to red).
+$my-warn: mat-palette($my-red-palette, 700);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$my-theme: mat-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($my-theme);
+
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/tailwindcss/base';
 @import '../node_modules/tailwindcss/components';
 @import '../node_modules/tailwindcss/utilities';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+}

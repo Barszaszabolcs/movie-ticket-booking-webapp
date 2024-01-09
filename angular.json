@@ -97,6 +97,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "movie-ticket-booking-webapp:build:production",
+            "firebaseProject": "movie-ticket-booking-webapp",
+            "firebaseHostingSite": "movie-ticket-booking-webapp"
+          }
         }
       }
     }

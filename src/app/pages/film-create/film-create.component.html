@@ -1,0 +1,44 @@
+<div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="bg-[#9d9d9d] rounded-lg w-1/2 my-10">
+        <form class="mx-20 my-10" [formGroup]="filmForm" (ngSubmit)="createFilm()" fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field class="w-full">
+                <mat-label for="title">Cím: </mat-label>
+                <input matInput type="text" formControlName="title">
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label for="movie_length">Hossz(percben): </mat-label>
+                <input matInput type="number" min="30" max="300" formControlName="movie_length" value="120">
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label for="title">Összegzés: </mat-label>
+                <textarea matInput cols="30" rows="10" formControlName="summary"></textarea>
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label for="age_limit">Korhatár: </mat-label>
+                <input matInput type="number" min="0" max="18" formControlName="age_limit" value="18">
+            </mat-form-field>
+            <div class="grid grid-cols-3 grid-flow-row w-full bg-white rounded-lg">
+                <div *ngFor="let genre of allGenres" formArrayName="chosenGenres">
+                    <!-- <input type="checkbox" value="{{genre}}" id="{{genre}}" (change)="handleGenres($event)">
+                    <label for="{{genre}}">{{genre}}</label> -->
+                    <mat-checkbox color="primary" (change)="handleGenres($event)" value="{{genre}}">{{genre}}</mat-checkbox>
+                </div>
+            </div>
+            <mat-form-field class="w-full mt-5">
+                <mat-label for="director">Rendező: </mat-label>
+                <input matInput type="text" formControlName="director">
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label for="actors">Színészek: </mat-label>
+                <textarea matInput cols="30" rows="10" formControlName="actors"></textarea>
+            </mat-form-field>
+            <div class="w-full">
+                <label for="cover_url">Borítókép: </label>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" formControlName="cover_url" required/>
+            </div>
+            <span>
+                <button mat-raised-button color="primary" class="mt-5" type="submit" >Létrehozás</button>
+            </span>
+        </form>
+    </div>
+</div>
