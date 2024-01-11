@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Genres } from '../../shared/constants/constants';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Film } from '../../shared/models/Film';
+import { AngularFireStorage } from '@angular/fire/compat/storage'
+import { FilmService } from '../../shared/services/film.service';
 
 @Component({
   selector: 'app-film-create',
@@ -10,8 +12,8 @@ import { Film } from '../../shared/models/Film';
 })
 export class FilmCreateComponent {
 
-  imageFile?: any;
-  imageFilePath?: string;
+  coverImageFile?: any;
+  coverImageFilePath?: string;
 
   allGenres = Genres;
   genres: string[] = [];
@@ -28,7 +30,7 @@ export class FilmCreateComponent {
     actors: '',
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private fireStorage: AngularFireStorage, private filmService: FilmService) {}
 
   createForm(model: any) {
     let filmGroup = this.formBuilder.group(model);
@@ -44,8 +46,7 @@ export class FilmCreateComponent {
 
   handleGenres(event: any) {
     let genreArray = this.filmForm.get('chosenGenres') as FormArray;
-    // console.log(event.checked);
-    // console.log(event.source.value);
+
     if (event.checked) {
       genreArray.push(new FormControl(event.source.value));
     }
@@ -65,51 +66,62 @@ export class FilmCreateComponent {
 
   async onFileSelected(event: any) {
     if (this.filmForm.valid) {
-      this.imageFile = event.target.files[0];
+      this.coverImageFile = event.target.files[0];
     } else {
       event.target.value = '';
     }
   }
 
-  createFilm() {
-    if (this.filmForm.valid) {
-      if (this.filmForm.get('title') && this.filmForm.get('summary') && this.filmForm.get('director') && this.filmForm.get('actors')) {
-        this.filmForm.get('creation_date')?.setValue(new Date());
+  async createFilm() {
 
-        let tzOffset = (new Date()).getTimezoneOffset() * 60000;
-        let minOffset = new Date().getTime() - tzOffset
-        let localISOTime = (new Date(minOffset)).toISOString().replaceAll(':', '-').replace('Z', '').replace('T', ' ').split('.')[0].replaceAll(' ', '-');
+    let genreArray = this.filmForm.get('chosenGenres') as FormArray;
+    if (genreArray.length === 0) {
+      console.log("EGY MŰFAJT LEGALÁBB KI KELL VÁLASZTANI");
+    } else if (genreArray.length >= 5) {
+      console.log("EGY FILMNEK MAXIMUM 5 MŰFAJA LEHET");
+    }
 
-        let filmObject: Film = {
-          id: '',
-          title: this.filmForm.get('title')?.value as string,
-          movie_length: this.filmForm.get('movie_length')?.value as number,
-          summary: this.filmForm.get('summary')?.value as string,
-          age_limit: this.filmForm.get('age_limit')?.value as number,
-          cover_url: 'images/' +  localISOTime + '.png',
-          genres: this.genres,
-          director: this.filmForm.get('director')?.value as string,
-          actors: this.filmForm.get('actors')?.value as string,
-          creation_date: new Date(),
-          ratings: this.ratings
-        }
+    if (this.filmForm.valid && this.coverImageFile && genreArray.length > 0 && genreArray.length <= 5) {
+      this.filmForm.get('creation_date')?.setValue(new Date());
 
-        let genreArray = this.filmForm.get('chosenGenres') as FormArray;
-        genreArray.controls.forEach((genre: any) => {
-          filmObject.genres.push(genre.value as string);
-        })
+      let tzOffset = (new Date()).getTimezoneOffset() * 60000;
+      let minOffset = new Date().getTime() - tzOffset
+      let localISOTime = (new Date(minOffset)).toISOString().replaceAll(':', '-').replace('Z', '').replace('T', ' ').split('.')[0].replaceAll(' ', '-');
 
-        this.imageFilePath = 'images/' + localISOTime + '.png';
+      let filmObject: Film = {
+        id: '',
+        title: this.filmForm.get('title')?.value as string,
+        movie_length: this.filmForm.get('movie_length')?.value as number,
+        summary: this.filmForm.get('summary')?.value as string,
+        age_limit: this.filmForm.get('age_limit')?.value as number,
+        cover_url: 'images/' +  localISOTime + '.png',
+        genres: this.genres,
+        director: this.filmForm.get('director')?.value as string,
+        actors: this.filmForm.get('actors')?.value as string,
+        creation_date: new Date(),
+        ratings: this.ratings
+      };
 
-        if (filmObject.genres.length === 0) {
-          console.log("EGY MŰFAJT LEGALÁBB KI KELL VÁLASZTANI");
-        } else if (filmObject.genres.length >= 5) {
-          console.log("EGY FILMNEK MAXIMUM 5 MŰFAJA LEHET");
-        }
-        
-        console.log(filmObject);
-        console.log(this.imageFilePath);
+      genreArray.controls.forEach((genre: any) => {
+        filmObject.genres.push(genre.value as string);
+      });
+
+      this.coverImageFilePath = 'images/' + localISOTime + '.png';
+      const fileUploadTask = this.fireStorage.upload(this.coverImageFilePath, this.coverImageFile);
+
+      try {
+        await fileUploadTask;
+      } catch(error) {
+        console.error(error);
       }
+
+      await this.filmService.create(filmObject).then(_ => {
+        console.log("SIKERES FILM LÉTREHOZÁS");
+        filmObject.genres.length = 0;
+      }).catch(error => {
+        console.error(error);
+        filmObject.genres.length = 0;
+      });
     }
   }
 }
