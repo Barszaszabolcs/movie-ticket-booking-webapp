@@ -29,4 +29,8 @@ export class FilmService {
   loadCoverImage(coverUrl: string) {
     return this.fireStorage.ref(coverUrl).getDownloadURL();
   }
+
+  update(film: Film){
+    return this.angularFirestore.collection<Film>(this.collectionName).doc(film.id).set(film);
+  }
 }

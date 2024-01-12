@@ -1,12 +1,10 @@
 export interface Comment {
-    // Kikommentezett reszek kesobb fognak kelleni
-    // id: string;
+    id: string;
     username: string;
+    date: number;
+    rating: number;
     comment: string;
-    date: Date;
-    // Ezt meg nem tudom milyen tipusu lesz
-    // rating: any;
-    // filmId: string;
-    // userId: string;
-    // moderatorId: string;
+    filmId: string;
+    userId: string;
+    moderatorId?: string;
 }

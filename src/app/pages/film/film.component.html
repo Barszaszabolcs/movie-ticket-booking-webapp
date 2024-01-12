@@ -23,11 +23,12 @@
         </div>
     </mat-card>
     <div>
-        <form class="w-full m-10" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
+        <form class="w-full m-10 bg-white" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
             <mat-form-field class="my-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>
-                <input matInput type="text" formControlName="username"/>
+                <input matInput type="text" readonly="true" [value]="user?.username"/>
             </mat-form-field>
+            <star-rating [value]="1" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="24px" [readonly]="false" (rate)="onRate($event)"></star-rating>
             <mat-form-field class="my-2 w-full">
                 <mat-label for="comment">Vélemény: </mat-label>
                 <textarea matInput cols="50" rows="10" formControlName="comment"></textarea>

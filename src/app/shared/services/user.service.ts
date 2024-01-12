@@ -14,4 +14,8 @@ export class UserService {
   create(user: User) {
     return this.angularFirestore.collection<User>(this.collectionName).doc(user.id).set(user);
   }
+
+  getById(id: string) {
+    return this.angularFirestore.collection<User>(this.collectionName, ref => ref.where('id', '==', id)).valueChanges();
+  }
 }

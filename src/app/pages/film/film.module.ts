@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { RatingModule } from 'ng-starrating';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
-    MatButtonModule
+    MatButtonModule,
+    RatingModule
   ]
 })
 export class FilmModule { }
