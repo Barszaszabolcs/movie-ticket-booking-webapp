@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Comment } from '../../shared/models/Comment';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Film } from '../../shared/models/Film';
+import { FilmService } from '../../shared/services/film.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-film',
@@ -10,7 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FilmComponent {
 
-  chosenFilm: string = '';
+  chosenFilm?: Film;
+  coverUrl?: string;
   comments: Array<Comment> = [];
 
   commentsForm = this.createForm({
@@ -19,12 +23,20 @@ export class FilmComponent {
     date: new Date()
   });
 
-  constructor(private fb: FormBuilder, private actRoute: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private actRoute: ActivatedRoute, private filmService: FilmService) {
   }
 
   ngOnInit(): void {
     this.actRoute.params.subscribe((param: any) => {
-      this.chosenFilm = param.chosenFilm as string;
+      this.filmService.loadFilmMetaById(param.chosenFilm).pipe(take(1)).subscribe(data => {
+        this.chosenFilm = data[0];
+
+        if (this.chosenFilm) {
+          this.filmService.loadCoverImage(this.chosenFilm.cover_url).subscribe(data => {
+            this.coverUrl = data;
+          })
+        }
+      })
     })
   }
 

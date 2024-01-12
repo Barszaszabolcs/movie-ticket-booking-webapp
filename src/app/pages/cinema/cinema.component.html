@@ -1,11 +1,11 @@
 <div class="grid grid-cols-3 grid-flow-row gap-4 justify-items-center bg-black">
-    <div class="w-3/4" *ngFor="let obj of filmObject">
-        <div class="flex items-center justify-center flex-wrap" *ngIf="filmObject">
+    <div class="w-3/4" *ngFor="let film of films">
+        <div class="flex items-center justify-center flex-wrap" *ngIf="films">
             <div>
-                <p class="text-white">{{obj.title}}</p>
+                <p class="text-white">{{film.title}}</p>
             </div>
             <div class="basis-full h-0"></div>
-            <a class="w-full h-auto" [routerLink]="'/film/' + obj.id"><img class="w-full h-auto" [src]="'assets/images/' + obj.id + '.jpg'" alt=""></a>
+            <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-full h-auto" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>
             <div class="basis-full h-0"></div>
         </div>
     </div>
