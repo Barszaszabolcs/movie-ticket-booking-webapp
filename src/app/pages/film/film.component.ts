@@ -22,6 +22,8 @@ export class FilmComponent implements OnInit{
   coverUrl?: string;
   comments: Array<Comment> = [];
 
+  averageRating = 0;
+
   commentsForm = this.createForm({
     rating: 1,
     comment: '',
@@ -48,6 +50,12 @@ export class FilmComponent implements OnInit{
           this.commentService.getCommentsByFilmId(this.chosenFilm.id).subscribe(data => {
             this.comments = data;
           });
+
+          let sum = 0;
+          for (let index = 0; index < this.chosenFilm.ratings.length; index++) {
+            sum += this.chosenFilm.ratings[index];
+          }
+          this.averageRating = sum / this.chosenFilm.ratings.length;
         }
       });
     });

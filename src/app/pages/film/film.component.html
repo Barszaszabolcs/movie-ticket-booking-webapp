@@ -1,55 +1,66 @@
 <div class="flex items-center justify-center flex-wrap h-full bg-black" *ngIf="chosenFilm">
-    <mat-card class="w-full h-5/6 m-3" fxLayout>
-        <div class="h-full w-full" fxLayout="column" fxFlex="1 1 50%">
-            <mat-card-content>
-                <img class="h-auto w-1/2" [src]="coverUrl" alt="{{chosenFilm.title}}">
+    <mat-card class="w-4/5 h-5/6 m-3" fxLayout style="background-color: black;">
+        <div class="h-full w-full" fxLayout="column" fxFlex="1 1 33%">
+            <mat-card-content fxLayout="column" fxLayoutAlign="center center" >
+                <div class="w-full mb-5">
+                    <p class="text-left text-white mr-2" fxFlex="1 1 30%" fxFlexAlign="center">Korhatár: {{chosenFilm.age_limit}}</p>
+                    <star-rating [value]="averageRating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="#9d9d9d" size="22px" [readonly]="true" fxFlex="1 1 40%"></star-rating>
+                    <div fxFlex="1 1 30%" fxLayout="row" fxLayoutAlign="end center">
+                        <mat-icon style="color: white;">access_time</mat-icon>
+                        <p class="ml-1 text-white">{{chosenFilm.movie_length}} perc</p>
+                    </div>
+                </div>
+                <img class="border-solid border-4 border-white rounded-md shadow-[0px_0px_9px_1px_rgba(0,0,0,0.75)] shadow-[#ffc000]" [src]="coverUrl" alt="{{chosenFilm.title}}">
             </mat-card-content>
         </div>
-        <div fxFlex="1 1 50%">
-            <mat-card-header class="my-3" fxLayout="row">
-                <p class="text-left" fxFlex="1 1 33%" fxFlexAlign="end">Korhatár: {{chosenFilm.age_limit}}</p>
-                <h1 class="text-center text-3xl" fxFlex="1 1 33%">{{chosenFilm.title}}</h1>
-                <p class="text-right" fxFlex="1 1 33%" fxFlexAlign="end">{{chosenFilm.movie_length}} perc</p>
+        <div fxFlex="1 1 67%">
+            <mat-card-header class="my-3 w-full">
+                <h1 class="w-full text-center text-white text-4xl">{{chosenFilm.title}}</h1>
             </mat-card-header>
             <mat-card-content>
-                <p class="my-3">{{chosenFilm.summary}}</p>
-                <div class="my-3" fxLayout="row" fxLayoutAlign="start center">
+                <p class="my-3 text-xl text-white">{{chosenFilm.summary}}</p>
+                <div class="border-solid border border-white"></div>
+                <div class="my-3 text-xl text-white" fxLayout="row" fxLayoutAlign="start center">
                     <p>Műfajok: </p>
                     <p class="mx-2" *ngFor="let genre of chosenFilm.genres">{{genre}}</p>
                 </div>
-                <p class="my-3">Rendező: {{chosenFilm.director}}</p>
-                <p class="my-3">Színészek: {{chosenFilm.actors}}</p>
+                <div class="border-solid border border-white"></div>
+                <p class="my-3 text-xl text-white">Rendező: {{chosenFilm.director}}</p>
+                <div class="border-solid border border-white"></div>
+                <p class="my-3 text-xl text-white">Színészek: {{chosenFilm.actors}}</p>
+                <div class="border-solid border border-white"></div>
             </mat-card-content>
         </div>
     </mat-card>
-    <div>
-        <form class="w-full m-10 bg-white" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
-            <mat-form-field class="my-2 w-full">
+    <div class="w-4/5 bg-[#434343]">
+        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
+            <mat-form-field class="mt-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>
-                <input matInput type="text" readonly="true" [value]="user?.username"/>
+                <input matInput class="w-11/12" type="text" readonly="true" [value]="user?.username"/>
             </mat-form-field>
-            <star-rating [value]="1" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="24px" [readonly]="false" (rate)="onRate($event)"></star-rating>
+            <star-rating class="mb-3" [value]="1" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="false" (rate)="onRate($event)"></star-rating>
             <mat-form-field class="my-2 w-full">
                 <mat-label for="comment">Vélemény: </mat-label>
-                <textarea matInput cols="50" rows="10" formControlName="comment"></textarea>
+                <textarea matInput cols="50" rows="3" formControlName="comment"></textarea>
             </mat-form-field>
-            <span>
-                <button mat-raised-button color="primary" type="submit">ADD</button>
+            <span class="w-full">
+                <button mat-raised-button class="w-full" color="primary" type="submit">Megjegyzés</button>
             </span>
         </form>
-    </div>
-    <div class="text-white" *ngIf="comments.length > 0">
-        <table class="border border-solid border-white">
-            <tr>
-                <th class="border border-solid border-white">Felhasználó</th>
-                <th class="border border-solid border-white">Komment</th>
-                <th class="border border-solid border-white">Dátum</th>
-            </tr>
-            <tr *ngFor="let comment of comments; let i = index;" [ngClass]="i % 2 === 0 ? 'bg-slate-300' : 'bg-orange-600'">
-            <td class="border border-solid border-white">{{comment.username}}</td> 
-            <td class="border border-solid border-white">{{comment.comment}}</td> 
-            <td class="border border-solid border-white">{{comment.date | dateFormat}}</td> 
-            </tr>
-        </table>
+        <div class="mt-5" *ngIf="comments.length > 0">
+            <h2 class="ml-5 text-2xl text-white font-medium">MÁSOK VÉLEMÉNYE:</h2>
+            <mat-card class="m-5" *ngFor="let comment of comments" style="background-color: #9d9d9d;">
+                <mat-card-header>
+                    <h3 class="text-xl text-black font-semibold">{{ comment.username }}</h3>
+                </mat-card-header>
+                <mat-card-content>
+                    <div fxFlex="1 1 85%">
+                        <p class="mt-2 text-black font-medium">{{ comment.comment }}</p>
+                        <p class="mt-2 text-black text-sm">{{ comment.date | dateFormat }}</p>
+                    </div>
+                    <star-rating class="mt-2 ml-4" [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" fxFlex="1 1 15%"></star-rating>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </div>

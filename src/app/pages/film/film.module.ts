@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { RatingModule } from 'ng-starrating';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { RatingModule } from 'ng-starrating';
     MatInputModule,
     FlexLayoutModule,
     MatButtonModule,
+    MatIconModule,
     RatingModule
   ]
 })
