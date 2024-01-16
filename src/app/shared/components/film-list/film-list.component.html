@@ -1,0 +1,11 @@
+<div class="w-full" *ngIf="films" fxLayout="row" fxLayoutAlign="space-around center">
+    <div>
+        <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
+    </div>
+    <div *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+        <img class="w-[150px] h-auto" [src]="getCoverUrl(film)" alt="{{film.title}}">
+    </div>
+    <div>
+        <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
+    </div>
+</div>

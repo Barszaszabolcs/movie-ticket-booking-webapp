@@ -1,3 +1,26 @@
-<div class="flex flex-col justify-center text-center h-screen text-3xl bg-black">
-    <h1 class="text-white">Welcome to my Cinema boi!</h1>
+<div class="bg-black" fxLayout="column" fxLayoutAlign="space-around center">
+    <div class="w-4/5 mb-5">
+        <h2 class="text-2xl text-white">Akció filmek</h2>
+    </div>
+    <div class="w-full mb-10">
+        <app-film-list [genre]="'Akció'"></app-film-list>
+    </div>
+    <div class="w-4/5 mb-5">
+        <h2 class="text-2xl text-white">Drámák</h2>
+    </div> 
+    <div class="w-full mb-10">
+        <app-film-list [genre]="'Dráma'"></app-film-list>
+    </div>
+    <div class="w-4/5 mb-5">
+        <h2 class="text-2xl text-white">Animációs filmek</h2>
+    </div>
+    <div class="w-full mb-10">
+        <app-film-list [genre]="'Animáció'"></app-film-list>
+    </div>
+    <div class="w-4/5 mb-5">
+        <h2 class="text-2xl text-white">Horror filmek</h2>
+    </div>
+    <div class="w-full mb-10">
+        <app-film-list [genre]="'Horror'"></app-film-list>
+    </div>
 </div>

@@ -26,6 +26,10 @@ export class FilmService {
     return this.angularFirestore.collection<Film>(this.collectionName, ref => ref.where('id', '==', id)).valueChanges();
   }
 
+  loadFilmMetaByGenre(genre: string) {
+    return this.angularFirestore.collection<Film>(this.collectionName, ref => ref.where('genres', 'array-contains', genre)).valueChanges();
+  }
+
   loadCoverImage(coverUrl: string) {
     return this.fireStorage.ref(coverUrl).getDownloadURL();
   }
