@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FilmListComponent } from '../../shared/components/film-list/film-list.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NgImageSliderModule } from 'ng-image-slider';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
     MainRoutingModule,
     FlexLayoutModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    NgImageSliderModule
   ]
 })
 export class MainModule { }
