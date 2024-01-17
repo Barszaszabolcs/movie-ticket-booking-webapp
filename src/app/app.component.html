@@ -10,28 +10,28 @@
         </button>
       </div>
       <div fxLayout fxLayoutAlign="space-around start" >
-        <p class="font-bold mr-2">CAMPUS CINEMA</p> 
-        <mat-icon>movie</mat-icon>
+        <p class="mr-2 text-2xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
+        <mat-icon class="mt-1" color="primary">local_movies</mat-icon>
       </div>
       <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
         <ul fxLayout fxLayoutGap="10px" class="list-none p-0 m-0">
           <li *ngIf="!(loggedInUser)">
-            <a routerLink="/login" class="hover:text-[#FF0000] active:text-yellow-300">Bejelentkezés</a>
+            <a routerLink="/login" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Bejelentkezés</a>
           </li>
           <li *ngIf="loggedInUser">
-            <a routerLink="/main" class="hover:text-[#FF0000] active:text-yellow-300" (click)="logout()">Kijelentkezés</a>
+            <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]" (click)="logout()">Kijelentkezés</a>
           </li>
           <li>
-            <a routerLink="/registration" class="hover:text-[#FF0000] active:text-yellow-300">Regisztráció</a>
+            <a routerLink="/registration" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Regisztráció</a>
           </li>
           <li>
-            <a routerLink="/main" class="hover:text-[#FF0000] active:text-yellow-300">Főoldal</a>
+            <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>
           <li>
-            <a routerLink="/cinema" class="hover:text-[#FF0000] active:text-yellow-300">Cinema</a>
+            <a routerLink="/cinema" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Cinema</a>
           </li>
           <li>
-            <a routerLink="/film-create" class="hover:text-[#FF0000] active:text-yellow-300">Film létrehozás</a>
+            <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
           </li>
         </ul>
       </div>
