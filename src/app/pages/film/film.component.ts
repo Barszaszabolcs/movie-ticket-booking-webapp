@@ -8,6 +8,7 @@ import { take } from 'rxjs';
 import { CommentService } from '../../shared/services/comment.service';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/User';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-film',
@@ -29,7 +30,10 @@ export class FilmComponent implements OnInit{
     comment: '',
   });
 
-  constructor(private fb: FormBuilder, private actRoute: ActivatedRoute, private filmService: FilmService, private commentService: CommentService, private userService: UserService) {
+  constructor(
+    private fb: FormBuilder, private actRoute: ActivatedRoute,
+    private filmService: FilmService, private commentService: CommentService,
+    private userService: UserService, private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -84,18 +88,20 @@ export class FilmComponent implements OnInit{
         moderatorId: ''
       }
 
-      this.commentService.create(comment).then(_ => {
-        console.log("SIKERES KOMMENTÁLÁS");
-        
+      this.commentService.create(comment).then(_ => {  
         this.chosenFilm?.ratings.push(comment.rating);
         this.filmService.update(this.chosenFilm as Film).then(_ => {
-          console.log("SIKERES FILMÉRTÉKELÉS");
+          this.toastr.success('Sikeres filmértékelés!', 'Kommentálás');
         }).catch(error => {
           console.error("SIKERTELEN FILMÉRTÉKELÉS: " + error);
+          this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
         });
       }).catch(error => {
         console.error('SIKERTELEN KOMMENTÁLÁS: ' + error);
+        this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
       });
+    } else {
+      this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
     }
   }
 }

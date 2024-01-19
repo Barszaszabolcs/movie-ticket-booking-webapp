@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthService } from './shared/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit{
 
   loggedInUser?: firebase.default.User | null;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.routes = this.router.config.map(conf => conf.path) as string[];
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit{
 
   logout(_?: boolean) {
     this.authService.logout().then(_ => {
-      console.log('Sikeres kijelentkezés');
+      this.toastr.success('Sikeres kijelentkezés!', 'Kijelentkezés');
     }).catch(error => {
       console.error(error);
     });

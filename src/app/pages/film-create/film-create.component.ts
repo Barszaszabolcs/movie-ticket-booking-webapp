@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Film } from '../../shared/models/Film';
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { FilmService } from '../../shared/services/film.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-film-create',
@@ -30,7 +31,9 @@ export class FilmCreateComponent {
     actors: '',
   });
 
-  constructor(private formBuilder: FormBuilder, private fireStorage: AngularFireStorage, private filmService: FilmService) {}
+  constructor(
+    private formBuilder: FormBuilder, private fireStorage: AngularFireStorage,
+    private filmService: FilmService, private toastr: ToastrService) {}
 
   createForm(model: any) {
     let filmGroup = this.formBuilder.group(model);
@@ -75,14 +78,8 @@ export class FilmCreateComponent {
   async createFilm() {
 
     let genreArray = this.filmForm.get('chosenGenres') as FormArray;
-    if (genreArray.length === 0) {
-      console.log("EGY MŰFAJT LEGALÁBB KI KELL VÁLASZTANI");
-    } else if (genreArray.length >= 5) {
-      console.log("EGY FILMNEK MAXIMUM 5 MŰFAJA LEHET");
-    }
 
-    if (this.filmForm.valid && this.coverImageFile && genreArray.length > 0 && genreArray.length <= 5) {
-      this.filmForm.get('creation_date')?.setValue(new Date());
+    if (this.filmForm.valid && this.coverImageFile && genreArray.length > 0 && genreArray.length <= 6) {
 
       let tzOffset = (new Date()).getTimezoneOffset() * 60000;
       let minOffset = new Date().getTime() - tzOffset
@@ -113,15 +110,25 @@ export class FilmCreateComponent {
         await fileUploadTask;
       } catch(error) {
         console.error(error);
+        this.toastr.error('Sikertelen képfeltöltés!', 'Film létrehozás');
       }
 
       await this.filmService.create(filmObject).then(_ => {
-        console.log("SIKERES FILM LÉTREHOZÁS");
+        this.toastr.success('Sikeres film létrehozás!', 'Film létrehozás');
         filmObject.genres.length = 0;
       }).catch(error => {
         console.error(error);
+        this.toastr.error('Sikertelen film létrehozás!', 'Film létrehozás');
         filmObject.genres.length = 0;
       });
+    } else {
+      if (genreArray.length === 0) {
+        this.toastr.error('Egy műfajt legalább ki kell választani!', 'Film létrehozás');
+      } else if (genreArray.length > 6) {
+        this.toastr.error('Egy filmnek maximum 6 műfaja lehet!', 'Film létrehozás');
+      } else {
+        this.toastr.error('Sikertelen film létrehozás!', 'Film létrehozás');
+      }
     }
   }
 }
