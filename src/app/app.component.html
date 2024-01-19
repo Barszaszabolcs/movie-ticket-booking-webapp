@@ -21,14 +21,14 @@
           <li *ngIf="loggedInUser">
             <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]" (click)="logout()">Kijelentkezés</a>
           </li>
-          <li>
+          <li *ngIf="!(loggedInUser)">
             <a routerLink="/registration" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Regisztráció</a>
           </li>
-          <li>
+          <li *ngIf="!(loggedInUser)">
             <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>
-          <li>
-            <a routerLink="/cinema" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Cinema</a>
+          <li *ngIf="loggedInUser">
+            <a routerLink="/cinema" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>
           <li>
             <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>

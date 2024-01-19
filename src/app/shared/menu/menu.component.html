@@ -7,17 +7,17 @@
         <mat-icon>logout</mat-icon>
         <span>Kijelentkezés</span>
     </a>
-    <a mat-list-item routerLink="/registration" (click)="close()">
+    <a mat-list-item routerLink="/registration" (click)="close()" *ngIf="!(loggedInUser)">
         <mat-icon>app_registration</mat-icon>
         <span>Regisztráció</span>
     </a>
-    <a mat-list-item routerLink="/main" (click)="close()">
+    <a mat-list-item routerLink="/main" (click)="close()" *ngIf="!(loggedInUser)">
         <mat-icon>home</mat-icon>
         <span>Főoldal</span>
     </a>
-    <a mat-list-item routerLink="/cinema" (click)="close()">
+    <a mat-list-item routerLink="/cinema" (click)="close()" *ngIf="loggedInUser">
         <mat-icon>movie</mat-icon>
-        <span>Cinema</span>
+        <span>Főoldal</span>
     </a>
     <a mat-list-item routerLink="/film-create" (click)="close()">
         <mat-icon>movie</mat-icon>

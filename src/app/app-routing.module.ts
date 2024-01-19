@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/services/auth.guard';
+import { ReverseAuthGuard } from './shared/services/reverse-auth.guard';
 
 const routes: Routes = [
   {
@@ -19,11 +20,13 @@ const routes: Routes = [
   },
   { 
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canActivate: [ReverseAuthGuard]
   },
   { 
     path: 'registration',
-    loadChildren: () => import('./pages/registration/registration.module').then(m => m.RegistrationModule)
+    loadChildren: () => import('./pages/registration/registration.module').then(m => m.RegistrationModule),
+    canActivate: [ReverseAuthGuard]
   },
   {
     path: 'film-create',

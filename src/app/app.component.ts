@@ -54,8 +54,14 @@ export class AppComponent implements OnInit{
   logout(_?: boolean) {
     this.authService.logout().then(_ => {
       this.toastr.success('Sikeres kijelentkezés!', 'Kijelentkezés');
+      localStorage.setItem('user', JSON.stringify(null));
+      this.navigate();
     }).catch(error => {
       console.error(error);
     });
+  }
+
+  navigate() {
+    this.router.navigateByUrl('/main');
   }
 }

@@ -16,6 +16,8 @@ export class LoginComponent {
     password: ''
   });
 
+  loggedInUser?: firebase.default.User | null;
+
   constructor(private router: Router, private authService: AuthService, private formBuilder: FormBuilder, private toastr: ToastrService) {}
 
   createForm(model: any) {
@@ -29,7 +31,14 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.get('email')?.value as string, this.loginForm.get('password')?.value as string).then(_ => {
         this.toastr.success('Sikeres bejelentkezés!', 'Bejelentkezés');
-        this.navigate();
+        this.authService.isUserLoggedIn().subscribe(user => {
+          this.loggedInUser = user;
+          localStorage.setItem('user', JSON.stringify(this.loggedInUser));
+          this.navigate();
+        }, error => {
+          console.error(error);
+          localStorage.setItem('user', JSON.stringify(null));
+        });
       }).catch(error => {
         this.toastr.error('Rossz jelszó vagy email!', 'Bejelentkezés');
         console.error(error);
