@@ -33,6 +33,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule)
   },
   {
+    path: 'screening-create',
+    loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule)
+  },
+  {
     path: '',
     redirectTo: '/main',
     pathMatch: 'full'

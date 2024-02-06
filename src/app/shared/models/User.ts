@@ -7,4 +7,5 @@ export interface User {
         lastname: string;
     }
     role: string;
+    cinemaId?: string;
 }

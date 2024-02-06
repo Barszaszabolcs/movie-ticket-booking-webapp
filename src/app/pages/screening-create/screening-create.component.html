@@ -1,0 +1,52 @@
+<div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="w-full my-10" fxLayout="column" fxLayoutAlign="space-around center">
+        <div class="w-4/5 h-full" *ngIf="films" fxLayout="row" fxLayoutAlign="space-around center">
+            <div>
+                <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
+            </div>
+            <div *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+                <div class="w-full h-full rounded-lg">
+                    <img class="w-[112px] h-[168px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}" (click)="chooseFilm(film.id)">
+                </div>
+            </div>
+            <div>
+                <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
+            </div>
+        </div>
+        <div class="bg-[#9d9d9d] rounded-lg w-1/2 my-10">
+            <form class="mx-20 my-10" [formGroup]="screeningForm" (ngSubmit)="createScreening()" fxLayout="column" fxLayoutAlign="space-around center">
+                <mat-form-field>
+                    <mat-label for="day">Nap: </mat-label>
+                    <mat-select formControlName="day" (selectionChange)="daySelected()">
+                      <mat-option *ngFor="let date of week" [value]="date"> {{ date | date:'EE, MMM d'}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="selectedDay">
+                    <mat-label for="time">Óra: </mat-label>
+                    <mat-select formControlName="time">
+                      <mat-option *ngFor="let hour of selectedDayHours" [value]="hour"> {{ hour | date: 'EE, MMM d, HH:mm' }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-full mt-5">
+                    <mat-label for="film_title">Film címe: </mat-label>
+                    <input matInput type="text" [value]="chosenFilm?.title" formControlName="film_title">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label for="screening_length">Hossz(percben): </mat-label>
+                    <input matInput type="number" [value]="screeningTime" formControlName="screening_length">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label for="language">Nyelv: </mat-label>
+                    <mat-select formControlName="language">
+                      <mat-option value="magyar">Magyar</mat-option>
+                      <mat-option value="english">English</mat-option>
+                      <mat-option value="japanese">Japanese</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <span>
+                    <button mat-raised-button color="primary" class="mt-5" type="submit" >Létrehozás</button>
+                </span>
+            </form>
+        </div>
+    </div>
+</div>
