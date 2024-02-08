@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Film } from '../../shared/models/Film';
-import { FilmService } from '../../shared/services/film.service';
-import { take } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs';
+
+import { User } from '../../shared/models/User';
+import { Film } from '../../shared/models/Film';
+import { Cinema } from '../../shared/models/Cinema';
+import { Auditorium } from '../../shared/models/Auditorium';
+import { FilmService } from '../../shared/services/film.service';
+import { UserService } from '../../shared/services/user.service';
+import { CinemaService } from '../../shared/services/cinema.service';
+import { AuditoriumService } from '../../shared/services/auditorium.service';
 
 @Component({
   selector: 'app-screening-create',
@@ -10,6 +17,11 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./screening-create.component.scss']
 })
 export class ScreeningCreateComponent implements OnInit{
+  
+  user?: User;
+  
+  cinema?: Cinema;
+  auditoriums: Array<Auditorium> = [];
 
   films?: Array<Film>;
   loadedCoverImages: Array<string> = [];
@@ -23,7 +35,7 @@ export class ScreeningCreateComponent implements OnInit{
 
   selectedDay?: Date;
   week = new Array(7).fill(new Date());
-  selectedDayHours = new Array(5).fill(new Date())
+  selectedDayHours = new Array(6).fill(new Date())
 
   screeningForm = this.createForm({
     auditoriumId: '',
@@ -34,9 +46,29 @@ export class ScreeningCreateComponent implements OnInit{
     language: ''
   });
 
-  constructor(private filmService: FilmService, private formBuilder: FormBuilder) {}
+  constructor(
+    private filmService: FilmService, private cinemaService: CinemaService,
+    private userService: UserService, private auditoriumService: AuditoriumService,
+    private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
+    this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
+      this.user = data[0];
+
+      if (this.user) {
+        this.cinemaService.getById(this.user.cinemaId).pipe(take(1)).subscribe(data => {
+          this.cinema = data[0];
+
+          if (this.cinema) {
+            this.auditoriumService.getAuditoriumsByCinemaId(this.cinema.id).subscribe(data => {
+              this.auditoriums = data;
+            });
+          }
+        });
+      }
+    });
+
     this.films = [];
     this.loadedCoverImages = [];
     this.filmService.loadFilmMeta().subscribe((data: Array<Film>) => {
@@ -62,7 +94,7 @@ export class ScreeningCreateComponent implements OnInit{
 
   createForm(model: any) {
     let screeningGroup = this.formBuilder.group(model);
-    //screeningGroup.get('auditoriumId')?.addValidators([Validators.required]);
+    screeningGroup.get('auditoriumId')?.addValidators([Validators.required]);
     screeningGroup.get('day')?.addValidators([Validators.required]);
     screeningGroup.get('time')?.addValidators([Validators.required]);
     //screeningGroup.get('film_title')?.addValidators([Validators.required]);
@@ -125,7 +157,7 @@ export class ScreeningCreateComponent implements OnInit{
   // Függvény a kiválasztott nap óráit tartalmazó tömb létrehozásához
   createHoursArray(selectedDate: Date): Date[] {
     const hoursArray: Date[] = [];
-    const hoursToAdd = [8, 11, 14, 17, 20];
+    const hoursToAdd = [7, 10, 13, 16, 19, 22];
 
     // Órák hozzáadása a tömbhöz
     hoursToAdd.forEach(hour => {
@@ -144,10 +176,12 @@ export class ScreeningCreateComponent implements OnInit{
   createScreening() {
     if (this.screeningForm.valid) {
       if (this.chosenFilm) {
+        console.log(this.cinema?.town);
         console.log(this.chosenFilm.title);
         console.log(this.screeningForm.get('time')?.value);
         console.log(this.screeningTime);
         console.log(this.screeningForm.get('language')?.value);
+        console.log(this.screeningForm.get('auditoriumId')?.value);
       } else {
         console.error('VÁLASSZ EGY FILMET!')
       }
@@ -155,4 +189,6 @@ export class ScreeningCreateComponent implements OnInit{
       console.error('whats up?');
     }
   }
+
+  auditoriumSelected() {}
 }

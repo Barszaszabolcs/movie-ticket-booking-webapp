@@ -55,7 +55,8 @@ export class RegistrationComponent {
               firstname: this.registerForm.get('name.firstname')?.value,
               lastname: this.registerForm.get('name.lastname')?.value
             },
-            role: 'user'
+            role: 'user',
+            cinemaId: ''
           }
           this.userService.create(user).then(_ => {
             this.toastr.success('Sikeres regisztráció!', 'Regisztráció');

@@ -14,7 +14,17 @@
             </div>
         </div>
         <div class="bg-[#9d9d9d] rounded-lg w-1/2 my-10">
+            <div class="m-5" *ngIf="cinema" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon>location_on</mat-icon>
+                <p class="text-2xl">{{cinema.town}}</p>
+            </div>
             <form class="mx-20 my-10" [formGroup]="screeningForm" (ngSubmit)="createScreening()" fxLayout="column" fxLayoutAlign="space-around center">
+                <mat-form-field>
+                    <mat-label for="auditoriumId">Terem: </mat-label>
+                    <mat-select formControlName="auditoriumId" (selectionChange)="auditoriumSelected()">
+                      <mat-option *ngFor="let auditorium of auditoriums" [value]="auditorium.id"> {{ auditorium.hall_number }}-s terem</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field>
                     <mat-label for="day">Nap: </mat-label>
                     <mat-select formControlName="day" (selectionChange)="daySelected()">
