@@ -1,5 +1,8 @@
 <div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="w-full my-10" fxLayout="column" fxLayoutAlign="space-around center">
+        <div class="w-4/5 h-full" *ngIf="!chosenFilm">
+            <h1 class="text-white text-4xl">Válassz egy filmet!</h1>
+        </div>
         <div class="w-4/5 h-full" *ngIf="films" fxLayout="row" fxLayoutAlign="space-around center">
             <div>
                 <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
@@ -19,13 +22,13 @@
                 <p class="text-2xl">{{cinema.town}}</p>
             </div>
             <form class="mx-20 my-10" [formGroup]="screeningForm" (ngSubmit)="createScreening()" fxLayout="column" fxLayoutAlign="space-around center">
-                <mat-form-field>
+                <mat-form-field *ngIf="chosenFilm">
                     <mat-label for="auditoriumId">Terem: </mat-label>
                     <mat-select formControlName="auditoriumId" (selectionChange)="auditoriumSelected()">
                       <mat-option *ngFor="let auditorium of auditoriums" [value]="auditorium.id"> {{ auditorium.hall_number }}-s terem</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field>
+                <mat-form-field *ngIf="selectedAuditorium">
                     <mat-label for="day">Nap: </mat-label>
                     <mat-select formControlName="day" (selectionChange)="daySelected()">
                       <mat-option *ngFor="let date of week" [value]="date"> {{ date | date:'EE, MMM d'}}</mat-option>
@@ -34,7 +37,7 @@
                 <mat-form-field *ngIf="selectedDay">
                     <mat-label for="time">Óra: </mat-label>
                     <mat-select formControlName="time">
-                      <mat-option *ngFor="let hour of selectedDayHours" [value]="hour"> {{ hour | date: 'EE, MMM d, HH:mm' }}</mat-option>
+                      <mat-option *ngFor="let hour of notUsedAppointments" [value]="hour"> {{ hour | date: 'EE, MMM d, HH:mm' }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="w-full mt-5">

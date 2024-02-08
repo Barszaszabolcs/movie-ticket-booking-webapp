@@ -16,6 +16,10 @@ export class AuditoriumService {
     return this.angularFirestore.collection<Auditorium>(this.collectionName).doc(auditorium.id).set(auditorium);
   }
 
+  getById(id: string){
+    return this.angularFirestore.collection<Auditorium>(this.collectionName, ref => ref.where('id', '==', id)).valueChanges();
+  }
+
   getAuditoriumsByCinemaId(cinemaId: string){
     return this.angularFirestore.collection<Auditorium>(this.collectionName, ref => ref.where('cinemaId', '==', cinemaId).orderBy('hall_number', 'asc')).valueChanges();
   }
