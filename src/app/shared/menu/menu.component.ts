@@ -10,6 +10,7 @@ export class MenuComponent {
   @Output() selectedPage: EventEmitter<string> = new EventEmitter();
   @Output() onCloseSidenav: EventEmitter<boolean> = new EventEmitter();
   @Input() loggedInUser?: firebase.default.User | null;
+  @Input() isAdmin?: boolean;
   @Output() onLogout: EventEmitter<boolean> = new EventEmitter();
 
   menuSwitch() {

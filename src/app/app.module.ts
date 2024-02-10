@@ -46,8 +46,7 @@ import { ToastrModule } from 'ngx-toastr';
     provideFunctions(() => getFunctions()),
     provideStorage(() => getStorage()),
     ToastrModule.forRoot({
-      timeOut: 3200,
-      progressBar: true,
+      timeOut: 3000
     })
   ],
   providers: [],

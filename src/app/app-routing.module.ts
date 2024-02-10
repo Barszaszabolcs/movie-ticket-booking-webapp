@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/services/auth.guard';
 import { ReverseAuthGuard } from './shared/services/reverse-auth.guard';
+import { AdminGuard } from './shared/services/admin.guard';
 
 const routes: Routes = [
   {
@@ -35,7 +36,7 @@ const routes: Routes = [
   {
     path: 'screening-create',
     loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, AdminGuard]
   },
   {
     path: '',

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { AuthService } from './shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from './shared/services/user.service';
+import { User } from './shared/models/User';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +19,10 @@ export class AppComponent implements OnInit{
   routes: Array<string> = [];
 
   loggedInUser?: firebase.default.User | null;
+  user?: User;
+  isAdmin = false;
 
-  constructor(private router: Router, private authService: AuthService, private toastr: ToastrService) {}
+  constructor(private router: Router, private authService: AuthService, private userService: UserService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.routes = this.router.config.map(conf => conf.path) as string[];
@@ -31,6 +35,18 @@ export class AppComponent implements OnInit{
     this.authService.isUserLoggedIn().subscribe(user => {
       this.loggedInUser = user;
       localStorage.setItem('user', JSON.stringify(this.loggedInUser));
+      if (this.loggedInUser) {
+        this.userService.getById(this.loggedInUser.uid).pipe(take(1)).subscribe(data => {
+          this.user = data[0];
+          if (this.user) {
+            if (this.user.role === 'admin') {
+              this.isAdmin = true;
+            } else {
+              this.isAdmin = false;
+            }
+          }
+        });
+      }
     }, error => {
       console.error(error);
       localStorage.setItem('user', JSON.stringify(null));
