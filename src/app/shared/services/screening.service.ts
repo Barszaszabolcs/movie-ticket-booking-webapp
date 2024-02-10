@@ -21,6 +21,10 @@ export class ScreeningService {
     return this.angularFirestore.collection<Screening>(this.collectionName).valueChanges();
   }
 
+  getScreeningsByAuditoriumIdAndDay(auditoriumId: string, day: number):Observable<Array<Screening>> {
+    return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('auditoriumId', '==', auditoriumId).where('day', '==', day).orderBy('time', 'asc')).valueChanges();
+  }
+
   getScreeningsByAuditoriumIdAndFilmIdAndDay(auditoriumId: string, filmId: string, day: number):Observable<Array<Screening>> {
     return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('auditoriumId', '==', auditoriumId).where('filmId', '==', filmId).where('day', '==', day).orderBy('time', 'asc')).valueChanges();
   }

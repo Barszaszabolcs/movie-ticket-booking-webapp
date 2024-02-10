@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
@@ -13,6 +13,7 @@ import { UserService } from '../../shared/services/user.service';
 import { CinemaService } from '../../shared/services/cinema.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 import { AuditoriumService } from '../../shared/services/auditorium.service';
+import { Genres } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-screening-create',
@@ -24,13 +25,21 @@ export class ScreeningCreateComponent implements OnInit{
   // bejelentkezett admin
   user?: User;
   
+  // az összes műfaj
+  genres = Genres;
+  // segítség a kereséshez, hogy újra lehessen üres a mező
+  all = '';
+
+  // a keresés eredményét tároló tömb
+  films?: Array<Film>;
+  // összes film
+  allFilms: Array<Film> = [];
+
   // mozi ahol az admin dolgozik
   cinema?: Cinema;
   // a mozihoz tartozó termek
   auditoriums: Array<Auditorium> = [];
 
-  // összes film
-  films?: Array<Film>;
   // a filmek borítóképei
   loadedCoverImages: Array<string> = [];
 
@@ -76,6 +85,11 @@ export class ScreeningCreateComponent implements OnInit{
     language: ''
   });
 
+  searchForm = new FormGroup({
+    title: new FormControl(''),
+    genre: new FormControl('')
+  });
+
   constructor(
     private filmService: FilmService, private cinemaService: CinemaService,
     private userService: UserService, private auditoriumService: AuditoriumService,
@@ -100,14 +114,14 @@ export class ScreeningCreateComponent implements OnInit{
       }
     });
 
-    this.films = [];
+    this.allFilms = [];
     this.loadedCoverImages = [];
     this.filmService.loadFilmMeta().subscribe((data: Array<Film>) => {
-      this.films = data;
+      this.allFilms = data;
 
-      if (this.films) {
-        for (let index = 0; index < this.films.length; index++) {
-          this.filmService.loadCoverImage(this.films[index].cover_url).pipe(take(1)).subscribe(data => {
+      if (this.allFilms) {
+        for (let index = 0; index < this.allFilms.length; index++) {
+          this.filmService.loadCoverImage(this.allFilms[index].cover_url).pipe(take(1)).subscribe(data => {
             if (!(this.loadedCoverImages.includes(data))) {
               this.loadedCoverImages.push(data);
             }
@@ -115,6 +129,8 @@ export class ScreeningCreateComponent implements OnInit{
         }
       }
     });
+
+    this.searchForm.get('title')?.addValidators([Validators.maxLength(200)]);
 
     this.savedScreenings = [];
     this.usedAppointments = [];
@@ -160,7 +176,7 @@ export class ScreeningCreateComponent implements OnInit{
     this.filmService.loadFilmMetaById(id).pipe(take(1)).subscribe(data => {
       this.chosenFilm = data[0];
       this.screeningTime = this.chosenFilm.movie_length + 15;
-    })
+    });
   }
 
   getNextWeek(){
@@ -200,9 +216,36 @@ export class ScreeningCreateComponent implements OnInit{
 
     return hoursArray;
   }
+
+  onSearch() {
+    if (this.searchForm.valid) {
+      let title = this.searchForm.get('title')?.value as string;
+      let genre = this.searchForm.get('genre')?.value as string;
+
+      this.films = this.allFilms;
+
+      if (title === '' && genre === '') {
+        this.films = undefined;
+
+      } else if (title !== '' && genre === '') {
+        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+
+      } else if (title === '' && genre !== '') {
+        this.films = this.films.filter(film => film.genres.includes(genre));
+
+      } else if (title !== '' && genre !== '') {
+        this.films = this.films.filter(film => film.genres.includes(genre));
+        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+
+      } else {
+        this.films = undefined;
+      }
+    }
+  }
   
   auditoriumSelected() {
     this.notUsedAppointments= [];
+    this.usedAppointments = [];
     this.auditoriumService.getById(this.screeningForm.get('auditoriumId')?.value as string).pipe(take(1)).subscribe(data => {
       this.selectedAuditorium = data[0];
     });
@@ -211,11 +254,12 @@ export class ScreeningCreateComponent implements OnInit{
   daySelected() {
     // szabad időpontok nullázása
     this.notUsedAppointments= [];
+    this.usedAppointments = [];
     this.selectedDay = this.screeningForm.get('day')?.value as Date;
     this.selectedDayHours = this.createHoursArray(this.selectedDay);
 
-    // a választott filmhez, teremhez és naphoz tartozó vetítések lekérése az adatbázisból
-    this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDay(this.selectedAuditorium?.id as string, this.chosenFilm?.id as string, (this.screeningForm.get('day')?.value as Date).getTime()).subscribe((data: Array<Screening>) => {
+    // a választott teremhez és naphoz tartozó vetítések lekérése az adatbázisból
+    this.screeningService.getScreeningsByAuditoriumIdAndDay(this.selectedAuditorium?.id as string, (this.screeningForm.get('day')?.value as Date).getTime()).subscribe((data: Array<Screening>) => {
       this.savedScreenings = data;
 
       if (this.savedScreenings) {
@@ -261,7 +305,10 @@ export class ScreeningCreateComponent implements OnInit{
 
         this.screeningService.create(screening).then(_ => {
           this.toastr.success('Sikeres vetítés létrehozás!', 'Vetítés létrehozás');
-          window.location.reload();
+          // az oldal újratöltése előtt várunk 2 másodpercet, hogy látható legyen a flash message
+          setTimeout(function () {
+            window.location.reload();
+          }, 2000);
         }).catch(error => {
           this.toastr.error('Sikertelen vetítés létrehozás!', 'Vetítés létrehozás');
         });

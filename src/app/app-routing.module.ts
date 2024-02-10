@@ -34,7 +34,8 @@ const routes: Routes = [
   },
   {
     path: 'screening-create',
-    loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule)
+    loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '',

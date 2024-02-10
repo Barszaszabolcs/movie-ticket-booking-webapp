@@ -33,7 +33,7 @@
           <li>
             <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
           </li>
-          <li>
+          <li *ngIf="loggedInUser">
             <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
           </li>
         </ul>
