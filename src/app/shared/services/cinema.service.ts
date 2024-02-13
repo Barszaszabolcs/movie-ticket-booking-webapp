@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Cinema } from '../models/Cinema';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class CinemaService {
   create(cinema: Cinema) {
     cinema.id = this.angularFirestore.createId();
     return this.angularFirestore.collection<Cinema>(this.collectionName).doc(cinema.id).set(cinema);
+  }
+
+  getAll(): Observable<Array<Cinema>> {
+    return this.angularFirestore.collection<Cinema>(this.collectionName).valueChanges();
   }
 
   getById(id: string){

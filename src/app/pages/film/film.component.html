@@ -32,7 +32,26 @@
             </mat-card-content>
         </div>
     </mat-card>
-    <div class="w-4/5 mb-10 bg-[#434343]">
+    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="row" fxLayoutAlign="start center">
+        <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout="column" fxLayoutAlign="start start">
+            <mat-form-field>
+                <mat-label for="cinemaId">Mozi: </mat-label>
+                <mat-select formControlName="cinemaId" (selectionChange)="cinemaSelected()">
+                  <mat-option *ngFor="let cinema of cinemas" [value]="cinema.id"> {{ cinema.town }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="chosenCinema">
+                <mat-label for="day">Nap: </mat-label>
+                <mat-select formControlName="day" (selectionChange)="daySelected()">
+                  <mat-option *ngFor="let date of week" [value]="date"> {{ date | date:'EE, MMM d'}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+        <div class="mx-6" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+            <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings">{{screening.time | date:'HH:mm'}}</button>
+        </div>
+    </div>
+    <div class="w-4/5 mb-10 bg-[#434343] rounded-lg">
         <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
             <mat-form-field class="mt-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>

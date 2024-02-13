@@ -12,6 +12,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { RatingModule } from 'ng-starrating';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { MatIconModule } from '@angular/material/icon';
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
+    MatOptionModule,
     RatingModule
   ]
 })
