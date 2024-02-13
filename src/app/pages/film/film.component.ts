@@ -114,6 +114,7 @@ export class FilmComponent implements OnInit{
     this.auditoriums = [];
     this.screenings = [];
     this.selectForm.get('day')?.reset();
+    this.selectedDay = undefined;
     const cinema = this.selectForm.get('cinemaId')?.value as string;
 
     this.cinemaService.getById(cinema).pipe(take(1)).subscribe(data => {

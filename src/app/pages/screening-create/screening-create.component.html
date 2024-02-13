@@ -45,7 +45,10 @@
                 <p class="text-2xl">{{cinema.town}}</p>
             </div>
             <form class="mx-20 my-10" [formGroup]="screeningForm" (ngSubmit)="createScreening()" fxLayout="column" fxLayoutAlign="space-around center">
-                <mat-form-field>
+                <div *ngIf="!chosenFilm">
+                    <p class="text-2xl">Válassz egy filmet!</p>
+                </div>
+                <mat-form-field *ngIf="chosenFilm">
                     <mat-label for="auditoriumId">Terem: </mat-label>
                     <mat-select formControlName="auditoriumId" (selectionChange)="auditoriumSelected()">
                       <mat-option *ngFor="let auditorium of auditoriums" [value]="auditorium.id"> {{ auditorium.hall_number }}-s terem</mat-option>
@@ -60,7 +63,7 @@
                 <mat-form-field *ngIf="selectedDay">
                     <mat-label for="time">Óra: </mat-label>
                     <mat-select formControlName="time">
-                      <mat-option *ngFor="let hour of notUsedAppointments" [value]="hour"> {{ hour | date: 'EE, MMM d, HH:mm' }}</mat-option>
+                      <mat-option *ngFor="let hour of selectedDayHours" [value]="hour"> {{ hour | date: 'HH:mm' }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="w-full mt-5">

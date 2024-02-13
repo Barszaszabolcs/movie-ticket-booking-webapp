@@ -64,14 +64,6 @@ export class ScreeningCreateComponent implements OnInit{
   // a választott naphoz tartozó órák
   selectedDayHours = new Array(6).fill(new Date());
   
-  // már lementett vetítések
-  savedScreenings: Array<Screening> = [];
-  
-  // foglalt időpontok
-  usedAppointments: Array<number> = [];
-  // szabad időpontok
-  notUsedAppointments: Array<number> = [];
-  
   // segítség a vetítés foglalt székeihez
   occupied_seats_help: Array<string> = [];
 
@@ -132,9 +124,7 @@ export class ScreeningCreateComponent implements OnInit{
 
     this.searchForm.get('title')?.addValidators([Validators.maxLength(200)]);
 
-    this.savedScreenings = [];
-    this.usedAppointments = [];
-    this.notUsedAppointments= [];
+    this.selectedDayHours = [];
 
     this.getNextWeek();
   }
@@ -171,8 +161,12 @@ export class ScreeningCreateComponent implements OnInit{
   }
 
   chooseFilm(id: string) {
-    this.usedAppointments = [];
-    this.notUsedAppointments = [];
+    this.screeningForm.get('auditoriumId')?.reset();
+    this.screeningForm.get('day')?.reset();
+    this.screeningForm.get('time')?.reset();
+    this.selectedDay = undefined;
+    this.selectedAuditorium = undefined;
+    this.selectedDayHours = [];
     this.filmService.loadFilmMetaById(id).pipe(take(1)).subscribe(data => {
       this.chosenFilm = data[0];
       this.screeningTime = this.chosenFilm.movie_length + 15;
@@ -244,44 +238,39 @@ export class ScreeningCreateComponent implements OnInit{
   }
   
   auditoriumSelected() {
-    this.notUsedAppointments= [];
-    this.usedAppointments = [];
+    this.screeningForm.get('day')?.reset();
+    this.screeningForm.get('time')?.reset();
+    this.selectedDay = undefined;
+    this.selectedDayHours = [];
     this.auditoriumService.getById(this.screeningForm.get('auditoriumId')?.value as string).pipe(take(1)).subscribe(data => {
       this.selectedAuditorium = data[0];
     });
   }
 
   daySelected() {
-    // szabad időpontok nullázása
-    this.notUsedAppointments= [];
-    this.usedAppointments = [];
+    this.screeningForm.get('time')?.reset();
+    this.selectedDayHours = [];
     this.selectedDay = this.screeningForm.get('day')?.value as Date;
     this.selectedDayHours = this.createHoursArray(this.selectedDay);
 
-    // a választott teremhez és naphoz tartozó vetítések lekérése az adatbázisból
-    this.screeningService.getScreeningsByAuditoriumIdAndDay(this.selectedAuditorium?.id as string, (this.screeningForm.get('day')?.value as Date).getTime()).subscribe((data: Array<Screening>) => {
-      this.savedScreenings = data;
+    this.screeningService.getScreeningsByAuditoriumIdAndDay(this.selectedAuditorium?.id as string, this.selectedDay.getTime()).subscribe(data => {
 
-      if (this.savedScreenings) {
-        this.savedScreenings.forEach(screening => {
-          // foglalt időpontok lementése
-          if (!this.usedAppointments.includes(screening.time as number)) {
-            this.usedAppointments.push(screening.time);
-          }
-        });
-      }
+      data.forEach(screening => {
+        this.selectedDayHours = this.selectedDayHours.filter(hour => !(hour === screening.time));
+      });
 
-      // a kiválasztott órákat akkor mentjük le, ha nem szerepel a foglalt időpontok között
-      if (this.usedAppointments) {
-        this.selectedDayHours.forEach(hour => {
-          if (!this.usedAppointments.includes(hour)) {
-            if (!this.notUsedAppointments.includes(hour)) {
-              this.notUsedAppointments.push(hour);
-            }
-          }
+      if (this.selectedDay) {
+        const selectedDayHelp = (this.screeningForm.get('day')?.value as Date).getTime();
+        this.auditoriums.forEach(auditorium => {
+          this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDay(auditorium.id, this.chosenFilm?.id as string, selectedDayHelp).subscribe(data => {
+            data.forEach(screening => {
+              this.selectedDayHours = this.selectedDayHours.filter(hour => !(hour === screening.time));
+            });
+          });
         });
       }
     });
+
   }
 
   createScreening() {
@@ -305,10 +294,10 @@ export class ScreeningCreateComponent implements OnInit{
 
         this.screeningService.create(screening).then(_ => {
           this.toastr.success('Sikeres vetítés létrehozás!', 'Vetítés létrehozás');
-          // az oldal újratöltése előtt várunk 2 másodpercet, hogy látható legyen a flash message
-          setTimeout(function () {
-            window.location.reload();
-          }, 2000);
+          this.screeningForm.reset();
+          this.chosenFilm = undefined;
+          this.selectedDay = undefined;
+          this.selectedAuditorium = undefined;
         }).catch(error => {
           this.toastr.error('Sikertelen vetítés létrehozás!', 'Vetítés létrehozás');
         });
