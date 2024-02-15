@@ -14,6 +14,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/film/film.module').then(m => m.FilmModule),
     canActivate: [AuthGuard]
   },
+  { 
+    path: 'ticket-booking',
+    loadChildren: () => import('./pages/ticket-booking/ticket-booking.module').then(m => m.TicketBookingModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: 'cinema',
     loadChildren: () => import('./pages/cinema/cinema.module').then(m => m.CinemaModule),

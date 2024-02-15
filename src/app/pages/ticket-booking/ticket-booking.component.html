@@ -1,0 +1,48 @@
+<div class="bg-black h-screen" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="w-4/6 h-fit bg-[#9d9d9d]" fxLayout="row" fxLayoutAlign="space-around center">
+        <div class="w-full h-full m-2" fxLayout="column" fxLayoutAlign="start center" fxFlex="1 1 33%">
+            <h1 class="text-3xl font-semibold">{{film?.title}}</h1>
+            <div class="m-0 p-0" *ngIf="cinema" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon>location_on</mat-icon>
+                <p class="text-2xl font-medium">{{cinema.town}}</p>
+            </div>
+            <p class="text-xl">{{screening?.time | date:'yyyy.MM.dd. HH:mm'}}</p>
+            <p class="text-xl">{{auditorium?.hall_number}}-es terem</p>
+        </div>
+        <div class="w-full h-full" fxFlex="1 1 67%">
+            <form class="m-14" [formGroup]="bookingForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center">
+                <div class="w-full mb-4 text-xl" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                    <span>
+                        <input type="radio" id="no_pay" [value]="false" formControlName="pay">
+                        <label for="no_pay">Lefoglalás</label>
+                    </span>
+                    <span>
+                        <input type="radio" id="pay" [value]="true" formControlName="pay">
+                        <label for="pay">Fizetés</label>
+                    </span>
+                </div>
+                <div class="w-full text-xl" formGroupName="ticket_count" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="15px">
+                    <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center" >
+                        <label for="ticket_count">Felnőtt, teljes árú jegy: <p class="font-medium">2200 Ft</p></label>
+                        <input type="number" min="0" max="10" formControlName="full" value="0">
+                    </div>
+                    <div class="w-full" *ngIf="bookingForm.get('pay')?.value" fxLayout="row" fxLayoutAlign="space-between center" >
+                        <label for="ticket_count">Diákjegy: <p class="font-medium">1800 Ft</p></label>
+                        <input type="number" min="0" max="10" formControlName="student" value="0">
+                    </div>
+                    <div class="w-full" *ngIf="bookingForm.get('pay')?.value" fxLayout="row" fxLayoutAlign="space-between center" >
+                        <label for="ticket_count">Jegy fogyatékkal élők számára: <p class="font-medium">1600 Ft</p></label>
+                        <input type="number" min="0" max="10" formControlName="special" value="0">
+                    </div>
+                    <div class="w-full" *ngIf="bookingForm.get('pay')?.value" fxLayout="row" fxLayoutAlign="space-between center" >
+                        <label for="ticket_count">Nyugdíjas jegy: <p class="font-medium">1700 Ft</p></label>
+                        <input type="number" min="0" max="10" formControlName="elderly" value="0">
+                    </div>
+                </div>
+                <span>
+                    <button mat-raised-button color="primary" class="mt-5" type="submit">Tovább</button>
+                </span>
+            </form>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,10 @@ export class ScreeningService {
     return this.angularFirestore.collection<Screening>(this.collectionName).doc(screening.id).set(screening);
   }
 
+  getById(id: string) {
+    return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('id', '==', id)).valueChanges();
+  }
+
   getAll():Observable<Array<Screening>> {
     return this.angularFirestore.collection<Screening>(this.collectionName).valueChanges();
   }

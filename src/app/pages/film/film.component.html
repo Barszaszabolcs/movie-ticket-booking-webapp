@@ -48,7 +48,7 @@
             </mat-form-field>
         </form>
         <div class="mx-6" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-            <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings">{{screening.time | date:'HH:mm'}}</button>
+            <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings" [routerLink]="'/ticket-booking/' + screening.id">{{screening.time | date:'HH:mm'}}</button>
         </div>
     </div>
     <div class="w-4/5 mb-10 bg-[#434343] rounded-lg">
