@@ -14,6 +14,8 @@ import { FilmService } from '../../shared/services/film.service';
 import { CinemaService } from '../../shared/services/cinema.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 import { AuditoriumService } from '../../shared/services/auditorium.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 
 @Component({
   selector: 'app-ticket-booking',
@@ -43,13 +45,16 @@ export class TicketBookingComponent implements OnInit{
       special: 0,
       elderly: 0
     })
-  })
+  });
+
+  popDone = false;
 
   constructor(
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
     private auditoriumService: AuditoriumService, private filmService: FilmService,
-    private cinemaService: CinemaService, private toastr: ToastrService) {}
+    private cinemaService: CinemaService, private dialog: MatDialog,
+    private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.tickets = [];
@@ -117,13 +122,31 @@ export class TicketBookingComponent implements OnInit{
         ];
       }
   
-      
+      let ticket_sum = 0;
       this.pay = pay;
       this.tickets = tickets;
       console.log(this.pay);
       this.tickets.forEach(ticket => {
         console.log(ticket.type + ', ' + ticket.price + ': ' + ticket.count);
+        ticket_sum += ticket.count;
       });
+
+      this.openPopUp(ticket_sum);
     }
+  }
+
+  openPopUp(ticket_sum: number) {
+    var popup = this.dialog.open(SeatSelectorComponent, {
+      width: '75%',
+      height: '85%',
+      data: {
+        ticket_sum: ticket_sum,
+        screeningId: this.screening?.id
+      }
+    });
+
+    popup.afterClosed().subscribe(data => {
+      this.popDone = data;
+    });
   }
 }

@@ -1,0 +1,75 @@
+.screen {
+    background-color: rgb(180, 180, 180);
+    height: 150px;
+    width: 65%;
+    margin: 15px 0;
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+}
+
+.container {
+    width: 90%;
+    height: fit-content;
+    background-color: white;
+    border: 0.4mm solid rgba(0, 0, 0, 0.08);
+    border-radius: 3mm;
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.item {
+  position: relative;
+}
+
+.item::before {
+    content: "";
+    position: absolute;
+    left: -25px;
+    width: 20px;
+    height: 20px;
+    background: rgb(255, 255, 255);
+    outline: 0.2mm solid rgb(120, 120, 120);
+    border-radius: 0.3mm;
+}
+
+.item:nth-child(1)::before {
+    background: #0BD808;
+    outline: none;
+}
+
+.item:nth-child(2)::before {
+    background: grey;
+    outline: none;
+}
+
+.item:nth-child(3)::before {
+    background: gold;
+    outline: none;
+}
+
+.seat {
+    display: block;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    padding-top: 4px;
+    background: #0BD808;
+    border-radius: 0.5mm;
+    outline: 0.3mm solid rgb(180, 180, 180);
+    cursor: pointer;
+}
+
+.all-seats input:checked + label {
+    background: gold;
+    outline: none;
+}
+
+.all-seats input:disabled + label{
+    background: grey;
+    outline: none;
+    pointer-events: none;
+}
+
+input {
+    display: none;
+}

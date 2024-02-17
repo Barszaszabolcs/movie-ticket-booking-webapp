@@ -7,11 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 
 
 @NgModule({
   declarations: [
-    TicketBookingComponent
+    TicketBookingComponent,
+    SeatSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatButtonModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatDialogModule
   ]
 })
 export class TicketBookingModule { }
