@@ -7,6 +7,7 @@ import { take } from 'rxjs';
 import { User } from '../../shared/models/User';
 import { Film } from '../../shared/models/Film';
 import { Cinema } from '../../shared/models/Cinema';
+import { Ticket } from '../../shared/models/Ticket';
 import { Screening } from '../../shared/models/Screening';
 import { Auditorium } from '../../shared/models/Auditorium';
 import { UserService } from '../../shared/services/user.service';
@@ -14,6 +15,7 @@ import { FilmService } from '../../shared/services/film.service';
 import { CinemaService } from '../../shared/services/cinema.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 import { AuditoriumService } from '../../shared/services/auditorium.service';
+
 import { MatDialog } from '@angular/material/dialog';
 import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 
@@ -36,6 +38,7 @@ export class TicketBookingComponent implements OnInit{
 
   pay: boolean = false;
   tickets: {type: string, price: number, count: number}[] = [];
+  finishedTickets: Array<Ticket> = [];
 
   chosenSeats: string[] = [];
 
@@ -51,6 +54,10 @@ export class TicketBookingComponent implements OnInit{
     })
   });
 
+  printSeats: string[] = [];
+
+  paymentAmount = 0;
+
   constructor(
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
@@ -61,6 +68,9 @@ export class TicketBookingComponent implements OnInit{
   ngOnInit(): void {
     this.tickets = [];
     this.chosenSeats = [];
+    this.finishedTickets = [];
+    this.printSeats = [];
+    this.paymentAmount = 0;
     this.activatedRoute.params.subscribe((param: any) => {
       this.screeningId = param.screeningId as string;
 
@@ -114,24 +124,24 @@ export class TicketBookingComponent implements OnInit{
       if (this.bookingForm.get('pay')?.value) {
         pay = this.bookingForm.get('pay')?.value as boolean;
         tickets = [
-          {type: 'full', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
-          {type: 'student', price: 1800, count: this.bookingForm.get('ticket_count.student')?.value as number},
-          {type: 'special', price: 1600, count: this.bookingForm.get('ticket_count.special')?.value as number},
-          {type: 'elderly', price: 1700, count: this.bookingForm.get('ticket_count.elderly')?.value as number},
+          {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
+          {type: 'Diákjegy', price: 1800, count: this.bookingForm.get('ticket_count.student')?.value as number},
+          {type: 'Jegy fogyatékkal élők számára', price: 1600, count: this.bookingForm.get('ticket_count.special')?.value as number},
+          {type: 'Nyugdíjas jegy', price: 1700, count: this.bookingForm.get('ticket_count.elderly')?.value as number},
         ];
       } else {
         pay = this.bookingForm.get('pay')?.value as boolean;
         tickets = [
-          {type: 'full', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
-          {type: 'student', price: 1800, count: 0},
-          {type: 'special', price: 1600, count: 0},
-          {type: 'elderly', price: 1700, count: 0},
+          {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
+          {type: 'Diákjegy', price: 1800, count: 0},
+          {type: 'Jegy fogyatékkal élők számára', price: 1600, count: 0},
+          {type: 'Nyugdíjas jegy', price: 1700, count: 0},
         ];
       }
   
       let ticket_sum = 0;
       this.pay = pay;
-      this.tickets = tickets;
+      this.tickets = tickets.filter(ticket => ticket.count > 0);
       console.log(this.pay);
       this.tickets.forEach(ticket => {
         console.log(ticket.type + ', ' + ticket.price + ': ' + ticket.count);
@@ -163,6 +173,48 @@ export class TicketBookingComponent implements OnInit{
 
     popup.afterClosed().subscribe(data => {
       this.chosenSeats = data;
+      this.finishedTickets = [];
+      this.printSeats = [];
+      this.paymentAmount = 0;
+
+      if (this.chosenSeats) {
+        for (let i = 0; i < this.tickets.length; i++) {
+          for (let j = 0; j < this.tickets[i].count; j++) {
+            const ticket: Ticket = {
+              id: '',
+              type: this.tickets[i].type,
+              price: this.tickets[i].price,
+              payed: this.pay,
+              chosen_seat: '',
+              screeningId: this.screening?.id as string,
+              orderId: '',
+              prizeId: ''
+            }
+            
+            this.finishedTickets.push(ticket);
+          }  
+        }
+        for (let i = 0; i < this.finishedTickets.length; i++) {
+          this.finishedTickets[i].chosen_seat = this.chosenSeats[i];
+        }
+
+        this.printSeats = this.convertSeats(this.chosenSeats);
+
+        this.finishedTickets.forEach(ticket => {
+          this.paymentAmount += ticket.price;
+        });
+
+        if (this.pay) {
+          this.paymentAmount += (this.finishedTickets.length * 100);
+        }
+      }
+    });
+  }
+
+  convertSeats(seats: string[]): string[] {
+    return seats.map(seat => {
+        const [row, seatNumber] = seat.split('/');
+        return `${row}.sor: ${seatNumber}.szék`;
     });
   }
 }

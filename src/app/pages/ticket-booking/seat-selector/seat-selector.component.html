@@ -14,8 +14,8 @@
             <div class="item">Kiválasztott</div>
         </div>
         <div class="screen"></div>
-        <div class="w-11/12" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-            <div class="w-full" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="center center">
+        <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div class="w-3/5" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
                 <p class="font-medium mr-10" *ngIf="i > 0">{{i}}</p>
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
                     <div class="all-seats w-fit h-fit" *ngFor="let seat of row">

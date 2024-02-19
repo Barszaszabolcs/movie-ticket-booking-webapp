@@ -7,23 +7,24 @@
 }
 
 th, td {
-    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
-tbody tr:first-child {
+.first-table tbody tr:first-child {
     border-top: 4px solid #ffc000;
 }
   
-tbody tr:last-child {
+.first-table tbody tr:last-child {
     border-bottom: 4px solid #ffc000;
 }
 
-tbody tr:nth-child(2){
+.first-table tbody tr:nth-child(2){
     border-top: 1px dashed black;
     border-bottom: 1px dashed black;
 }
 
-tbody tr:nth-child(3) {
+.first-table tbody tr:nth-child(3) {
     border-bottom: 1px dashed black;
 }
 
@@ -31,4 +32,27 @@ input[type="number"] {
     padding-left: 3px;
     border: 2px solid black;
     border-radius: 5px;
+}
+
+.scroll {
+    height: fit-content;
+    max-height: 12em;
+    overflow-y: auto;
+}
+
+.second-table tbody {
+    border-top: 4px solid #ffc000;
+    border-bottom: 4px solid #ffc000;
+}
+
+.second-table tbody tr{
+    border-bottom: 1px dashed black;
+}
+
+.second-table tbody tr:last-child{
+    border-bottom: none;
+}
+
+.personal-infos, .screening-infos, .payment-infos {
+    border-bottom: 2px solid lightgray;
 }

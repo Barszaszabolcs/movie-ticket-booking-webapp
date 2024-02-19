@@ -1,6 +1,6 @@
 <div class="bg-black h-screen" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="w-full h-fit bg-white" fxLayout="row" fxLayoutAlign="space-around center">
-        <div class="w-4/5 h-fit" fxLayout="row" fxLayoutAlign="space-around center">
+        <div class="w-4/5 h-fit" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="chosenSeats.length === 0">
             <div class="w-full h-full m-2" fxLayout="column" fxLayoutAlign="start center" fxFlex="1 1 33%">
                 <h1 class="text-3xl font-semibold">{{film?.title}}</h1>
                 <div class="m-0 p-0" *ngIf="cinema" fxLayout="row" fxLayoutAlign="start center">
@@ -8,7 +8,7 @@
                     <p class="text-2xl font-medium">{{cinema.town}}</p>
                 </div>
                 <p class="text-xl">{{screening?.time | date:'yyyy.MM.dd. HH:mm'}}</p>
-                <p class="text-xl">{{auditorium?.hall_number}}-es terem</p>
+                <p class="text-xl">{{auditorium?.hall_number}}. terem</p>
             </div>
             <div class="container w-full h-full" fxFlex="1 1 67%">
                 <form class="w-full h-full my-14 pl-3" [formGroup]="bookingForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center">
@@ -22,7 +22,7 @@
                             <label class="ml-2" for="pay">Fizetés</label>
                         </span>
                     </div>
-                    <div class="w-full" formGroupName="ticket_count">
+                    <div class="first-table w-full" formGroupName="ticket_count">
                         <table class="w-full text-left">
                             <thead class="w-full">
                                 <tr class="w-full">
@@ -68,13 +68,76 @@
                             </tbody>
                         </table>
                     </div>
-                    <div *ngIf="chosenSeats">
-                        <p *ngFor="let seat of chosenSeats">{{seat}}</p>
-                    </div>
                     <span>
                         <button mat-raised-button color="primary" class="mt-5" type="submit">Tovább</button>
                     </span>
                 </form>
+            </div>
+        </div>
+        <div class="w-3/5 h-fit my-3" fxLayout="column" fxLayoutAlign="space-around start"  *ngIf="chosenSeats.length !== 0">
+            <h1 class="my-2 text-2xl font-semibold">Személyes adatok:</h1>
+            <div class="personal-infos w-full text-left" fxLayout="row" fxLayoutAlign="start center" >
+                <div fxFlex="1 1 20%">
+                    <p>Név</p>
+                    <p>Email</p>
+                </div>
+                <div fxFlex="1 1 80%">
+                    <p>{{user?.name?.firstname}} {{user?.name?.lastname}}</p>
+                    <p>{{user?.email}}</p>
+                </div>
+            </div>
+            <div class="screening-infos w-full my-2">
+                <h3 class="text-xl text-[#ffa700] font-medium">{{screening?.film_title + '(' + screening?.language + ')'}}</h3>
+                <div class="w-full font-medium mt-2" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+                    <p>{{screening?.time | date:'EEEE yyyy.MM.dd. HH:mm'}}</p>
+                    <p>Campus Cinema: {{cinema?.town}}</p>
+                    <p>{{auditorium?.hall_number}}. terem</p>
+                </div>
+            </div>
+            <h1 class="my-2 text-2xl font-semibold">Jegyek:</h1>
+            <div class="second-table w-full">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr>
+                            <th fxFlex="1 1 40%">Jegytípus</th>
+                            <th fxFlex="1 1 20%">Ár</th>
+                            <th fxFlex="1 1 20%" *ngIf="pay">Kényelmi díj</th>
+                            <th fxFlex="1 1 20%">Szék</th>
+                        </tr>
+                    </thead>
+                    <tbody class="scroll block">
+                        <tr *ngFor="let ticket of finishedTickets; let i = index">
+                            <td fxFlex="1 1 40%">{{(i+1)}}. {{ticket.type}}</td>
+                            <td fxFlex="1 1 20%">{{ticket.price}} Ft</td>
+                            <td fxFlex="1 1 20%" *ngIf="pay">100 Ft</td>
+                            <td fxFlex="1 1 20%">{{printSeats[i]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h1 class="mt-4 mb-3 text-2xl font-semibold">Fizetési adatok</h1>
+            <div class="w-full">
+                <div class="w-full">
+                    <div class="payment-infos w-full mb-2" fxLayout="row" fxLayoutAlign="start center">
+                        <p fxFlex="1 1 10%">Mód</p>
+                        <p fxFlex="1 1 90%">{{pay ? 'Azonnali fizetés' : 'Mozipénztárnál fizetés'}}</p>
+                    </div>
+                    <div class="w-full" fxLayout="row" fxLayoutAlign="start center">
+                        <p class="text-2xl font-semibold" fxFlex="1 1 30%">Fizetendő összeg:</p>
+                        <p class="text-2xl font-semibold" fxFlex="1 1 70%">{{paymentAmount}} Ft</p>
+                    </div>
+                </div>
+                <div>
+                    <input type="text">
+                </div>
+            </div>
+            <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+                <span>
+                    <button mat-raised-button color="accent" class="mt-5">Mégse</button>
+                </span>
+                <span>
+                    <button mat-raised-button color="primary" class="mt-5">Tovább</button>
+                </span>
             </div>
         </div>
     </div>

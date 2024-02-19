@@ -2,10 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
-import { Auditorium } from 'src/app/shared/models/Auditorium';
-import { Screening } from 'src/app/shared/models/Screening';
-import { AuditoriumService } from 'src/app/shared/services/auditorium.service';
-import { ScreeningService } from 'src/app/shared/services/screening.service';
+import { Auditorium } from '../../../shared/models/Auditorium';
+import { Screening } from '../../../shared/models/Screening';
+import { AuditoriumService } from '../../../shared/services/auditorium.service';
+import { ScreeningService } from '../../../shared/services/screening.service';
 
 @Component({
   selector: 'app-seat-selector',
@@ -148,11 +148,11 @@ export class SeatSelectorComponent implements OnInit{
     }
   }
 
-  // A string tömb "1/1" formátumú elemeit "1:1" formátumra konvertálja
+  // A string tömb "1/1" formátumú elemeit "1. 1.szék" formátumra konvertálja
   convertSeats(seats: string[]): string[] {
     return seats.map(seat => {
         const [row, seatNumber] = seat.split('/');
-        return `${row}. ${seatNumber}. szék`;
+        return `${row}. ${seatNumber}.szék`;
     });
-}
+  }
 }
