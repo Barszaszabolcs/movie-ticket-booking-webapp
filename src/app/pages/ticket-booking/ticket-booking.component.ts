@@ -37,6 +37,10 @@ export class TicketBookingComponent implements OnInit{
   pay: boolean = false;
   tickets: {type: string, price: number, count: number}[] = [];
 
+  chosenSeats: string[] = [];
+
+  numbers: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   bookingForm = this.createForm({
     pay: false,
     ticket_count: this.formBuilder.group({
@@ -47,8 +51,6 @@ export class TicketBookingComponent implements OnInit{
     })
   });
 
-  popDone = false;
-
   constructor(
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
@@ -58,6 +60,7 @@ export class TicketBookingComponent implements OnInit{
   
   ngOnInit(): void {
     this.tickets = [];
+    this.chosenSeats = [];
     this.activatedRoute.params.subscribe((param: any) => {
       this.screeningId = param.screeningId as string;
 
@@ -99,6 +102,10 @@ export class TicketBookingComponent implements OnInit{
     return bookingGroup;
   }
 
+  paymentSelected() {
+    this.pay = this.bookingForm.get('pay')?.value as boolean;
+  }
+
   goToSeats() {
     let pay: boolean;
     let tickets: {type: string, price: number, count: number}[];
@@ -131,14 +138,23 @@ export class TicketBookingComponent implements OnInit{
         ticket_sum += ticket.count;
       });
 
-      this.openPopUp(ticket_sum);
+      if (ticket_sum === 0) {
+        this.toastr.error('Egy jegyet legalább választani kell!', 'Jegyfoglalás');
+      } else if (ticket_sum > 10) {
+        this.toastr.error('Egy felhasználó maximum 10 jegyet foglalhat!', 'Jegyfoglalás');
+      } else {
+        this.openPopUp(ticket_sum);
+      }
+    } else {
+      this.toastr.error('Egy jegy típusból 0-10-et lehet foglalni!', 'Jegyfoglalás');
     }
   }
 
   openPopUp(ticket_sum: number) {
     var popup = this.dialog.open(SeatSelectorComponent, {
-      width: '75%',
+      width: '100%',
       height: '85%',
+      autoFocus: false,
       data: {
         ticket_sum: ticket_sum,
         screeningId: this.screening?.id
@@ -146,7 +162,7 @@ export class TicketBookingComponent implements OnInit{
     });
 
     popup.afterClosed().subscribe(data => {
-      this.popDone = data;
+      this.chosenSeats = data;
     });
   }
 }

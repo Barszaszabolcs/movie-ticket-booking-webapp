@@ -1,31 +1,39 @@
-<div class="w-full h-full bg-[#9d9d9d]" fxLayout="row" fxLayoutAlign="space-around center">
+<div class="w-full h-full bg-[#e9e9e9]" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="container" fxLayout="column" fxLayoutAlign="center center">
-        <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px">
+        <div class="w-full my-1">
+            <div>
+                Szék kiválasztva: <span class="count">0</span>/<span class="max"></span>
+            </div>
+            <div>
+                Kiválasztott székek: <span class="chosen-seats"></span>
+            </div>
+        </div>
+        <div class="w-full mt-3" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px">
             <div class="item">Szabad</div>
             <div class="item">Foglalt</div>
             <div class="item">Kiválasztott</div>
         </div>
         <div class="screen"></div>
         <div class="w-11/12" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-            <div class="w-full" *ngFor="let row of seats" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-                <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
-                    <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
-                    <label class="seat" for="{{seat}}">{{seat.split('/')[1]}}</label>
+            <div class="w-full" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="center center">
+                <p class="font-medium mr-10" *ngIf="i > 0">{{i}}</p>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+                    <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
+                        <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
+                        <label class="seat" for="{{seat}}">{{seat.split('/')[1]}}</label>
+                    </div>
                 </div>
+                <p class="font-medium ml-10" *ngIf="i > 0">{{i}}</p>
             </div>
         </div>
-        <div class="w-full">
-            <div class="total">
-                <div>
-                    Szék kiválasztva: <span class="count">0</span>/<span class="max"></span>
-                </div>
-                <div>
-                    Kiválasztott székek: <span class="chosen-seats"></span>
-                </div>
-            </div>
-            <div>
-                <button mat-raised-button mat-dialog-close color="primary" class="mt-5">Mégse</button>
-                <button mat-raised-button color="primary" class="mt-5" (click)="ok()">Tovább</button>
+        <div class="w-full mt-3">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <span>
+                    <button mat-raised-button mat-dialog-close color="warn" class="mt-5">Mégse</button>
+                </span>
+                <span>
+                    <button mat-raised-button color="primary" class="mt-5" (click)="ok()">Tovább</button>
+                </span>
             </div>
         </div>
     </div>

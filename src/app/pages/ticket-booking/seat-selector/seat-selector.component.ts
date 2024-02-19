@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Auditorium } from 'src/app/shared/models/Auditorium';
 import { Screening } from 'src/app/shared/models/Screening';
@@ -25,11 +26,10 @@ export class SeatSelectorComponent implements OnInit{
 
   chosenSeats: string[] = [];
 
-  done = false
-
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any, private ref: MatDialogRef<SeatSelectorComponent>,
-    private auditoriumService: AuditoriumService, private screeningService: ScreeningService) {}
+    private auditoriumService: AuditoriumService, private screeningService: ScreeningService,
+    private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.seats = [];
@@ -95,8 +95,11 @@ export class SeatSelectorComponent implements OnInit{
   }
 
   ok() {
-    this.done = true;
-    this.ref.close(this.done);
+    if (this.chosenSeats.length !== this.ticket_sum) {
+      this.toastr.error(this.ticket_sum + ' széket kell kiválasztani!', 'Szék foglalás');
+    } else {
+      this.ref.close(this.chosenSeats);
+    }
   }
 
   seatSelected(event: any) {
@@ -129,9 +132,11 @@ export class SeatSelectorComponent implements OnInit{
     }
 
     this.chosenSeats = this.chosenSeats.sort(this.customSort);
-    chosen.innerText = this.chosenSeats.join(', ');
+    let printChosenSeats = this.convertSeats(this.chosenSeats)
+    chosen.innerText = printChosenSeats.join(', ');
   }
 
+  // Növekvő sorrendbe rendezi a string-eket szám szerint
   customSort(a: string, b: string): number {
     const [aNum, aDen] = a.split('/').map(Number);
     const [bNum, bDen] = b.split('/').map(Number);
@@ -142,4 +147,12 @@ export class SeatSelectorComponent implements OnInit{
         return aNum - bNum;
     }
   }
+
+  // A string tömb "1/1" formátumú elemeit "1:1" formátumra konvertálja
+  convertSeats(seats: string[]): string[] {
+    return seats.map(seat => {
+        const [row, seatNumber] = seat.split('/');
+        return `${row}. ${seatNumber}. szék`;
+    });
+}
 }
