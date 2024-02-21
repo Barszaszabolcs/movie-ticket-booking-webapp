@@ -12,7 +12,15 @@ export class OrderService {
   constructor(private angularFirestore: AngularFirestore) { }
 
   create(order: Order) {
-    order.id = this.angularFirestore.createId();
-    return this.angularFirestore.collection<Order>(this.collectionName).doc(order.id).set(order);
+    // Üres objektum létrehozása 
+    return this.angularFirestore.collection(this.collectionName).add({}).then(docRef => {
+      // Id kinyerése, és order dokumentum id beállítása
+      order.id = docRef.id;
+      // Frissítjük az order dokumentumot
+      return docRef.update(order).then(_ => {
+        // Order id visszaadása
+        return order.id;
+      });
+    });
   }
 }

@@ -15,15 +15,15 @@
         </div>
         <div class="screen"></div>
         <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-            <div class="w-3/5" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
-                <p class="font-medium mr-10" *ngIf="i > 0">{{i}}</p>
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <div class="w-4/5" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
+                <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0">{{i}}</p>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxFlex="1 1 80%">
                     <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
                         <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
                         <label class="seat" for="{{seat}}">{{seat.split('/')[1]}}</label>
                     </div>
                 </div>
-                <p class="font-medium ml-10" *ngIf="i > 0">{{i}}</p>
+                <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0">{{i}}</p>
             </div>
         </div>
         <div class="w-full mt-3">

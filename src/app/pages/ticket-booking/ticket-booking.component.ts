@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 import { User } from '../../shared/models/User';
 import { Film } from '../../shared/models/Film';
+import { Order } from '../../shared/models/Order';
 import { Cinema } from '../../shared/models/Cinema';
 import { Ticket } from '../../shared/models/Ticket';
 import { Screening } from '../../shared/models/Screening';
 import { Auditorium } from '../../shared/models/Auditorium';
 import { UserService } from '../../shared/services/user.service';
 import { FilmService } from '../../shared/services/film.service';
+import { OrderService } from '../../shared/services/order.service';
 import { CinemaService } from '../../shared/services/cinema.service';
+import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 import { AuditoriumService } from '../../shared/services/auditorium.service';
 
-import { MatDialog } from '@angular/material/dialog';
-import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 
 @Component({
   selector: 'app-ticket-booking',
@@ -62,8 +65,9 @@ export class TicketBookingComponent implements OnInit{
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
     private auditoriumService: AuditoriumService, private filmService: FilmService,
-    private cinemaService: CinemaService, private dialog: MatDialog,
-    private toastr: ToastrService) {}
+    private cinemaService: CinemaService, private orderService: OrderService,
+    private ticketService: TicketService, private dialog: MatDialog, 
+    private toastr: ToastrService, private router: Router) {}
   
   ngOnInit(): void {
     this.tickets = [];
@@ -142,9 +146,7 @@ export class TicketBookingComponent implements OnInit{
       let ticket_sum = 0;
       this.pay = pay;
       this.tickets = tickets.filter(ticket => ticket.count > 0);
-      console.log(this.pay);
       this.tickets.forEach(ticket => {
-        console.log(ticket.type + ', ' + ticket.price + ': ' + ticket.count);
         ticket_sum += ticket.count;
       });
 
@@ -216,5 +218,39 @@ export class TicketBookingComponent implements OnInit{
         const [row, seatNumber] = seat.split('/');
         return `${row}.sor: ${seatNumber}.szék`;
     });
+  }
+
+  finishOrder() {
+    const order: Order = {
+      id: '',
+      price: this.paymentAmount,
+      date: new Date().getTime(),
+      userId: this.user?.id as string
+    }
+
+    this.orderService.create(order).then(docRef => {
+      this.finishedTickets.forEach(ticket => {
+        ticket.orderId = docRef;
+        this.ticketService.create(ticket).then(_ => {
+          if (!this.screening?.occupied_seats.includes(ticket.chosen_seat)) {
+            this.screening?.occupied_seats.push(ticket.chosen_seat);
+            this.screeningService.update(this.screening as Screening).then(_ => {
+            }).catch(error => {
+              this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+            });
+          }
+        }).catch(error => {
+          this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+        });
+      });
+      this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+      this.router.navigateByUrl('/cinema');
+    }).catch(error => {
+      this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+    });
+  }
+
+  cancel() {
+    this.router.navigateByUrl('/cinema');
   }
 }
