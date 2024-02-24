@@ -1,0 +1,56 @@
+<div class="bg-black w-full h-screen" fxLayout="column" fxLayoutAlign="space-around center" >
+    <div class="w-4/5">
+        <div class="bg-[#ffc000] mr-2 my-3 py-5 rounded-lg font-medium" fxFlex="1 1 33%" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+            <img class="rounded-full" src="../../../assets/img/profilkep.jpg" width="75%" height="auto" alt="profilkép">
+            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <mat-icon>person</mat-icon>
+                <p>{{user?.name?.firstname}} {{user?.name?.lastname}}</p>
+            </div>
+            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <mat-icon>account_circle</mat-icon>
+                <p>{{user?.username}}</p>
+            </div>
+            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <mat-icon>mail_outline</mat-icon>
+                <p>{{user?.email}}</p>
+            </div>
+        </div>
+        <div class="bg-[#d9d9d9] my-3 rounded-lg pb-2" fxFlex="1 1 66%" *ngIf="tickets">
+            <h1 class="font-semibold text-2xl m-3">JEGYEK</h1>
+            <div class="w-full" *ngIf="tickets.length === 0">
+                <p class="w-full text-center font-semibold text-2xl m-3">Még nem foglaltál jegyet</p>
+            </div>
+            <div class="scroll w-full" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="15px" *ngIf="tickets.length > 0">
+                <mat-card *ngFor="let ticket of tickets" style="width: 90%; background-color: white; text-align: center;">
+                    <mat-card-content>
+                        <div fxFlex="1 1 25%">
+                            <p class="font-medium">Ajándék</p>
+                            <span *ngIf="ticket.prizeId === ''">
+                                <button mat-raised-button color="primary" class="mt-5" (click)="giftRedemption()">Beváltás</button>
+                            </span>
+                            <!--<div *ngIf="!(ticket.prizeId === '')">
+                                <img src="" alt="">
+                            </div>-->
+                        </div>
+                        <div fxFlex="1 1 25%">
+                            <p class="font-medium">{{ticket.film_title}}</p>
+                            <p class="font-medium">{{ticket.cinema}} {{ticket.auditorium_number}}. terem</p>
+                            <p class="font-medium">{{convertSeat(ticket.chosen_seat)}}</p>
+                            <p class="font-medium">{{ticket.screening_time | date: 'yyyy.MM.dd. HH:mm'}}</p>
+                        </div>
+                        <div fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
+                            <p class="font-medium">{{ticket.payed ? 'Fizetve' : 'Lefoglalva'}}</p>
+                            <span *ngIf="!ticket.payed">
+                                <button mat-raised-button color="warn" class="mt-5" (click)="deleteTicket()">Lemondás</button>
+                            </span>
+                        </div>
+                        <div fxFlex="1 1 25%" fxLayout="row" fxLayoutAlign="space-around center">
+                            <p class="text-xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
+                            <mat-icon class="mt-1 -ml-4" color="primary">local_movies</mat-icon>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

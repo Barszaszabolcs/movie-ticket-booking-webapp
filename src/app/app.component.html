@@ -24,6 +24,9 @@
           <li *ngIf="!(loggedInUser)">
             <a routerLink="/registration" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Regisztráció</a>
           </li>
+          <li *ngIf="loggedInUser">
+            <a routerLink="/profile" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Profil</a>
+          </li>
           <li *ngIf="!(loggedInUser)">
             <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>

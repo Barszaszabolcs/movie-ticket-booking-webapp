@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Order } from '../models/Order';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class OrderService {
         return order.id;
       });
     });
+  }
+
+  getByUserId(userId: string) {
+    return this.angularFirestore.collection<Order>(this.collectionName, ref => ref.where('userId', '==', userId).orderBy('date', 'desc')).valueChanges();
   }
 }

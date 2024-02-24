@@ -15,4 +15,8 @@ export class TicketService {
     ticket.id = this.angularFirestore.createId();
     return this.angularFirestore.collection<Ticket>(this.collectionName).doc(ticket.id).set(ticket);
   }
+
+  getByOrderId(orderId: string) {
+    return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('orderId', '==', orderId)).valueChanges();
+  }
 }

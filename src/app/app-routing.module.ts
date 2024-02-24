@@ -34,6 +34,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registration/registration.module').then(m => m.RegistrationModule),
     canActivate: [ReverseAuthGuard]
   },
+  { 
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: 'film-create',
     loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule)

@@ -11,6 +11,10 @@
         <mat-icon>app_registration</mat-icon>
         <span>Regisztráció</span>
     </a>
+    <a mat-list-item routerLink="/profile" (click)="close()" *ngIf="loggedInUser">
+        <mat-icon>account_circle</mat-icon>
+        <span>Profil</span>
+    </a>
     <a mat-list-item routerLink="/main" (click)="close()" *ngIf="!(loggedInUser)">
         <mat-icon>home</mat-icon>
         <span>Főoldal</span>
