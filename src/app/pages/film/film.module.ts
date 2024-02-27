@@ -14,11 +14,14 @@ import { RatingModule } from 'ng-starrating';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CommentEditPopupComponent } from './comment-edit-popup/comment-edit-popup.component';
 
 @NgModule({
   declarations: [
     FilmComponent,
-    DateFormatPipe
+    DateFormatPipe,
+    CommentEditPopupComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +36,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatIconModule,
     MatSelectModule,
     MatOptionModule,
-    RatingModule
+    RatingModule,
+    MatDialogModule
   ]
 })
 export class FilmModule { }

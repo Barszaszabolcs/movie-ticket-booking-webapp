@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { CommentEditPopupComponent } from './comment-edit-popup/comment-edit-popup.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 import { User } from '../../shared/models/User';
 import { Film } from '../../shared/models/Film';
@@ -25,6 +27,7 @@ import { AuditoriumService } from '../../shared/services/auditorium.service';
 export class FilmComponent implements OnInit{
   
   user?: User;
+  isModerator = false;
   
   chosenFilm?: Film;
   coverUrl?: string;
@@ -40,6 +43,10 @@ export class FilmComponent implements OnInit{
   week = new Array(7).fill(new Date());
   
   comments: Array<Comment> = [];
+
+  ownComment?: Comment;
+
+  loaded = false;
   
   selectForm = this.createSelectForm({
     cinemaId: '',
@@ -56,13 +63,14 @@ export class FilmComponent implements OnInit{
     private toastr: ToastrService, private filmService: FilmService, 
     private commentService: CommentService, private userService: UserService,
     private screeningService: ScreeningService, private cinemaService: CinemaService,
-    private auditoriumService: AuditoriumService) {
+    private auditoriumService: AuditoriumService, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.cinemas = [];
     this.auditoriums = [];
     this.screenings = [];
+    this.loaded = false;
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
     this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
       this.user = data[0];
@@ -80,21 +88,20 @@ export class FilmComponent implements OnInit{
           this.cinemaService.getAll().subscribe(data => {
             this.cinemas = data;
           });
-
-          this.commentService.getCommentsByFilmId(this.chosenFilm.id).subscribe(data => {
-            this.comments = data;
-          });
-
-          let sum = 0;
-          for (let index = 0; index < this.chosenFilm.ratings.length; index++) {
-            sum += this.chosenFilm.ratings[index];
-          }
-          this.averageRating = sum / this.chosenFilm.ratings.length;
+          this.getAverageRating(this.chosenFilm);
         }
       });
     });
     
     this.getNextWeek();
+  }
+
+  getAverageRating(chosenFilm: Film) {
+    let sum = 0;
+    for (let index = 0; index < chosenFilm.ratings.length; index++) {
+      sum += chosenFilm.ratings[index];
+    }
+    this.averageRating = sum / chosenFilm.ratings.length;
   }
 
   createSelectForm(model: any) {
@@ -159,6 +166,33 @@ export class FilmComponent implements OnInit{
     }
   }
 
+  getComments() {
+    this.isModerator = false;
+    if (!this.loaded) {
+      if (this.user) {
+        if (this.user.role === 'moderator') {
+          this.isModerator = true;
+        } else {
+          this.isModerator = false;
+        }
+      }
+      this.commentService.getCommentsByFilmId(this.chosenFilm?.id as string).subscribe(data => {
+        this.comments = data;
+
+        this.comments = this.comments.filter(comment => comment.userId !== this.user?.id);
+  
+        this.commentService.getCommentByFilmIdAndUserId(this.chosenFilm?.id as string, this.user?.id as string).pipe(take(1)).subscribe(data => {
+          this.ownComment = data[0];
+        });
+      });
+      this.loaded = !this.loaded;
+    }
+  }
+
+  hideComments() {
+    this.loaded = !this.loaded;
+  }
+
   onRate(event: any): void {
     this.commentsForm.get('rating')?.setValue(event.newValue);
   }
@@ -191,5 +225,46 @@ export class FilmComponent implements OnInit{
     } else {
       this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
     }
+  }
+
+  deleteComment(comment: Comment) {
+    this.commentService.delete(comment.id).then(_ => {
+      if (this.chosenFilm) {
+        this.chosenFilm.ratings = this.removeNumberFromArray(this.chosenFilm.ratings, comment.rating);
+
+        this.filmService.update(this.chosenFilm).then(_ => {
+          this.toastr.success('Sikeres komment törlés!', 'Kommentálás');    
+        }).catch(error => {
+          this.toastr.error('Sikertelen komment törlés!', 'Kommentálás');
+        });
+      }
+    }).catch(error => {
+      this.toastr.error('Sikertelen komment törlés!', 'Kommentálás');
+    });
+  }
+
+  removeNumberFromArray(arr: number[], num: number): number[] {
+    // megtalálja az első előfordulás indexét
+    const index = arr.indexOf(num);
+    if (index !== -1) {
+        // a megtalált indextől számítva töröl egy elemet
+        arr.splice(index, 1);
+    }
+    return arr;
+  }
+
+  edit(comment: Comment) {
+    var popup = this.dialog.open(CommentEditPopupComponent, {
+      width: '60%',
+      height: '50%',
+      autoFocus: false,
+      data: {
+        commentId: comment.id
+      }
+    });
+
+    popup.afterClosed().subscribe(_ => {
+      this.loaded = false;
+    });
   }
 }

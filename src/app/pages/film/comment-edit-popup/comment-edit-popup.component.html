@@ -1,0 +1,22 @@
+<div class="w-full h-full bg-[#e9e9e9]" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="comment">
+    <form class="w-11/12 p-5 bg-[#9d9d9d]" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="editComment()">
+        <mat-form-field class="mt-2 w-full">
+            <mat-label for="username">Felhasználónév: </mat-label>
+            <input matInput class="w-11/12" type="text" readonly="true" [value]="comment.username"/>
+        </mat-form-field>
+        <star-rating class="mb-3" [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="false" (rate)="onRate($event)" *ngIf="!isModerator"></star-rating>
+        <star-rating class="mb-3" [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" *ngIf="isModerator"></star-rating>
+        <mat-form-field class="my-2 w-full">
+            <mat-label for="comment">Vélemény: </mat-label>
+            <textarea matInput cols="50" rows="3" formControlName="comment" id="text"></textarea>
+        </mat-form-field>
+        <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+            <span>
+                <button mat-raised-button mat-dialog-close color="warn" class="mt-5">Mégse</button>
+            </span>
+            <span>
+                <button mat-raised-button color="primary" class="mt-5" type="submit">Módosítás</button>
+            </span>
+        </div>
+    </form>
+</div>

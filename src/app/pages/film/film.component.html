@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center flex-wrap h-full bg-black" *ngIf="chosenFilm">
+<div class="h-full bg-black" fxLayout="column" fxLayoutAlign="space-around center" *ngIf="chosenFilm">
     <mat-card class="w-4/5 h-5/6 m-3" fxLayout style="background-color: black;">
         <div class="h-full w-full" fxLayout="column" fxFlex="1 1 33%">
             <mat-card-content fxLayout="column" fxLayoutAlign="center center" >
@@ -51,8 +51,20 @@
             <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings" [routerLink]="'/ticket-booking/' + screening.id">{{screening.time | date:'HH:mm'}}</button>
         </div>
     </div>
-    <div class="w-4/5 mb-10 bg-[#434343] rounded-lg">
-        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()">
+    <div class="w-4/5 mb-8" *ngIf="!loaded">
+        <button mat-raised-button class="w-full text-white font-medium" style="background-color: #9d9d9d; color: white;" (click)="getComments()">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                <mat-icon style="scale: 200%; color: white;">keyboard_arrow_down</mat-icon>
+                <p class="text-xl">Vélemények</p>
+                <mat-icon style="scale: 200%; color: white;">keyboard_arrow_down</mat-icon>
+            </div>
+        </button>
+    </div>
+    <div class="w-4/5 mb-8" *ngIf="loaded">
+        <button mat-raised-button class="w-full" style="background-color: #9d9d9d;" (click)="hideComments()"><mat-icon style="scale: 200%; color: white;">keyboard_arrow_up</mat-icon></button>
+    </div>
+    <div class="w-4/5 mb-10 bg-[#434343] rounded-lg" *ngIf="loaded">
+        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()" *ngIf="!ownComment">
             <mat-form-field class="mt-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>
                 <input matInput class="w-11/12" type="text" readonly="true" [value]="user?.username"/>
@@ -66,18 +78,41 @@
                 <button mat-raised-button class="w-full" color="primary" type="submit">Megjegyzés</button>
             </span>
         </form>
+        <div class="mt-5" *ngIf="ownComment">
+            <h2 class="ml-5 text-2xl text-white font-medium">SAJÁT VÉLEMÉNY:</h2>
+            <mat-card class="m-5" style="background-color: #9d9d9d;">
+                <mat-card-content>
+                    <div fxFlex="1 1 85%">
+                        <h3 class="text-xl text-black font-semibold">{{ ownComment.username }}</h3>
+                        <p class="mt-2 text-black font-medium">{{ ownComment.comment }}</p>
+                        <p class="mt-2 text-black text-sm">{{ ownComment.date | dateFormat }} <span *ngIf="ownComment.moderatorId !== ''">moderated</span></p>
+                    </div>
+                    <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" fxFlex="1 1 15%">
+                        <star-rating [value]="ownComment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true"></star-rating>
+                        <div class="w-full"  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+                            <button mat-fab color="warn" style="scale: 85%;" (click)="deleteComment(ownComment)"><mat-icon>delete</mat-icon></button>
+                            <button mat-fab style="scale: 85%; background-color: cornflowerblue;" (click)="edit(ownComment)" *ngIf="ownComment.moderatorId === ''"><mat-icon>edit</mat-icon></button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
         <div class="mt-5" *ngIf="comments.length > 0">
             <h2 class="ml-5 text-2xl text-white font-medium">MÁSOK VÉLEMÉNYE:</h2>
             <mat-card class="m-5" *ngFor="let comment of comments" style="background-color: #9d9d9d;">
-                <mat-card-header>
-                    <h3 class="text-xl text-black font-semibold">{{ comment.username }}</h3>
-                </mat-card-header>
                 <mat-card-content>
                     <div fxFlex="1 1 85%">
+                        <h3 class="text-xl text-black font-semibold">{{ comment.username }}</h3>
                         <p class="mt-2 text-black font-medium">{{ comment.comment }}</p>
-                        <p class="mt-2 text-black text-sm">{{ comment.date | dateFormat }}</p>
+                        <p class="mt-2 text-black text-sm">{{ comment.date | dateFormat }} <span *ngIf="comment.moderatorId !== ''">moderated</span></p>
                     </div>
-                    <star-rating class="mt-2 ml-4" [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" fxFlex="1 1 15%"></star-rating>
+                    <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" fxFlex="1 1 15%">
+                        <star-rating [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" fxFlex="1 1 15%"></star-rating>
+                        <div class="w-full"  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="isModerator">
+                            <button mat-fab color="warn" style="scale: 85%;" (click)="deleteComment(comment)"><mat-icon>delete</mat-icon></button>
+                            <button mat-fab style="scale: 85%; background-color: cornflowerblue;" (click)="edit(comment)" *ngIf="comment.moderatorId === ''"><mat-icon>edit</mat-icon></button>
+                        </div>
+                    </div>
                 </mat-card-content>
             </mat-card>
         </div>
