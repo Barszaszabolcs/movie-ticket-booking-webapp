@@ -46,4 +46,3 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 /src/environments
-/functions/node_modules

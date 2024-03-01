@@ -270,7 +270,7 @@ export class TicketBookingComponent implements OnInit{
 
   onCheckout() {
     localStorage.setItem('tickets', JSON.stringify(this.finishedTickets));
-    this.http.post('http://localhost:4200/checkout', {
+    this.http.post('https://us-central1-movie-ticket-booking-webapp.cloudfunctions.net/api/checkout', {
       items: this.finishedTickets
     }).subscribe(async (res: any) => {
       let stripe = await loadStripe('pk_test_51OpEKjFsVOqGvUD10lxbe07w6Di9pGGBkk1CpoxOr8ovWxZjeXf8pEWhtfuhZjruyTCuNzFrPFMLi5njedC4thgs00u9jxKVmG');

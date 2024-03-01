@@ -1,3 +1,4 @@
+const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
 const body_parser = require('body-parser');
@@ -25,8 +26,8 @@ app.post('/checkout', async (req, res, next) => {
                 quantity: 1
             })),
             mode: 'payment',
-            success_url: 'http://localhost:4201/success-payment',
-            cancel_url: 'http://localhost:4201/cancel-payment'
+            success_url: 'https://movie-ticket-booking-webapp.web.app/success-payment',
+            cancel_url: 'https://movie-ticket-booking-webapp.web.app/cancel-payment'
         });
 
         res.status(200).json(session);
@@ -35,7 +36,7 @@ app.post('/checkout', async (req, res, next) => {
     }
 });
 
-app.listen(4200, () => console.log('app is running'));
+exports.api = functions.https.onRequest(app);
 
 
 function convertSeats(seat) {
@@ -45,13 +46,19 @@ function convertSeats(seat) {
 
 function formatScreeningTime(screeningTime) {
     const dateObj = new Date(screeningTime);
+    
+    // Hozzáadunk egy órát
+    dateObj.setHours(dateObj.getHours() + 1);
+    
     const options = {
         weekday: 'long',
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        hour12: false // Az órák formátumának 24 órás formátumban való megjelenítése
     };
+    
     return dateObj.toLocaleDateString('hu-HU', options);
 }
