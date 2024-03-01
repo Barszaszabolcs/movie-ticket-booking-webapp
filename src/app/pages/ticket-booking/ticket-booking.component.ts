@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
+import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+
+import { ToastrService } from 'ngx-toastr';
+
+import { HttpClient } from '@angular/common/http';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { User } from '../../shared/models/User';
 import { Film } from '../../shared/models/Film';
@@ -67,7 +71,8 @@ export class TicketBookingComponent implements OnInit{
     private auditoriumService: AuditoriumService, private filmService: FilmService,
     private cinemaService: CinemaService, private orderService: OrderService,
     private ticketService: TicketService, private dialog: MatDialog, 
-    private toastr: ToastrService, private router: Router) {}
+    private toastr: ToastrService, private router: Router,
+    private http: HttpClient) {}
   
   ngOnInit(): void {
     this.tickets = [];
@@ -232,29 +237,46 @@ export class TicketBookingComponent implements OnInit{
       userId: this.user?.id as string
     }
 
-    this.orderService.create(order).then(docRef => {
-      this.finishedTickets.forEach(ticket => {
-        ticket.orderId = docRef;
-        this.ticketService.create(ticket).then(_ => {
-          if (!this.screening?.occupied_seats.includes(ticket.chosen_seat)) {
-            this.screening?.occupied_seats.push(ticket.chosen_seat);
-            this.screeningService.update(this.screening as Screening).then(_ => {
-            }).catch(error => {
-              this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
-            });
-          }
-        }).catch(error => {
-          this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+    if (!this.pay) {  
+      this.orderService.create(order).then(docRef => {
+        this.finishedTickets.forEach(ticket => {
+          ticket.orderId = docRef;
+          this.ticketService.create(ticket).then(_ => {
+            if (!this.screening?.occupied_seats.includes(ticket.chosen_seat)) {
+              this.screening?.occupied_seats.push(ticket.chosen_seat);
+              this.screeningService.update(this.screening as Screening).then(_ => {
+              }).catch(error => {
+                this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+              });
+            }
+          }).catch(error => {
+            this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+          });
         });
+        this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+        this.router.navigateByUrl('/cinema');
+      }).catch(error => {
+        this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
       });
-      this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-      this.router.navigateByUrl('/cinema');
-    }).catch(error => {
-      this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
-    });
+    } else {
+      this.onCheckout();
+    }
+
   }
 
   cancel() {
     this.router.navigateByUrl('/cinema');
+  }
+
+  onCheckout() {
+    localStorage.setItem('tickets', JSON.stringify(this.finishedTickets));
+    this.http.post('http://localhost:4200/checkout', {
+      items: this.finishedTickets
+    }).subscribe(async (res: any) => {
+      let stripe = await loadStripe('pk_test_51OpEKjFsVOqGvUD10lxbe07w6Di9pGGBkk1CpoxOr8ovWxZjeXf8pEWhtfuhZjruyTCuNzFrPFMLi5njedC4thgs00u9jxKVmG');
+      stripe?.redirectToCheckout({
+        sessionId: res.id
+      });
+    });
   }
 }
