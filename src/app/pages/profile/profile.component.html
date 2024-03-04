@@ -16,9 +16,18 @@
             </div>
         </div>
         <div class="bg-[#d9d9d9] my-3 rounded-lg pb-2" fxFlex="1 1 66%" *ngIf="tickets">
-            <h1 class="font-semibold text-2xl m-3">JEGYEK</h1>
+            <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+                <h1 class="w-full font-semibold text-2xl m-3">JEGYEK</h1>
+                <div class="w-full flex justify-end m-3" *ngIf="tickets.length > 0">
+                    <mat-button-toggle-group (change)="getTickets($event)">
+                        <mat-button-toggle value="active" checked>Aktív</mat-button-toggle>
+                        <mat-button-toggle value="expired">Lejárt</mat-button-toggle>
+                        <mat-button-toggle value="all">Mind</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
             <div class="w-full" *ngIf="tickets.length === 0">
-                <p class="w-full text-center font-semibold text-2xl m-3">Még nem foglaltál jegyet</p>
+                <p class="w-full text-center font-semibold text-2xl m-3">Nincsen jegy!</p>
             </div>
             <div class="scroll w-full" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="15px" *ngIf="tickets.length > 0">
                 <mat-card *ngFor="let ticket of tickets" style="width: 90%; background-color: white; text-align: center;">
@@ -26,7 +35,8 @@
                         <div fxFlex="1 1 25%">
                             <p class="font-medium">Ajándék</p>
                             <span *ngIf="ticket.prizeId === ''">
-                                <button mat-raised-button color="primary" class="mt-5" (click)="giftRedemption()">Beváltás</button>
+                                <button mat-raised-button style="background-color: #0BD808;" class="mt-5" (click)="giftRedemption()" *ngIf="ticket.screening_time > currentDate">Beváltás</button>
+                                <mat-icon class="mt-5" style="scale: 300%;" *ngIf="ticket.screening_time <= currentDate">close</mat-icon>
                             </span>
                             <!--<div *ngIf="!(ticket.prizeId === '')">
                                 <img src="" alt="">
@@ -41,7 +51,7 @@
                         <div fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
                             <p class="font-medium">{{ticket.payed ? 'Fizetve' : 'Lefoglalva'}}</p>
                             <span *ngIf="!ticket.payed">
-                                <button mat-raised-button color="warn" class="mt-5" (click)="deleteTicket()">Lemondás</button>
+                                <button mat-raised-button color="warn" class="mt-5" (click)="deleteTicket(ticket)" *ngIf="ticket.screening_time > currentDate">Lemondás</button>
                             </span>
                         </div>
                         <div fxFlex="1 1 25%" fxLayout="row" fxLayoutAlign="space-around center">

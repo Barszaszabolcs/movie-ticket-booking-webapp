@@ -3,3 +3,15 @@
     max-height: 37em;
     overflow-y: auto;
 }
+
+.mat-button-toggle {
+    background-color: #ffc000;
+}
+
+.mat-button-toggle:hover {
+    filter: brightness(99%);
+}
+
+.mat-button-toggle-checked {
+    filter: brightness(90%);
+}

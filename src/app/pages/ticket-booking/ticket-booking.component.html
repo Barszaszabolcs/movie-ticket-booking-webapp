@@ -120,7 +120,7 @@
                 <div class="w-full">
                     <div class="payment-infos w-full mb-2" fxLayout="row" fxLayoutAlign="start center">
                         <p fxFlex="1 1 10%">Mód</p>
-                        <p fxFlex="1 1 90%">{{pay ? 'Azonnali fizetés' : 'Mozipénztárnál fizetés'}}</p>
+                        <p fxFlex="1 1 90%">{{pay ? 'Azonnali fizetés' : 'Pénztárnál fizetés'}}</p>
                     </div>
                     <div class="w-full" fxLayout="row" fxLayoutAlign="start center">
                         <p class="text-2xl font-semibold" fxFlex="1 1 30%">Fizetendő összeg:</p>
@@ -135,8 +135,11 @@
                 <span>
                     <button mat-raised-button color="accent" class="mt-5" (click)="cancel()">Mégse</button>
                 </span>
-                <span>
+                <span *ngIf="pay">
                     <button mat-raised-button color="primary" class="mt-5" (click)="finishOrder()">Tovább</button>
+                </span>
+                <span *ngIf="!pay">
+                    <button mat-raised-button color="primary" class="mt-5" (click)="finishOrder()">Foglalás</button>
                 </span>
             </div>
         </div>
