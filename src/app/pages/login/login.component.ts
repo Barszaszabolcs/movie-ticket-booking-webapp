@@ -49,6 +49,6 @@ export class LoginComponent {
   }
 
   navigate() {
-    this.router.navigateByUrl('/cinema');
+    this.router.navigateByUrl('/main');
   }
 }

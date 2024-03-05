@@ -27,7 +27,7 @@ export class AdminGuard implements CanActivate {
             this.answer = true;
           } else {
             this.answer = false;
-            this.router.navigate(['/cinema']);
+            this.router.navigate(['/main']);
           }
         } else {
           this.router.navigate(['/login']);

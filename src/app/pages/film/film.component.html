@@ -32,7 +32,7 @@
             </mat-card-content>
         </div>
     </mat-card>
-    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="row" fxLayoutAlign="start center">
+    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="row" fxLayoutAlign="start center" *ngIf="user">
         <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout="column" fxLayoutAlign="start start">
             <mat-form-field>
                 <mat-label for="cinemaId">Mozi: </mat-label>
@@ -63,11 +63,14 @@
     <div class="w-4/5 mb-8" *ngIf="loaded">
         <button mat-raised-button class="w-full" style="background-color: #9d9d9d;" (click)="hideComments()"><mat-icon style="scale: 200%; color: white;">keyboard_arrow_up</mat-icon></button>
     </div>
+    <div class="w-4/5 mb-8" *ngIf="loaded && !user && comments.length === 0">
+        <h1 class="w-full text-center text-white text-3xl font-bold">Még nincsen komment ehhez a filmhez!</h1>
+    </div>
     <div class="w-4/5 mb-10 bg-[#434343] rounded-lg" *ngIf="loaded">
-        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()" *ngIf="!ownComment">
+        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()" *ngIf="!ownComment && user">
             <mat-form-field class="mt-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>
-                <input matInput class="w-11/12" type="text" readonly="true" [value]="user?.username"/>
+                <input matInput class="w-11/12" type="text" readonly="true" [value]="user.username"/>
             </mat-form-field>
             <star-rating class="mb-3" [value]="1" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="false" (rate)="onRate($event)"></star-rating>
             <mat-form-field class="my-2 w-full">
@@ -78,7 +81,7 @@
                 <button mat-raised-button class="w-full" color="primary" type="submit">Megjegyzés</button>
             </span>
         </form>
-        <div class="mt-5" *ngIf="ownComment">
+        <div class="mt-5" *ngIf="user && ownComment">
             <h2 class="ml-5 text-2xl text-white font-medium">SAJÁT VÉLEMÉNY:</h2>
             <mat-card class="m-5" style="background-color: #9d9d9d;">
                 <mat-card-content>

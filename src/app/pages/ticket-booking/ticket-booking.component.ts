@@ -254,7 +254,7 @@ export class TicketBookingComponent implements OnInit{
           });
         });
         this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-        this.router.navigateByUrl('/cinema');
+        this.router.navigateByUrl('/main');
       }).catch(error => {
         this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
       });
@@ -265,7 +265,7 @@ export class TicketBookingComponent implements OnInit{
   }
 
   cancel() {
-    this.router.navigateByUrl('/cinema');
+    this.router.navigateByUrl('/main');
   }
 
   onCheckout() {

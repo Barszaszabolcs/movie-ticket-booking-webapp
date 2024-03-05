@@ -2,7 +2,47 @@
     <div class="w-full mb-10">
         <ng-image-slider [images]="imageObject" [infinite]="true" [imageSize]="{width: '99.3%', height: '50%'}" [slideImage]="1" [animationSpeed]="1.5" [imagePopup]="false" [autoSlide]="5"></ng-image-slider>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="w-4/5 h-full my-7">
+        <form class="w-full" [formGroup]="searchForm" (ngSubmit)="onSearch()" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+            <button mat-raised-button class="mb-6" color="primary" type="submit">Keresés<mat-icon class="ml-1">search</mat-icon></button>
+            <mat-form-field>
+                <mat-label for="title">Cím:</mat-label>
+                <input matInput color="primary" type="text" formControlName="title">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label for="genre">Műfaj:</mat-label>
+                <mat-select formControlName="genre">
+                    <mat-option [value]="all"></mat-option>
+                    <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
+    <div *ngIf="films" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
+        <div *ngIf="films.length > 6">
+            <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
+        </div>
+        <div [ngClass]="films.length <= 6 ? 'ml-20' : ''" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
+            <div class="card" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+                <div class="front w-full h-full rounded-lg">
+                    <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>
+                </div>
+                <a class="back rounded-lg" [routerLink]="'/film/' + film.id">
+                    <p class="w-full p-1 text-center font-medium">{{film.title}}</p>
+                    <p class="p-1 text-sm italic">Korhatár: {{film.age_limit}}</p>
+                    <p class="p-1 text-sm italic">Hossz: {{film.movie_length}} perc</p>
+                    <p class="p-1 text-sm italic">Rendező(k): {{film.director}}</p>
+                </a>
+            </div>
+        </div>
+        <div *ngIf="films.length > 6">
+            <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
+        </div>
+    </div>
+    <div class="w-4/5" *ngIf="films.length === 0">
+        <p class="w-full mb-10 text-center text-white text-2xl">Nincsen ilyen film még!</p>
+    </div>
+    <div class="w-4/5 mb-5 mt-10">
         <h2 class="text-2xl text-white">Akció filmek</h2>
     </div>
     <div class="w-full mb-10">

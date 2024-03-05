@@ -8,6 +8,11 @@ import { FilmListComponent } from '../../shared/components/film-list/film-list.c
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -21,7 +26,13 @@ import { NgImageSliderModule } from 'ng-image-slider';
     FlexLayoutModule,
     MatIconModule,
     MatButtonModule,
-    NgImageSliderModule
+    NgImageSliderModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    FormsModule,
+    MatInputModule
   ]
 })
 export class MainModule { }

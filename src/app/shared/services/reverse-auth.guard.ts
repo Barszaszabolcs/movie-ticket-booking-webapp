@@ -15,7 +15,7 @@ export class ReverseAuthGuard implements CanActivate {
       
       const user = JSON.parse(localStorage.getItem('user') as string);
       if (user) {
-        this.router.navigate(['/cinema']);
+        this.router.navigate(['/main']);
         return false;
       }
       return true;

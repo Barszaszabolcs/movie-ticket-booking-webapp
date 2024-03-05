@@ -60,7 +60,7 @@ export class RegistrationComponent {
           }
           this.userService.create(user).then(_ => {
             this.toastr.success('Sikeres regisztráció!', 'Regisztráció');
-            this.router.navigateByUrl('/cinema');
+            this.router.navigateByUrl('/main');
           }).catch(error => {
             console.error(error);
             this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');

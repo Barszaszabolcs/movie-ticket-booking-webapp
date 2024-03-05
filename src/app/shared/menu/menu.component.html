@@ -15,14 +15,14 @@
         <mat-icon>account_circle</mat-icon>
         <span>Profil</span>
     </a>
-    <a mat-list-item routerLink="/main" (click)="close()" *ngIf="!(loggedInUser)">
+    <a mat-list-item routerLink="/main" (click)="close()">
         <mat-icon>home</mat-icon>
         <span>Főoldal</span>
     </a>
-    <a mat-list-item routerLink="/cinema" (click)="close()" *ngIf="loggedInUser">
+    <!--<a mat-list-item routerLink="/cinema" (click)="close()" *ngIf="loggedInUser">
         <mat-icon>movie</mat-icon>
         <span>Főoldal</span>
-    </a>
+    </a>-->
     <a mat-list-item routerLink="/film-create" (click)="close()">
         <mat-icon>movie</mat-icon>
         <mat-icon>create</mat-icon>

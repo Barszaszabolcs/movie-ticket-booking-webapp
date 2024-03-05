@@ -11,7 +11,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label for="genre">Műfaj:</mat-label>
-                <mat-select  formControlName="genre">
+                <mat-select formControlName="genre">
                     <mat-option [value]="all"></mat-option>
                     <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
                 </mat-select>

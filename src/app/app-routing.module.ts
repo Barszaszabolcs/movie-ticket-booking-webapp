@@ -11,19 +11,18 @@ const routes: Routes = [
   },
   {
     path: 'film',
-    loadChildren: () => import('./pages/film/film.module').then(m => m.FilmModule),
-    canActivate: [AuthGuard]
+    loadChildren: () => import('./pages/film/film.module').then(m => m.FilmModule)
   },
   { 
     path: 'ticket-booking',
     loadChildren: () => import('./pages/ticket-booking/ticket-booking.module').then(m => m.TicketBookingModule),
     canActivate: [AuthGuard]
   },
-  {
+  /*{
     path: 'cinema',
     loadChildren: () => import('./pages/cinema/cinema.module').then(m => m.CinemaModule),
     canActivate: [AuthGuard]
-  },
+  },*/
   { 
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),

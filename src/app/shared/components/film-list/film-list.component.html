@@ -4,14 +4,14 @@
     </div>
     <div class="card" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
         <div class="front w-full h-full rounded-lg">
-            <img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}">
+            <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>
         </div>
-        <div class="back rounded-lg">
+        <a class="back rounded-lg" [routerLink]="'/film/' + film.id">
             <p class="w-full p-1 text-center font-medium">{{film.title}}</p>
             <p class="p-1 text-sm italic">Korhatár: {{film.age_limit}}</p>
             <p class="p-1 text-sm italic">Hossz: {{film.movie_length}} perc</p>
             <p class="p-1 text-sm italic">Rendező(k): {{film.director}}</p>
-        </div>
+        </a>
     </div>
     <div>
         <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>

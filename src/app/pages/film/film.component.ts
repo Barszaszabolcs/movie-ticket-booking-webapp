@@ -72,9 +72,11 @@ export class FilmComponent implements OnInit{
     this.screenings = [];
     this.loaded = false;
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
-    this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
-      this.user = data[0];
-    });
+    if (user) {
+      this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
+        this.user = data[0];
+      });
+    }
 
     this.actRoute.params.subscribe((param: any) => {
       this.filmService.loadFilmMetaById(param.chosenFilm).pipe(take(1)).subscribe(data => {
@@ -179,11 +181,13 @@ export class FilmComponent implements OnInit{
       this.commentService.getCommentsByFilmId(this.chosenFilm?.id as string).subscribe(data => {
         this.comments = data;
 
-        this.comments = this.comments.filter(comment => comment.userId !== this.user?.id);
-  
-        this.commentService.getCommentByFilmIdAndUserId(this.chosenFilm?.id as string, this.user?.id as string).pipe(take(1)).subscribe(data => {
-          this.ownComment = data[0];
-        });
+        if (this.user) {
+          this.comments = this.comments.filter(comment => comment.userId !== this.user?.id);
+    
+          this.commentService.getCommentByFilmIdAndUserId(this.chosenFilm?.id as string, this.user?.id as string).pipe(take(1)).subscribe(data => {
+            this.ownComment = data[0];
+          });
+        }
       });
       this.loaded = !this.loaded;
     }
