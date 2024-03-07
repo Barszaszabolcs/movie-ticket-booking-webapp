@@ -18,7 +18,7 @@
         <div class="bg-[#d9d9d9] my-3 rounded-lg pb-2" fxFlex="1 1 66%" *ngIf="tickets">
             <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
                 <h1 class="w-full font-semibold text-2xl m-3">JEGYEK</h1>
-                <div class="w-full flex justify-end m-3" *ngIf="tickets.length > 0">
+                <div class="w-full flex justify-end m-3">
                     <mat-button-toggle-group (change)="getTickets($event)">
                         <mat-button-toggle value="active" checked>Aktív</mat-button-toggle>
                         <mat-button-toggle value="expired">Lejárt</mat-button-toggle>

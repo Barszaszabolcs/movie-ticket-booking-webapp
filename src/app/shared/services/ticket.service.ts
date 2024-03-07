@@ -16,8 +16,15 @@ export class TicketService {
     return this.angularFirestore.collection<Ticket>(this.collectionName).doc(ticket.id).set(ticket);
   }
 
-  getByOrderId(orderId: string) {
-    return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('orderId', '==', orderId)).valueChanges();
+  getByUserId(userId: string, mode: string) {
+    const currentDate = new Date().getTime();
+    if (mode === 'active') {
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '>', currentDate).orderBy('screening_time', 'asc')).valueChanges();
+    } else if (mode === 'expired') {
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '<=', currentDate).orderBy('screening_time', 'desc')).valueChanges();
+    } else {
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).orderBy('screening_time', 'desc')).valueChanges();
+    }
   }
 
   delete(id: string) {

@@ -12,14 +12,12 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { User } from '../../shared/models/User';
 import { Film } from '../../shared/models/Film';
-import { Order } from '../../shared/models/Order';
 import { Cinema } from '../../shared/models/Cinema';
 import { Ticket } from '../../shared/models/Ticket';
 import { Screening } from '../../shared/models/Screening';
 import { Auditorium } from '../../shared/models/Auditorium';
 import { UserService } from '../../shared/services/user.service';
 import { FilmService } from '../../shared/services/film.service';
-import { OrderService } from '../../shared/services/order.service';
 import { CinemaService } from '../../shared/services/cinema.service';
 import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
@@ -69,10 +67,9 @@ export class TicketBookingComponent implements OnInit{
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
     private auditoriumService: AuditoriumService, private filmService: FilmService,
-    private cinemaService: CinemaService, private orderService: OrderService,
-    private ticketService: TicketService, private dialog: MatDialog, 
-    private toastr: ToastrService, private router: Router,
-    private http: HttpClient) {}
+    private cinemaService: CinemaService, private ticketService: TicketService,
+    private dialog: MatDialog, private toastr: ToastrService,
+    private router: Router, private http: HttpClient) {}
   
   ngOnInit(): void {
     this.tickets = [];
@@ -198,7 +195,7 @@ export class TicketBookingComponent implements OnInit{
               screening_time: this.screening?.time as number,
               chosen_seat: '',
               screeningId: this.screening?.id as string,
-              orderId: '',
+              userId: this.user?.id as string,
               prizeId: ''
             }
             
@@ -230,38 +227,26 @@ export class TicketBookingComponent implements OnInit{
   }
 
   finishOrder() {
-    const order: Order = {
-      id: '',
-      price: this.paymentAmount,
-      date: new Date().getTime(),
-      userId: this.user?.id as string
-    }
-
     if (!this.pay) {  
-      this.orderService.create(order).then(docRef => {
-        this.finishedTickets.forEach(ticket => {
-          ticket.orderId = docRef;
-          this.ticketService.create(ticket).then(_ => {
-            if (!this.screening?.occupied_seats.includes(ticket.chosen_seat)) {
-              this.screening?.occupied_seats.push(ticket.chosen_seat);
-              this.screeningService.update(this.screening as Screening).then(_ => {
-              }).catch(error => {
-                this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
-              });
-            }
-          }).catch(error => {
-            this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
-          });
+      this.finishedTickets.forEach(ticket => {
+        ticket.date = new Date().getTime();
+        this.ticketService.create(ticket).then(_ => {
+          if (!this.screening?.occupied_seats.includes(ticket.chosen_seat)) {
+            this.screening?.occupied_seats.push(ticket.chosen_seat);
+            this.screeningService.update(this.screening as Screening).then(_ => {
+            }).catch(error => {
+              this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+            });
+          }
+        }).catch(error => {
+          this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
         });
-        this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-        this.router.navigateByUrl('/main');
-      }).catch(error => {
-        this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
       });
+      this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+      this.router.navigateByUrl('/main');
     } else {
       this.onCheckout();
     }
-
   }
 
   cancel() {

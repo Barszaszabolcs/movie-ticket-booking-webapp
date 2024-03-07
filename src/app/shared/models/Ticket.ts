@@ -8,7 +8,8 @@ export interface Ticket {
     auditorium_number: number;
     screening_time: number;
     chosen_seat: string;
+    date?: number;
     screeningId: string;
-    orderId: string;
-    prizeId?: string;
+    userId: string;
+    prizeId: string;
 }

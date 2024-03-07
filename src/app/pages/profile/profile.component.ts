@@ -3,11 +3,9 @@ import { take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 import { User } from '../../shared/models/User';
-import { Order } from '../../shared/models/Order';
 import { Ticket } from '../../shared/models/Ticket';
 import { Screening } from '../../shared/models/Screening';
 import { UserService } from '../../shared/services/user.service';
-import { OrderService } from '../../shared/services/order.service';
 import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 
@@ -20,27 +18,22 @@ export class ProfileComponent implements OnInit{
 
   user?: User;
 
-  orders: Array<Order> = [];
-
-  tickets: Array<Ticket> = [];
-
   allTickets: Array<Ticket> = [];
   activeTickets: Array<Ticket> = [];
   expiredTickets: Array<Ticket> = [];
+  tickets: Array<Ticket> = [];
 
   currentDate = new Date().getTime();
 
   constructor(
-    private userService: UserService, private orderService: OrderService,
-    private ticketService: TicketService, private screeningService: ScreeningService,
-    private toastr: ToastrService) {}
+    private userService: UserService, private ticketService: TicketService,
+    private screeningService: ScreeningService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.orders = [];
-    this.tickets = [];
     this.allTickets = [];
     this.activeTickets = [];
     this.expiredTickets = [];
+    this.tickets = [];
     this.currentDate = new Date().getTime();
 
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
@@ -48,25 +41,19 @@ export class ProfileComponent implements OnInit{
       this.user = data[0];
 
       if (this.user) {
-        this.orderService.getByUserId(this.user.id).subscribe(data => {
-          this.orders = data;
+        this.ticketService.getByUserId(this.user.id, 'all').subscribe(data => {
+          this.allTickets = data;
+        });
 
-          if (this.orders) {
-            this.orders.forEach(order => {
-              this.ticketService.getByOrderId(order.id).subscribe(data => {
-                data.forEach(ticket => {
-                  this.allTickets.push(ticket);
-                  
-                  if (ticket.screening_time > this.currentDate) {
-                    this.activeTickets.push(ticket);
-                    this.tickets.push(ticket);
-                  } else if(ticket.screening_time < this.currentDate) {
-                    this.expiredTickets.push(ticket);
-                  }
-                });
-              });
-            });
+        this.ticketService.getByUserId(this.user.id, 'active').subscribe(data => {
+          this.activeTickets = data;
+          if (this.activeTickets) {
+            this.tickets = this.activeTickets;
           }
+        });
+
+        this.ticketService.getByUserId(this.user.id, 'expired').subscribe(data => {
+          this.expiredTickets = data;
         });
       }
     });
@@ -74,7 +61,6 @@ export class ProfileComponent implements OnInit{
 
   getTickets(event: any) {
     this.tickets = [];
-    this.tickets = this.allTickets;
     if (event.source.value === 'active') {
       this.tickets = this.activeTickets;
     } else if (event.source.value === 'expired') {
@@ -107,9 +93,6 @@ export class ProfileComponent implements OnInit{
             screening.occupied_seats = screening.occupied_seats.filter(seat => seat !== ticket.chosen_seat);
 
             this.screeningService.update(screening).then(_ => {
-              this.allTickets = this.allTickets.filter(t => t.id !== ticket.id);
-              this.activeTickets = this.activeTickets.filter(t => t.id !== ticket.id);
-              this.tickets = this.allTickets;
               this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
             }).catch(error => {
               this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');

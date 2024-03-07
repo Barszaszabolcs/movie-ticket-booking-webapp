@@ -5,7 +5,7 @@
                 <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
             </div>
             <div *ngFor="let film of allFilms.slice(presentIndex, presentEndIndex)">
-                <div class="w-full h-full rounded-lg">
+                <div class="image-container w-full h-full rounded-lg">
                     <img class="w-[112px] h-[168px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}" (click)="chooseFilm(film.id)">
                 </div>
             </div>
