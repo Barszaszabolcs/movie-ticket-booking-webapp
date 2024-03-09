@@ -23,14 +23,18 @@
         <mat-icon>movie</mat-icon>
         <span>Főoldal</span>
     </a>-->
+    <a mat-list-item routerLink="/screening-create" (click)="close()" *ngIf="loggedInUser && isAdmin">
+        <mat-icon>video_label</mat-icon>
+        <mat-icon>create</mat-icon>
+        <span>Vetítés létrehozás</span>
+    </a>
     <a mat-list-item routerLink="/film-create" (click)="close()">
         <mat-icon>movie</mat-icon>
         <mat-icon>create</mat-icon>
         <span>Film létrehozás</span>
     </a>
-    <a mat-list-item routerLink="/screening-create" (click)="close()" *ngIf="loggedInUser && isAdmin">
-        <mat-icon>video_label</mat-icon>
-        <mat-icon>create</mat-icon>
-        <span>Vetítés létrehozás</span>
+    <a mat-list-item routerLink="/list-users" (click)="close()">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>Felhasználók</span>
     </a>
 </mat-nav-list>

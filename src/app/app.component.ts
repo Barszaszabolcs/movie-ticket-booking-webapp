@@ -71,6 +71,7 @@ export class AppComponent implements OnInit{
     this.authService.logout().then(_ => {
       this.toastr.success('Sikeres kijelentkezés!', 'Kijelentkezés');
       localStorage.setItem('user', JSON.stringify(null));
+      localStorage.setItem('tickets', JSON.stringify([]));
       this.navigate();
     }).catch(error => {
       console.error(error);

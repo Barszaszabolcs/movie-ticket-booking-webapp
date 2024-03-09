@@ -62,3 +62,36 @@ function formatScreeningTime(screeningTime) {
     
     return dateObj.toLocaleDateString('hu-HU', options);
 }
+
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+exports.addAdminRole = functions.https.onCall((data, context) => {
+    // get user and add custom claim (admin)
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+            admin: true
+        });
+    }).then(() => {
+        return {
+            success: true
+        }
+    }).catch(error => {
+        return error;
+    });
+});
+
+exports.addModeratorRole = functions.https.onCall((data, context) => {
+    // get user and add custom claim (moderator)
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+            moderator: true
+        });
+    }).then(() => {
+        return {
+            success: true
+        }
+    }).catch(error => {
+        return error;
+    });
+});

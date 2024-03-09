@@ -48,6 +48,10 @@ const routes: Routes = [
     canActivate: [AuthGuard, AdminGuard]
   },
   { 
+    path: 'list-users',
+    loadChildren: () => import('./pages/list-users/list-users.module').then(m => m.ListUsersModule)
+  },
+  { 
     path: 'cancel-payment',
     loadChildren: () => import('./pages/payment/cancel-payment/cancel-payment.module').then(m => m.CancelPaymentModule)
   },

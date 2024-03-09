@@ -33,11 +33,14 @@
           <!--<li *ngIf="loggedInUser">
             <a routerLink="/cinema" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>-->
+          <li *ngIf="loggedInUser && isAdmin">
+            <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
+          </li>
           <li>
             <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
           </li>
-          <li *ngIf="loggedInUser && isAdmin">
-            <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
+          <li>
+            <a routerLink="/list-users" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Felhasználók</a>
           </li>
         </ul>
       </div>

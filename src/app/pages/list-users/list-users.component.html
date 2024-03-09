@@ -1,0 +1,37 @@
+<div class="bg-black w-full" fxLayout="column" fxLayoutAlign="space-around center">
+    <div class="w-3/5 m-5 pb-5 h-full bg-[#d9d9d9] rounded-lg" fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="20px">
+        <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+            <h1 class="w-full font-semibold text-3xl m-3">Regisztrált felhasználók</h1>
+            <div class="w-full flex justify-end m-3">
+                <mat-button-toggle-group (change)="getUsers($event)">
+                    <mat-button-toggle value="user" checked>Felhasználók</mat-button-toggle>
+                    <mat-button-toggle value="admin">Adminok</mat-button-toggle>
+                    <mat-button-toggle value="moderator">Moderátorok</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+        <mat-card *ngFor="let user of users" style=" width: 95%; background-color: white;">
+            <mat-card-content fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex="1 1 33%">
+                    <p>Beosztás:</p>
+                    <p>Felhasználónév:</p>
+                    <p>Teljes név:</p>
+                    <p>E-mail:</p>
+                </div>
+                <div fxFlex="1 1 34%">
+                    <p class="font-medium">{{getRole(user)}}</p>
+                    <p class="font-medium">{{user.username}}</p>
+                    <p class="font-medium">{{user.name.firstname}} {{user.name.lastname}}</p>
+                    <p class="font-medium">{{user.email}}</p>
+                </div>
+                <div class="h-full" fxFlex="1 1 33%" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="15px" *ngIf="user.role === 'user'">
+                    <button mat-raised-button color="warn" (click)="makeAdmin(user)">Legyen Admin</button>
+                    <button mat-raised-button color="primary" (click)="makeModerator(user)">Legyen Moderátor</button>
+                </div>
+                <div fxFlex="1 1 33%" *ngIf="user.role === 'admin'">
+                    <p class="text-xl text-center font-medium">{{getCinema(user)}}</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
