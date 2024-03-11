@@ -36,10 +36,10 @@
           <li *ngIf="loggedInUser && isAdmin">
             <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
           </li>
-          <li>
+          <li *ngIf="loggedInUser && isSuperadmin">
             <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
           </li>
-          <li>
+          <li *ngIf="loggedInUser && isSuperadmin">
             <a routerLink="/list-users" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Felhasználók</a>
           </li>
         </ul>

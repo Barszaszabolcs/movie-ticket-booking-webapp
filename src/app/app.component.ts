@@ -21,10 +21,13 @@ export class AppComponent implements OnInit{
   loggedInUser?: firebase.default.User | null;
   user?: User;
   isAdmin = false;
+  isSuperadmin = false;
 
   constructor(private router: Router, private authService: AuthService, private userService: UserService, private toastr: ToastrService) {}
 
   ngOnInit() {
+    // can be used to log out the user's claims
+    //this.authService.logUserClaims();
     this.routes = this.router.config.map(conf => conf.path) as string[];
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((evts: any) => {
       const currentPage = (evts.urlAfterRedirects as string).split('/')[1] as string;
@@ -41,8 +44,13 @@ export class AppComponent implements OnInit{
           if (this.user) {
             if (this.user.role === 'admin') {
               this.isAdmin = true;
+              this.isSuperadmin = false;
+            } else if (this.user.role === 'superadmin') {
+              this.isSuperadmin = true;
+              this.isAdmin = false;
             } else {
               this.isAdmin = false;
+              this.isSuperadmin = false;
             }
           }
         });

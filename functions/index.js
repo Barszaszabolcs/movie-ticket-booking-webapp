@@ -95,3 +95,18 @@ exports.addModeratorRole = functions.https.onCall((data, context) => {
         return error;
     });
 });
+
+exports.addSuperadminRole = functions.https.onCall((data, context) => {
+    // get user and add custom claim (superadmin)
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+            superadmin: true
+        });
+    }).then(() => {
+        return {
+            success: true
+        }
+    }).catch(error => {
+        return error;
+    });
+});

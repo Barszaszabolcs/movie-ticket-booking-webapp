@@ -137,4 +137,20 @@ export class ListUsersComponent implements OnInit {
       }
     });
   }
+
+  // can be used to make superadmins in the future
+  /*makeSuperadmin(user: User) {
+    const addSuperadminRole = this.functions.httpsCallable('addSuperadminRole');
+    const data = addSuperadminRole({ email: user.email });
+    data.toPromise().then(result => {
+      if (result) {
+        user.role = 'superadmin';
+        this.userService.update(user).then(_ => {
+          this.toastr.success('A ' + user.email + ' e-mail című felhasználó mostár szuperadmin!', 'Szuperadmin választás');
+        }).catch(error => {
+          this.toastr.error('Sikertelen szuperadmin létrehozás', 'Szuperadmin választás');
+        });
+      }
+    });
+  }*/
 }

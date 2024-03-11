@@ -27,6 +27,7 @@
                 <div class="h-full" fxFlex="1 1 33%" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="15px" *ngIf="user.role === 'user'">
                     <button mat-raised-button color="warn" (click)="makeAdmin(user)">Legyen Admin</button>
                     <button mat-raised-button color="primary" (click)="makeModerator(user)">Legyen Moderátor</button>
+                    <!--<button mat-raised-button color="accent" (click)="makeSuperadmin(user)">Legyen Szuperadmin</button>-->
                 </div>
                 <div fxFlex="1 1 33%" *ngIf="user.role === 'admin'">
                     <p class="text-xl text-center font-medium">{{getCinema(user)}}</p>

@@ -23,4 +23,14 @@ export class AuthService {
   logout() {
     return this.auth.signOut();
   }
+
+  logUserClaims() {
+    this.auth.onAuthStateChanged(user => {
+      if (user) {
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims);
+        });
+      }
+    });
+  }
 }

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './shared/services/auth.guard';
-import { ReverseAuthGuard } from './shared/services/reverse-auth.guard';
-import { AdminGuard } from './shared/services/admin.guard';
+import { AuthGuard } from './shared/services/guards/auth.guard';
+import { AdminGuard } from './shared/services/guards/admin.guard';
+import { SuperadminGuard } from './shared/services/guards/superadmin.guard';
+import { ReverseAuthGuard } from './shared/services/guards/reverse-auth.guard';
 
 const routes: Routes = [
   {
@@ -40,7 +41,8 @@ const routes: Routes = [
   },
   {
     path: 'film-create',
-    loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule)
+    loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule),
+    canActivate: [AuthGuard, SuperadminGuard]
   },
   {
     path: 'screening-create',
@@ -49,7 +51,8 @@ const routes: Routes = [
   },
   { 
     path: 'list-users',
-    loadChildren: () => import('./pages/list-users/list-users.module').then(m => m.ListUsersModule)
+    loadChildren: () => import('./pages/list-users/list-users.module').then(m => m.ListUsersModule),
+    canActivate: [AuthGuard, SuperadminGuard]
   },
   { 
     path: 'cancel-payment',
