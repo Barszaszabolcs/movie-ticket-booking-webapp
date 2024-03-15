@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { CinemaCreateComponent } from './shared/components/cinema-create/cinema-create.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, take } from 'rxjs';
-import { AuthService } from './shared/services/auth.service';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './shared/services/user.service';
+
 import { User } from './shared/models/User';
+import { UserService } from './shared/services/user.service';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +27,10 @@ export class AppComponent implements OnInit{
   isAdmin = false;
   isSuperadmin = false;
 
-  constructor(private router: Router, private authService: AuthService, private userService: UserService, private toastr: ToastrService) {}
+  constructor(
+    private router: Router, private authService: AuthService,
+    private userService: UserService, private toastr: ToastrService,
+    private dialog: MatDialog) {}
 
   ngOnInit() {
     // can be used to log out the user's claims
@@ -88,5 +95,12 @@ export class AppComponent implements OnInit{
 
   navigate() {
     this.router.navigateByUrl('/main');
+  }
+
+  createCinema() {
+    this.dialog.open(CinemaCreateComponent, {
+      width: '40%',
+      height: '50%'
+    });
   }
 }

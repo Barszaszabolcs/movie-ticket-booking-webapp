@@ -1,0 +1,23 @@
+<div class="w-full h-full bg-[#e9e9e9]" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="container">
+        <h1 class="w-full text-3xl font-medium text-center">Hozzon létre egy városi mozit!</h1>
+        <form class="w-full h-full" fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="cinemaForm" (ngSubmit)="createCinema()">
+            <mat-form-field class="mt-2 w-full">
+                <mat-label for="town">Város: </mat-label>
+                <input matInput type="text" formControlName="town"/>
+            </mat-form-field>
+            <mat-form-field class="w-full">
+                <mat-label for="auditorium_limit">Terem limit: </mat-label>
+                <input matInput type="number" min="1" max="14" formControlName="auditorium_limit">
+            </mat-form-field>
+            <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+                <span>
+                    <button mat-raised-button mat-dialog-close color="warn">Mégse</button>
+                </span>
+                <span>
+                    <button mat-raised-button color="primary" type="submit">Létrehozás</button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>

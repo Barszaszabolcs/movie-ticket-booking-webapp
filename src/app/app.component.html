@@ -45,6 +45,9 @@
           <li *ngIf="loggedInUser && isSuperadmin">
             <a routerLink="/list-users" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Felhasználók</a>
           </li>
+          <li *ngIf="loggedInUser && isSuperadmin">
+            <a (click)="createCinema()" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00] cursor-pointer">Mozi létrehozás</a>
+          </li>
         </ul>
       </div>
     </mat-toolbar>

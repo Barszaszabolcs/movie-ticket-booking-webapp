@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+//import { MatDialog } from '@angular/material/dialog';
+//import { CinemaCreateComponent } from '../cinema-create/cinema-create.component';
 
 @Component({
   selector: 'app-menu',
@@ -14,6 +16,8 @@ export class MenuComponent {
   @Input() isSuperadmin?: boolean;
   @Output() onLogout: EventEmitter<boolean> = new EventEmitter();
 
+  //constructor(private dialog: MatDialog) {}
+
   menuSwitch() {
     this.selectedPage.emit(this.currentPage);
   }
@@ -24,4 +28,12 @@ export class MenuComponent {
       this.onLogout.emit(logout);
     }
   }
+
+  // needs to be responsive
+  /*createCinema() {
+    this.dialog.open(CinemaCreateComponent, {
+      width: '40%',
+      height: '50%'
+    });
+  }*/
 }
