@@ -1,0 +1,32 @@
+<div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="bg-white rounded-lg w-1/2 my-10" fxLayout="row" fxLayoutAlign="space-around center">
+        <form class="mx-20 my-10 w-full" [formGroup]="auditoriumForm" (ngSubmit)="createAuditorium()" fxLayout="column" fxLayoutAlign="space-around center">
+            <h1 class="w-full mb-5 text-2xl text-center font-medium">{{cinema?.town}} városi mozihoz hozzon létre egy termet!</h1>
+            <div class="w-full border-t-4 border-t-[#ffc000] pt-5" fxLayout="row" fxLayoutAlign="space-around center">
+                <mat-form-field>
+                    <mat-label for="auditorium_number">Terem száma:</mat-label>
+                    <mat-select formControlName="auditorium_number">
+                        <mat-option *ngFor="let i of numbers" [value]="i">{{i}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label for="layout">Elrendezés:</mat-label>
+                    <mat-select formControlName="layout">
+                        <mat-option *ngFor="let layout of layouts" [value]="layout">{{layout}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <mat-form-field>
+                <mat-label for="rows_number">Sorok száma:</mat-label>
+                <input matInput type="number" formControlName="rows_number" min="1" max="20">
+            </mat-form-field>
+            <div class="w-full grid justify-center grid-cols-3 gap-[15px] border-t-4 border-t-[#ffc000] pt-3" formArrayName="rows">
+                <div class="text-center" *ngFor="let input of getInputControls(); let i=index" [formGroupName]="i">
+                    <label class="mr-1 text-lg" for="value">{{i + 1}}. sor székek száma:</label>
+                    <input class="row-seat-number" type="number" formControlName="value" min="3" max="20">
+                </div>
+            </div>
+            <button mat-raised-button color="primary" class="mt-5" type="submit" >Létrehozás</button>
+        </form>
+    </div>
+</div>

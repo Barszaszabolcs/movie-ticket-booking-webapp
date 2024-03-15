@@ -1,6 +1,6 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
-    <app-menu (selectedPage)="changePage($event)" [currentPage]="page" (onCloseSidenav)="onClose($event, sidenav)" [loggedInUser]="loggedInUser" [isAdmin]="isAdmin" (onLogout)="logout($event)"></app-menu>
+    <app-menu (selectedPage)="changePage($event)" [currentPage]="page" (onCloseSidenav)="onClose($event, sidenav)" [loggedInUser]="loggedInUser" [isAdmin]="isAdmin" [isSuperadmin]="isSuperadmin" (onLogout)="logout($event)"></app-menu>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar class="bg-black text-white">
@@ -35,6 +35,9 @@
           </li>-->
           <li *ngIf="loggedInUser && isAdmin">
             <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
+          </li>
+          <li *ngIf="loggedInUser && isAdmin">
+            <a routerLink="/auditorium-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Terem létrehozás</a>
           </li>
           <li *ngIf="loggedInUser && isSuperadmin">
             <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>

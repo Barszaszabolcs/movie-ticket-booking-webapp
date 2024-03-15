@@ -11,6 +11,7 @@ export class MenuComponent {
   @Output() onCloseSidenav: EventEmitter<boolean> = new EventEmitter();
   @Input() loggedInUser?: firebase.default.User | null;
   @Input() isAdmin?: boolean;
+  @Input() isSuperadmin?: boolean;
   @Output() onLogout: EventEmitter<boolean> = new EventEmitter();
 
   menuSwitch() {

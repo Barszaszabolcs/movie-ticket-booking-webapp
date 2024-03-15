@@ -40,14 +40,19 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'film-create',
-    loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule),
-    canActivate: [AuthGuard, SuperadminGuard]
-  },
-  {
     path: 'screening-create',
     loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule),
     canActivate: [AuthGuard, AdminGuard]
+  },
+  { 
+    path: 'auditorium-create',
+    loadChildren: () => import('./pages/auditorium-create/auditorium-create.module').then(m => m.AuditoriumCreateModule),
+    canActivate: [AuthGuard, AdminGuard]
+  },
+  {
+    path: 'film-create',
+    loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule),
+    canActivate: [AuthGuard, SuperadminGuard]
   },
   { 
     path: 'list-users',
