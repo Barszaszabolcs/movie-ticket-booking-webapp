@@ -167,7 +167,7 @@ export class TicketBookingComponent implements OnInit{
   openPopUp(ticket_sum: number) {
     var popup = this.dialog.open(SeatSelectorComponent, {
       width: '100%',
-      height: '85%',
+      height: '95%',
       autoFocus: false,
       data: {
         ticket_sum: ticket_sum,

@@ -2,10 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+
 import { Auditorium } from '../../../shared/models/Auditorium';
 import { Screening } from '../../../shared/models/Screening';
-import { AuditoriumService } from '../../../shared/services/auditorium.service';
 import { ScreeningService } from '../../../shared/services/screening.service';
+import { AuditoriumService } from '../../../shared/services/auditorium.service';
 
 @Component({
   selector: 'app-seat-selector',
@@ -154,5 +155,15 @@ export class SeatSelectorComponent implements OnInit{
         const [row, seatNumber] = seat.split('/');
         return `${row}. ${seatNumber}.szék`;
     });
+  }
+
+  getLayout(): string {
+    if (this.auditorium?.layout === 'left') {
+      return 'start';
+    } else if (this.auditorium?.layout === 'right') {
+      return 'end';
+    } else {
+      return 'center';
+    }
   }
 }

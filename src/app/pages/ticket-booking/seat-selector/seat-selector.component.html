@@ -14,16 +14,18 @@
             <div class="item">Kiválasztott</div>
         </div>
         <div class="screen"></div>
-        <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-            <div class="w-4/5" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
-                <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0">{{i}}</p>
-                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" fxFlex="1 1 80%">
-                    <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
-                        <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
-                        <label class="seat" for="{{seat}}">{{seat.split('/')[1]}}</label>
+        <div class="seats-container w-full">
+            <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <div class="w-full" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
+                    <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">{{i}}</p>
+                    <div fxLayout="row" fxLayoutAlign="{{getLayout()}} center" fxLayoutGap="10px" fxFlex="1 1 80%" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">
+                        <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
+                            <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
+                            <label class="seat text-sm" for="{{seat}}">{{seat.split('/')[1]}}</label>
+                        </div>
                     </div>
+                    <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">{{i}}</p>
                 </div>
-                <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0">{{i}}</p>
             </div>
         </div>
         <div class="w-full mt-3">
