@@ -1,0 +1,18 @@
+<div class="w-full h-full bg-[#e9e9e9]" fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="container" fxLayout="column" fxLayoutAlign="space-around center">
+        <div class="scratch-container">
+            <div class="scratch-card">
+                <div class="content">
+                    Hello my Boi
+                </div>
+            </div>
+            <canvas #prizeCanvas width="600px" height="600px" (mousedown)="mousedownFunction($event)" (mousemove)="mousemoveFunction($event)" (mouseup)="mouseupFunction($event)" (mouseleave)="mouseleaveFunction($event)"></canvas>
+        </div>
+        
+        <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!hideButton">
+            <span>
+                <button mat-raised-button color="primary" (click)="done()">Létrehozás</button>
+            </span>
+        </div>
+    </div>
+</div>

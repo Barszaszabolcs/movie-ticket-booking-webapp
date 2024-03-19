@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PrizeComponent } from './prize/prize.component';
 import { take } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 import { User } from '../../shared/models/User';
@@ -27,7 +29,8 @@ export class ProfileComponent implements OnInit{
 
   constructor(
     private userService: UserService, private ticketService: TicketService,
-    private screeningService: ScreeningService, private toastr: ToastrService) {}
+    private screeningService: ScreeningService, private toastr: ToastrService,
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.allTickets = [];
@@ -75,8 +78,6 @@ export class ProfileComponent implements OnInit{
     return `${row}.sor: ${seatNumber}.szék`;
   }
 
-  giftRedemption() {}
-
   deleteTicket(ticket: Ticket) {
     let text = 'Biztosan leakarja mondani a:\n' + ticket.film_title + ' című film ' + ticket.cinema + ' ' + ticket.auditorium_number + '.terem ' + this.formatScreeningTime(ticket.screening_time) + ' órai vetítésre foglalt, ' + ticket.type + ' ' + this.convertSeat(ticket.chosen_seat) + ' jegyet?';
 
@@ -114,5 +115,16 @@ export class ProfileComponent implements OnInit{
         minute: '2-digit'
     };
     return dateObj.toLocaleDateString('hu-HU', options as object);
+  }
+
+  getPrize(ticket: Ticket) {
+    this.dialog.open(PrizeComponent, {
+      width: '70%',
+      height: '90%',
+      autoFocus: false,
+      data: {
+        ticket: ticket
+      }
+    });
   }
 }
