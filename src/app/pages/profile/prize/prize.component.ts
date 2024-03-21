@@ -4,6 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Ticket } from '../../../shared/models/Ticket';
 import { TicketService } from '../../../shared/services/ticket.service';
 
+import confetti from 'canvas-confetti';
+
 export var context: any;
 
 @Component({
@@ -19,6 +21,8 @@ export class PrizeComponent implements OnInit{
   isDragging = false;
 
   hideButton = true;
+
+  private backgroundColorChecked = false;
 
   constructor(
     private ticketService: TicketService, private ref: MatDialogRef<PrizeComponent>,
@@ -52,25 +56,58 @@ export class PrizeComponent implements OnInit{
   }
 
   checkBackgroundColor() {
-    const imageData = context.getImageData(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-    const data = imageData.data;
-    let transparentPixelCount = 0;
-
-    for (let i = 0; i < data.length; i += 4) {
-        // Az alfa érték 0, ha az adott pixel átlátszó
-        if (data[i + 3] === 0) {
-            transparentPixelCount++;
-        }
+    if (!this.backgroundColorChecked) {
+      
+      const imageData = context.getImageData(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      const data = imageData.data;
+      let transparentPixelCount = 0;
+  
+      for (let i = 0; i < data.length; i += 4) {
+          // Az alfa érték 0, ha az adott pixel átlátszó
+          if (data[i + 3] === 0) {
+              transparentPixelCount++;
+          }
+      }
+  
+      // Ellenőrizzük, hogy a háttérszín 80% eltünt-e már
+      if (transparentPixelCount / (this.canvas.nativeElement.width * this.canvas.nativeElement.height) >= 0.8) {
+          console.log('A háttérszín 80%-a már eltűnt!');
+          //ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
+          context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+          this.hideButton = false;
+          this.celebrate();
+          this.celebrate();
+          this.celebrate();
+          this.backgroundColorChecked = true;
+      }
     }
+  }
 
-    // Ellenőrizzük, hogy a háttérszín 80% eltünt-e már
-    if (transparentPixelCount / (this.canvas.nativeElement.width * this.canvas.nativeElement.height) >= 0.8) {
-        console.log('A háttérszín 80%-a már eltűnt!');
-        //ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
-        context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-        this.hideButton = false;
-    }
-}
+  celebrate() {
+    confetti({
+      particleCount: 150,
+      angle: 0,
+      spread: 90,
+      origin: { x: 0, y: 0.3 },
+      shapes: ['star'],
+      zIndex: 1000,
+      colors: ['#fae700', '#ffd900', '#ffc000', '#ffa700', '#fe7a00'],
+      drift: 1,
+      ticks: 150
+    });
+
+    confetti({
+      particleCount: 150,
+      angle: 180,
+      spread: 90,
+      origin: { x: 1, y: 0.3 },
+      shapes: ['star'],
+      zIndex: 1000,
+      colors: ['#fae700', '#ffd900', '#ffc000', '#ffa700', '#fe7a00'],
+      drift: -1,
+      ticks: 150
+    });
+  }
 
   mouseupFunction(event: any) {
     this.isDragging = false;
