@@ -27,6 +27,10 @@ export class TicketService {
     }
   }
 
+  update(ticket: Ticket){
+    return this.angularFirestore.collection<Ticket>(this.collectionName).doc(ticket.id).set(ticket);
+  }
+
   delete(id: string) {
     return this.angularFirestore.collection<Ticket>(this.collectionName).doc(id).delete();
   }

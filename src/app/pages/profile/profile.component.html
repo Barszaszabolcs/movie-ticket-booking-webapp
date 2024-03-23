@@ -32,17 +32,17 @@
             <div class="scroll w-full" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="15px" *ngIf="tickets.length > 0">
                 <mat-card *ngFor="let ticket of tickets" style="width: 90%; background-color: white; text-align: center;">
                     <mat-card-content>
-                        <div fxFlex="1 1 25%">
+                        <div fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
                             <p class="font-medium">Ajándék</p>
                             <span *ngIf="ticket.prizeId === ''">
                                 <button mat-raised-button style="background-color: #0BD808;" class="mt-5" (click)="getPrize(ticket)" *ngIf="ticket.screening_time > currentDate">Beváltás</button>
                                 <mat-icon class="mt-5" style="scale: 300%;" *ngIf="ticket.screening_time <= currentDate">close</mat-icon>
                             </span>
-                            <!--<div *ngIf="!(ticket.prizeId === '')">
-                                <img src="" alt="">
-                            </div>-->
+                            <div *ngIf="ticket.prizeId !== ''">
+                                <img [src]="getPrizeImage(ticket.prizeId)" height="50px">
+                            </div>
                         </div>
-                        <div fxFlex="1 1 25%">
+                        <div fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
                             <p class="font-medium">{{ticket.film_title}}</p>
                             <p class="font-medium">{{ticket.cinema}} {{ticket.auditorium_number}}. terem</p>
                             <p class="font-medium">{{convertSeat(ticket.chosen_seat)}}</p>

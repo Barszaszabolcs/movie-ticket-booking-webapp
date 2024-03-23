@@ -1,7 +1,10 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs';
 
+import { Prize } from '../../../shared/models/Prize';
 import { Ticket } from '../../../shared/models/Ticket';
+import { PrizeService } from '../../../shared/services/prize.service';
 import { TicketService } from '../../../shared/services/ticket.service';
 
 import confetti from 'canvas-confetti';
@@ -24,20 +27,66 @@ export class PrizeComponent implements OnInit{
 
   private backgroundColorChecked = false;
 
+  prizes: Array<Prize> = [];
+
+  loadedImages: Array<string> = [];
+
+  randomPrize?: Prize;
+
   constructor(
-    private ticketService: TicketService, private ref: MatDialogRef<PrizeComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any) {}
+    private ticketService: TicketService, private prizeService: PrizeService,
+    private ref: MatDialogRef<PrizeComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {}
 
   ngOnInit(): void {
+    this.prizes = [];
+    this.loadedImages = [];
     this.ticket = this.data.ticket;
 
     context = this.canvas.nativeElement.getContext('2d');
     this.init();
+
+    if (this.ticket) {   
+  
+      this.prizeService.loadPrizeMeta().subscribe(data => {
+        this.prizes = data;
+  
+        if (this.prizes) {
+          const randomNumber: number = Math.floor(Math.random() * 16);
+          this.randomPrize = this.prizes[randomNumber];
+  
+          if (this.randomPrize) {
+            if (this.ticket) {
+              this.ticket.prizeId = this.randomPrize.id;
+              this.ticketService.update(this.ticket).catch(error => {
+                console.log(error);
+              });
+            }
+          }
+  
+          for (let i = 0; i < this.prizes.length; i++) {
+            this.prizeService.loadCoverImage(this.prizes[i].image_url).pipe(take(1)).subscribe(data => {
+              if (!(this.loadedImages.includes(data))) {
+                this.loadedImages.push(data);
+              }
+            });
+          }
+        }
+      });
+    }
+
+  }
+
+  getImageUrl(prize: Prize): string | undefined {
+    return this.loadedImages.find(image_url => image_url.includes(prize.image_url.split(".")[0].split("/")[1]));
   }
 
   init() {
-    context.fillStyle = "red";
-    context.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    var img = new Image();
+    img.onload = () => {
+        // Rajzolás a canvas-ra, amikor a kép betöltődött
+        context.drawImage(img, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    };
+    img.src = '../assets/img/scratch.jpg';
   }
 
   mousedownFunction(event: any) {
@@ -73,8 +122,8 @@ export class PrizeComponent implements OnInit{
       if (transparentPixelCount / (this.canvas.nativeElement.width * this.canvas.nativeElement.height) >= 0.8) {
           console.log('A háttérszín 80%-a már eltűnt!');
           //ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
-          context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
           this.hideButton = false;
+          context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
           this.celebrate();
           this.celebrate();
           this.celebrate();
@@ -120,7 +169,7 @@ export class PrizeComponent implements OnInit{
   scratch(x: any, y: any) {
     context.globalCompositeOperation = "destination-out";
     context.beginPath();
-    context.arc(x, y, 36, 0, 4 * Math.PI);
+    context.arc(x, y, 42, 0, 4 * Math.PI);
     context.fill();
   }
 

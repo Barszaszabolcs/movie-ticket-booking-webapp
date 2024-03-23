@@ -1,17 +1,24 @@
 <div class="w-full h-full bg-[#e9e9e9]" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="container" fxLayout="column" fxLayoutAlign="space-around center">
+        <div class="w-full" *ngIf="!hideButton">
+            <h1 class="w-full text-2xl font-semibold text-center">Gratulálunk! A nyereményed:</h1>
+            <p class="w-full text-center">{{randomPrize?.description}}</p>
+        </div>
+        <div class="w-full" *ngIf="hideButton">
+            <h1 class="w-full text-2xl font-semibold text-center">Kapard le, és nézd meg a nyereményed!</h1>
+        </div>
         <div class="scratch-container">
-            <div class="scratch-card">
+            <div class="scratch-card" *ngIf="randomPrize">
                 <div class="content">
-                    Hello my Boi
+                    <img [src]="getImageUrl(randomPrize)" height="550px">
                 </div>
             </div>
             <canvas #prizeCanvas width="600px" height="600px" (mousedown)="mousedownFunction($event)" (mousemove)="mousemoveFunction($event)" (mouseup)="mouseupFunction($event)" (mouseleave)="mouseleaveFunction($event)"></canvas>
         </div>
         
-        <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="!hideButton">
+        <div class="w-full" fxLayout="row" fxLayoutAlign="end center" *ngIf="!hideButton">
             <span>
-                <button mat-raised-button color="primary" (click)="done()">Létrehozás</button>
+                <button mat-raised-button color="primary" (click)="done()">Tovább</button>
             </span>
         </div>
     </div>

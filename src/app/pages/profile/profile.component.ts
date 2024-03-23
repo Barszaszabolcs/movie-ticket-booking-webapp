@@ -5,9 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 import { User } from '../../shared/models/User';
+import { Prize } from '../../shared/models/Prize';
 import { Ticket } from '../../shared/models/Ticket';
 import { Screening } from '../../shared/models/Screening';
 import { UserService } from '../../shared/services/user.service';
+import { PrizeService } from '../../shared/services/prize.service';
 import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 
@@ -27,16 +29,22 @@ export class ProfileComponent implements OnInit{
 
   currentDate = new Date().getTime();
 
+  prizes: Array<Prize> = [];
+
+  loadedImages: Array<string> = [];
+
   constructor(
     private userService: UserService, private ticketService: TicketService,
-    private screeningService: ScreeningService, private toastr: ToastrService,
-    private dialog: MatDialog) {}
+    private screeningService: ScreeningService, private prizeService: PrizeService,
+    private toastr: ToastrService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.allTickets = [];
     this.activeTickets = [];
     this.expiredTickets = [];
     this.tickets = [];
+    this.prizes = [];
+    this.loadedImages = [];
     this.currentDate = new Date().getTime();
 
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
@@ -57,6 +65,20 @@ export class ProfileComponent implements OnInit{
 
         this.ticketService.getByUserId(this.user.id, 'expired').subscribe(data => {
           this.expiredTickets = data;
+        });
+
+        this.prizeService.loadPrizeMeta().subscribe(data => {
+          this.prizes = data;
+
+          if (this.prizes) {
+            for (let i = 0; i < this.prizes.length; i++) {
+              this.prizeService.loadCoverImage(this.prizes[i].image_url).pipe(take(1)).subscribe(data => {
+                if (!(this.loadedImages.includes(data))) {
+                  this.loadedImages.push(data);
+                }
+              });
+            }
+          }
         });
       }
     });
@@ -126,5 +148,14 @@ export class ProfileComponent implements OnInit{
         ticket: ticket
       }
     });
+  }
+
+  getPrizeImage(id: string): string | undefined {
+    const prize = this.prizes.find(prize => prize.id.includes(id));
+    if (prize) {
+      return this.loadedImages.find(image_url => image_url.includes(prize.image_url.split(".")[0].split("/")[1]));
+    } else {
+      return undefined;
+    }
   }
 }
