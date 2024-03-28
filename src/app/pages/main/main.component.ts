@@ -108,7 +108,7 @@ export class MainComponent implements OnInit{
   }
 
   nextButton() {
-    if (this.presentEndIndex == this.films?.length) {
+    if (this.presentEndIndex >= this.films?.length) {
       console.log("Előrefele nincs több film");
     } else {
       this.presentIndex += 2;
@@ -117,7 +117,7 @@ export class MainComponent implements OnInit{
   }
 
   previousButton() {
-      if (this.presentIndex == 0) {
+      if (this.presentIndex <= 0) {
         console.log("Visszafele nincs több film!")
       } else {
         this.presentIndex -= 2;

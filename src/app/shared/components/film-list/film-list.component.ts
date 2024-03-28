@@ -11,7 +11,7 @@ import { take } from 'rxjs';
 export class FilmListComponent implements OnInit{
   @Input() genre?: string;
 
-  films?: Array<Film>;
+  films: Array<Film> = [];
   loadedCoverImages: Array<string> = [];
 
   presentIndex = 0;
@@ -42,7 +42,7 @@ export class FilmListComponent implements OnInit{
   }
 
   nextButton() {
-    if (this.presentEndIndex == this.films?.length) {
+    if (this.presentEndIndex >= this.films?.length) {
       console.log("Előrefele nincs több film");
     } else {
       this.presentIndex += 2;
@@ -51,7 +51,7 @@ export class FilmListComponent implements OnInit{
   }
 
   previousButton() {
-      if (this.presentIndex == 0) {
+      if (this.presentIndex <= 0) {
         console.log("Visszafele nincs több film!")
       } else {
         this.presentIndex -= 2;

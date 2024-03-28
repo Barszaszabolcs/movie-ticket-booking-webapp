@@ -145,7 +145,7 @@ export class ScreeningCreateComponent implements OnInit{
   }
 
   nextButton() {
-    if (this.presentEndIndex == this.films?.length) {
+    if (this.presentEndIndex >= this.allFilms.length) {
     } else {
       this.presentIndex += 2;
       this.presentEndIndex += 2;
@@ -153,7 +153,7 @@ export class ScreeningCreateComponent implements OnInit{
   }
 
   previousButton() {
-      if (this.presentIndex == 0) {
+      if (this.presentIndex <= 0) {
       } else {
         this.presentIndex -= 2;
         this.presentEndIndex -= 2;

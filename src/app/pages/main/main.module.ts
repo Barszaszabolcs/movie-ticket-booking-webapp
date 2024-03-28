@@ -13,12 +13,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { OnShowFilmsListComponent } from '../../shared/components/on-show-films-list/on-show-films-list.component';
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    FilmListComponent
+    FilmListComponent,
+    OnShowFilmsListComponent
   ],
   imports: [
     CommonModule,
