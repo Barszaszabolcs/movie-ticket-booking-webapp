@@ -11,7 +11,7 @@ import { take } from 'rxjs';
 })
 export class OnShowFilmsListComponent implements OnInit{
 
-  films: Set<Film> = new Set();
+  films: Array<Film> = [];
   loadedCoverImages: Array<string> = [];
 
   presentIndex = 0;
@@ -20,15 +20,18 @@ export class OnShowFilmsListComponent implements OnInit{
   constructor(private filmService: FilmService, private screeningService: ScreeningService) {}
 
   ngOnInit(): void {
-    this.films.clear();
+    this.films = [];
     this.loadedCoverImages = [];
 
     this.screeningService.getFutureScreenings().subscribe(data => {
-      this.films.clear();
+      this.films = [];
       data.forEach(screening => {
         this.filmService.loadFilmMetaById(screening.filmId).pipe(take(1)).subscribe(data => {
-          if (!(this.films.has(data[0]))) {
-            this.films.add(data[0]);
+          const film = data[0]
+          if (film) {
+            if (!(this.films.find(f => f.id === film.id))) {
+              this.films.push(film);
+            }
           }
         });
       });
@@ -50,7 +53,7 @@ export class OnShowFilmsListComponent implements OnInit{
   }
 
   nextButton() {
-    if (this.presentEndIndex >= this.films?.size) {
+    if (this.presentEndIndex >= this.films?.length) {
       console.log("Előrefele nincs több film");
     } else {
       this.presentIndex += 2;
@@ -67,7 +70,7 @@ export class OnShowFilmsListComponent implements OnInit{
     }
   }
 
-  setSlice<Film>(set: Set<Film>, start: number, end?: number): Set<Film> {
+  /*setSlice<Film>(set: Set<Film>, start: number, end?: number): Set<Film> {
     const result = new Set<Film>();
     const array = Array.from(set);
     const slicedArray = array.slice(start, end);
@@ -75,5 +78,5 @@ export class OnShowFilmsListComponent implements OnInit{
         result.add(item);
     });
     return result;
-}
+  }*/
 }

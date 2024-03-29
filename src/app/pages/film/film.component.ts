@@ -154,6 +154,9 @@ export class FilmComponent implements OnInit{
 
               // növekvő sorrendbe rendezzük a tömben szereplő vetítéseket a time adattag szerint
               this.screenings.sort((a, b) => a.time - b.time);
+              const currentTime = new Date().getTime();
+              // csak azokat a vetítéseket tartjuk meg, amelyek vetítési ideje - 30 perc a jelenlegi időhöz képest a jövőben lesz
+              this.screenings = this.screenings.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
             });
           }
         });
@@ -163,8 +166,8 @@ export class FilmComponent implements OnInit{
 
   getNextWeek(){
     var date = new Date();
-    for(let i = 0; i < 7; i++){
-      this.week[i] = new Date(date.getFullYear(),date.getMonth(),date.getDate()+(i+1));
+    for(let i = 0; i <= 7; i++){
+      this.week[i] = new Date(date.getFullYear(),date.getMonth(),date.getDate()+(i));
     }
   }
 

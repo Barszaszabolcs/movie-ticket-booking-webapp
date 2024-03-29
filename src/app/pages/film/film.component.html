@@ -32,22 +32,23 @@
             </mat-card-content>
         </div>
     </mat-card>
-    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="row" fxLayoutAlign="start center" *ngIf="user">
-        <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout="column" fxLayoutAlign="start start">
+    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="column" fxLayoutAlign="space-around start" *ngIf="user">
+        <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout="row" fxLayoutAlign="start start">
             <mat-form-field>
                 <mat-label for="cinemaId">Mozi: </mat-label>
                 <mat-select formControlName="cinemaId" (selectionChange)="cinemaSelected()">
                   <mat-option *ngFor="let cinema of cinemas" [value]="cinema.id"> {{ cinema.town }}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="chosenCinema">
-                <mat-label for="day">Nap: </mat-label>
-                <mat-select formControlName="day" (selectionChange)="daySelected()">
-                  <mat-option *ngFor="let date of week" [value]="date"> {{ date | date:'EE, MMM d'}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <div *ngIf="chosenCinema" (change)="daySelected()">
+                <span *ngFor="let date of week; let i = index">
+                    <input type="radio" [id]="'day' + i" [value]="date" formControlName="day">
+                    <label class="ml-2 text-xl font-medium" [for]="'day' + i">{{ i === 0 ? 'Ma' : date | hungarianDateFormat}}</label>
+                </span>
+                <p class="ml-2">{{selectedDay | date: 'yyyy/MM/dd'}}</p>                
+            </div>
         </form>
-        <div class="mx-6" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+        <div class="mx-6 mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
             <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings" [routerLink]="'/ticket-booking/' + screening.id">{{screening.time | date:'HH:mm'}}</button>
         </div>
     </div>
