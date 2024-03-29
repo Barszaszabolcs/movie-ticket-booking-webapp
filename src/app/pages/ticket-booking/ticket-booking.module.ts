@@ -9,6 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
+import { SharedPipesModule } from '../../shared/pipes/shared-pipes/shared-pipes.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
     MatButtonModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    MatDialogModule
+    MatDialogModule,
+    SharedPipesModule
   ]
 })
 export class TicketBookingModule { }

@@ -14,17 +14,29 @@
             <div class="item">Kiválasztott</div>
         </div>
         <div class="screen"></div>
-        <div class="seats-container w-full">
-            <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <div class="w-full" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
-                    <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">{{i}}</p>
-                    <div fxLayout="row" fxLayoutAlign="{{getLayout()}} center" fxLayoutGap="10px" fxFlex="1 1 80%" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">
-                        <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
-                            <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
-                            <label class="seat text-sm" for="{{seat}}">{{seat.split('/')[1]}}</label>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <div class="seats-container w-full">
+                <div class="w-fit" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+                    <div class="mt-6" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="6px">
+                        <div *ngFor="let row of seats; let j = index">
+                            <p class="font-medium text-center" *ngIf="j > 0" [ngClass]="j % 5 === 0 ? 'mb-5' : ''">{{j}}</p>
                         </div>
                     </div>
-                    <p class="font-medium text-center" fxFlex="1 1 10%" *ngIf="i > 0" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">{{i}}</p>
+                    <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                        <div class="w-full" *ngFor="let row of seats; let i = index" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div class="w-full" fxLayout="row" fxLayoutAlign="{{getLayout()}} center" fxLayoutGap="10px" [ngClass]="i % 5 === 0 ? 'mb-5' : ''">
+                                <div class="all-seats w-fit h-fit" *ngFor="let seat of row">
+                                    <input type="checkbox" name="tickets" id="{{seat}}" value="{{seat}}" (change)="seatSelected($event)" [disabled]="reservedSeats.includes(seat)">
+                                    <label class="seat text-sm" for="{{seat}}">{{seat.split('/')[1]}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="6px">
+                        <div *ngFor="let row of seats; let k = index">
+                            <p class="font-medium text-center" *ngIf="k > 0" [ngClass]="k % 5 === 0 ? 'mb-5' : ''">{{k}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

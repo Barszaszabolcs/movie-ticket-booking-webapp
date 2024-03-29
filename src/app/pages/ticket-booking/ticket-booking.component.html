@@ -87,9 +87,9 @@
                 </div>
             </div>
             <div class="screening-infos w-full my-2">
-                <h3 class="text-xl text-[#ffa700] font-medium">{{screening?.film_title + '(' + screening?.language + ')'}}</h3>
+                <h3 class="text-xl text-[#ffa700] font-semibold">{{screening?.film_title + '(' + screening?.language + ')'}}</h3>
                 <div class="w-full font-medium mt-2" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-                    <p>{{screening?.time | date:'EEEE yyyy.MM.dd. HH:mm'}}</p>
+                    <p>{{screening?.time | hungarianDateFormat}} {{screening?.time | date:' yyyy.MM.dd. HH:mm'}}</p>
                     <p>Campus Cinema: {{cinema?.town}}</p>
                     <p>{{auditorium?.hall_number}}. terem</p>
                 </div>

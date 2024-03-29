@@ -16,14 +16,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommentEditPopupComponent } from './comment-edit-popup/comment-edit-popup.component';
-import { HungarianDateFormatPipe } from '../../shared/pipes/hungarian-date-format.pipe';
+import { SharedPipesModule } from '../../shared/pipes/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
     FilmComponent,
     DateFormatPipe,
-    CommentEditPopupComponent,
-    HungarianDateFormatPipe
+    CommentEditPopupComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +38,8 @@ import { HungarianDateFormatPipe } from '../../shared/pipes/hungarian-date-forma
     MatSelectModule,
     MatOptionModule,
     RatingModule,
-    MatDialogModule
+    MatDialogModule,
+    SharedPipesModule
   ]
 })
 export class FilmModule { }
