@@ -94,7 +94,7 @@ export class AppComponent implements OnInit{
   }
 
   navigate() {
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/main');
   }
 
   createCinema() {

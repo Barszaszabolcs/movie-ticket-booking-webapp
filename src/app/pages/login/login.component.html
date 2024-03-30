@@ -1,17 +1,19 @@
-<div class="flex flex-col justify-center text-center h-screen bg-black">
-    <h1 class="text-white text-3xl">Bejelentkezés</h1>
-    <form class="flex flex-col justify-center text-center items-center" [formGroup]="loginForm" (ngSubmit)="login()">
-        <mat-form-field class="m-3 w-1/2">
-            <mat-label for="email">Email: </mat-label>
-            <input matInput type="text" formControlName="email">
-        </mat-form-field>
-        <mat-form-field class="m-3 w-1/2">
-            <mat-label for="password">Jelszó: </mat-label>
-            <input matInput type="password" formControlName="password">
-        </mat-form-field>
-        <span>
-            <button mat-raised-button color="primary" class="mx-3" type="submit">Bejelentkezés</button>
-            <button mat-raised-button color="primary" class="mx-3" [routerLink]="'/registration'">Regisztráció</button>
-        </span>
-    </form>
+<div class="text-center h-screen bg-black" fxLayout="column" fxLayoutAlign="space-around center">
+    <div class="box w-1/3 h-1/2" fxLayout="column" fxLayoutAlign="space-around center">
+        <form class="text-center w-[99%] h-[99%]" fxLayout="column" fxLayoutAlign="center center" [formGroup]="loginForm" (ngSubmit)="login()">
+            <h1 class="mb-10 text-white text-3xl">Bejelentkezés</h1>
+            <mat-form-field class="w-2/3 mb-5">
+                <mat-label for="email">Email: </mat-label>
+                <input matInput type="text" formControlName="email">
+            </mat-form-field>
+            <mat-form-field class="w-2/3">
+                <mat-label for="password">Jelszó: </mat-label>
+                <input matInput type="password" formControlName="password">
+            </mat-form-field>
+            <div class="w-2/3" fxLayout="column" fxLayoutAlign="center end" fxLayoutGap="35px">
+                <a class="text-white no-underline hover:text-[#ffc000] active:text-[#fe7a00]" [routerLink]="'/registration'">Regisztráció</a>
+                <button mat-raised-button color="primary" type="submit" style="width: 100%;">Bejelentkezés</button>
+            </div>
+        </form>
+    </div>
 </div>
