@@ -9,6 +9,8 @@ export interface Ticket {
     screening_time: number;
     chosen_seat: string;
     date?: number;
+    screening_type: string;
+    glasses: boolean;
     screeningId: string;
     userId: string;
     prizeId: string;

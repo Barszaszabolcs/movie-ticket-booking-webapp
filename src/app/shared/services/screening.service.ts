@@ -28,14 +28,23 @@ export class ScreeningService {
   getScreeningsByAuditoriumIdAndDay(auditoriumId: string, day: number):Observable<Array<Screening>> {
     return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('auditoriumId', '==', auditoriumId).where('day', '==', day).orderBy('time', 'asc')).valueChanges();
   }
-
+  
   getScreeningsByAuditoriumIdAndFilmIdAndDay(auditoriumId: string, filmId: string, day: number):Observable<Array<Screening>> {
     return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('auditoriumId', '==', auditoriumId).where('filmId', '==', filmId).where('day', '==', day).orderBy('time', 'asc')).valueChanges();
   }
-
+  
+  getScreeningsByAuditoriumIdAndFilmIdAndDayAndType(auditoriumId: string, filmId: string, day: number, type: string):Observable<Array<Screening>> {
+    return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('auditoriumId', '==', auditoriumId).where('filmId', '==', filmId).where('day', '==', day).where('type', '==', type).orderBy('time', 'asc')).valueChanges();
+  }
+  
   getFutureScreenings() {
     const currentDate = new Date().getTime();
     return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('time', '>', currentDate).orderBy('time', 'asc')).valueChanges();
+  }
+
+  get3dScreenings() {
+    const currentDate = new Date().getTime();
+    return this.angularFirestore.collection<Screening>(this.collectionName, ref => ref.where('type', '==', '3D').where('time', '>', currentDate).orderBy('time', 'asc')).valueChanges();
   }
 
   update(screening: Screening) {

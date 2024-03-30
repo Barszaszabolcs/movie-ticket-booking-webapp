@@ -72,7 +72,8 @@ export class ScreeningCreateComponent implements OnInit{
     time: null,
     film_title: '',
     screening_length: 0,
-    language: ''
+    language: '',
+    type: ''
   });
 
   searchForm = new FormGroup({
@@ -156,6 +157,7 @@ export class ScreeningCreateComponent implements OnInit{
     screeningGroup.get('film_title')?.disable();
     screeningGroup.get('screening_length')?.disable();
     screeningGroup.get('language')?.addValidators([Validators.required]);
+    screeningGroup.get('type')?.addValidators([Validators.required]);
     return screeningGroup;
   }
 
@@ -299,7 +301,7 @@ export class ScreeningCreateComponent implements OnInit{
           day: day,
           time: time,
           length: this.screeningTime as number,
-          type: '2D',
+          type: this.screeningForm.get('type')?.value as string,
           language: this.screeningForm.get('language')?.value as string,
           occupied_seats: this.occupied_seats_help,
           filmId: this.chosenFilm.id,

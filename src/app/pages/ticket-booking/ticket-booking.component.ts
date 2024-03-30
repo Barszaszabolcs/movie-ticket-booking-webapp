@@ -42,7 +42,7 @@ export class TicketBookingComponent implements OnInit{
   film?: Film;
 
   pay: boolean = false;
-  tickets: {type: string, price: number, count: number}[] = [];
+  tickets: {type: string, price: number, count: number, glasses: boolean}[] = [];
   finishedTickets: Array<Ticket> = [];
 
   chosenSeats: string[] = [];
@@ -56,6 +56,20 @@ export class TicketBookingComponent implements OnInit{
       student: 0,
       special: 0,
       elderly: 0
+    })
+  });
+
+  booking3dForm = this.create3dForm({
+    pay: false,
+    ticket_count: this.formBuilder.group({
+      full: 0,
+      full_glasses: 0,
+      student: 0,
+      student_glasses: 0,
+      special: 0,
+      special_glasses: 0,
+      elderly: 0,
+      elderly_glasses: 0
     })
   });
 
@@ -118,32 +132,78 @@ export class TicketBookingComponent implements OnInit{
     return bookingGroup;
   }
 
+  create3dForm(model: any) {
+    let bookingGroup = this.formBuilder.group(model);
+    bookingGroup.get('ticket_count.full')?.addValidators([Validators.required, Validators.max(10)]);
+    bookingGroup.get('ticket_count.full_glasses')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.student')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.student_glasses')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.special')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.special_glasses')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.elderly')?.addValidators([Validators.max(10)]);
+    bookingGroup.get('ticket_count.elderly_glasses')?.addValidators([Validators.max(10)]);
+    return bookingGroup;
+  }
+  
   paymentSelected() {
-    this.pay = this.bookingForm.get('pay')?.value as boolean;
+    if (this.screening?.type === '3D') {
+      this.pay = this.booking3dForm.get('pay')?.value as boolean;
+    } else {
+      this.pay = this.bookingForm.get('pay')?.value as boolean;
+    }
   }
 
   goToSeats() {
     let pay: boolean;
-    let tickets: {type: string, price: number, count: number}[];
+    let tickets: {type: string, price: number, count: number, glasses: boolean}[];
 
-    if (this.bookingForm.valid) {
-      if (this.bookingForm.get('pay')?.value) {
-        pay = this.bookingForm.get('pay')?.value as boolean;
-        tickets = [
-          {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
-          {type: 'Diákjegy', price: 1800, count: this.bookingForm.get('ticket_count.student')?.value as number},
-          {type: 'Jegy fogyatékkal élők számára', price: 1600, count: this.bookingForm.get('ticket_count.special')?.value as number},
-          {type: 'Nyugdíjas jegy', price: 1700, count: this.bookingForm.get('ticket_count.elderly')?.value as number},
-        ];
+    if (this.bookingForm.valid || this.booking3dForm.valid) {
+      if (this.screening?.type === '3D') {
+        if (this.booking3dForm.get('pay')?.value) {
+          pay = this.booking3dForm.get('pay')?.value as boolean;
+          tickets = [
+            {type: 'Felnőtt, teljes árú jegy', price: 2400, count: this.booking3dForm.get('ticket_count.full')?.value as number, glasses: false},
+            {type: 'Felnőtt, teljes árú jegy + szemüveg', price: 2800, count: this.booking3dForm.get('ticket_count.full_glasses')?.value as number, glasses: true},
+            {type: 'Diákjegy', price: 2000, count: this.booking3dForm.get('ticket_count.student')?.value as number, glasses: false},
+            {type: 'Diákjegy + szemüveg', price: 2200, count: this.booking3dForm.get('ticket_count.student_glasses')?.value as number, glasses: true},
+            {type: 'Jegy fogyatékkal élők számára', price: 1800, count: this.booking3dForm.get('ticket_count.special')?.value as number, glasses: false},
+            {type: 'Jegy fogyatékkal élők számára + szemüveg', price: 2000, count: this.booking3dForm.get('ticket_count.special_glasses')?.value as number, glasses: true},
+            {type: 'Nyugdíjas jegy', price: 1900, count: this.booking3dForm.get('ticket_count.elderly')?.value as number, glasses: false},
+            {type: 'Nyugdíjas jegy + szemüveg', price: 2100, count: this.booking3dForm.get('ticket_count.elderly_glasses')?.value as number, glasses: true},
+          ];
+        } else {
+          pay = this.booking3dForm.get('pay')?.value as boolean;
+          tickets = [
+            {type: 'Felnőtt, teljes árú jegy', price: 2400, count: this.booking3dForm.get('ticket_count.full')?.value as number, glasses: false},
+            {type: 'Felnőtt, teljes árú jegy + szemüveg', price: 2800, count: this.booking3dForm.get('ticket_count.full_glasses')?.value as number, glasses: true},
+            {type: 'Diákjegy', price: 2000, count: 0, glasses: false},
+            {type: 'Diákjegy + szemüveg', price: 2200, count: 0, glasses: true},
+            {type: 'Jegy fogyatékkal élők számára', price: 1800, count: 0, glasses: false},
+            {type: 'Jegy fogyatékkal élők számára + szemüveg', price: 2000, count: 0, glasses: true},
+            {type: 'Nyugdíjas jegy', price: 1900, count: 0, glasses: false},
+            {type: 'Nyugdíjas jegy + szemüveg', price: 2100, count: 0, glasses: true},
+          ];
+        }
       } else {
-        pay = this.bookingForm.get('pay')?.value as boolean;
-        tickets = [
-          {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number},
-          {type: 'Diákjegy', price: 1800, count: 0},
-          {type: 'Jegy fogyatékkal élők számára', price: 1600, count: 0},
-          {type: 'Nyugdíjas jegy', price: 1700, count: 0},
-        ];
+        if (this.bookingForm.get('pay')?.value) {
+          pay = this.bookingForm.get('pay')?.value as boolean;
+          tickets = [
+            {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number, glasses: false},
+            {type: 'Diákjegy', price: 1800, count: this.bookingForm.get('ticket_count.student')?.value as number, glasses: false},
+            {type: 'Jegy fogyatékkal élők számára', price: 1600, count: this.bookingForm.get('ticket_count.special')?.value as number, glasses: false},
+            {type: 'Nyugdíjas jegy', price: 1700, count: this.bookingForm.get('ticket_count.elderly')?.value as number, glasses: false},
+          ];
+        } else {
+          pay = this.bookingForm.get('pay')?.value as boolean;
+          tickets = [
+            {type: 'Felnőtt, teljes árú jegy', price: 2200, count: this.bookingForm.get('ticket_count.full')?.value as number, glasses: false},
+            {type: 'Diákjegy', price: 1800, count: 0, glasses: false},
+            {type: 'Jegy fogyatékkal élők számára', price: 1600, count: 0, glasses: false},
+            {type: 'Nyugdíjas jegy', price: 1700, count: 0, glasses: false},
+          ];
+        }
       }
+
   
       let ticket_sum = 0;
       this.pay = pay;
@@ -194,6 +254,8 @@ export class TicketBookingComponent implements OnInit{
               auditorium_number: this.auditorium?.hall_number as number,
               screening_time: this.screening?.time as number,
               chosen_seat: '',
+              screening_type: this.screening?.type as string,
+              glasses: this.tickets[i].glasses as boolean,
               screeningId: this.screening?.id as string,
               userId: this.user?.id as string,
               prizeId: ''

@@ -37,7 +37,8 @@ export class FilmComponent implements OnInit{
   chosenCinema?: Cinema;
   auditoriums: Array<Auditorium> = [];
 
-  screenings: Array<Screening> = [];
+  screenings2d: Array<Screening> = [];
+  screenings3d: Array<Screening> = [];
   
   selectedDay?: Date;
   week = new Array(7).fill(new Date());
@@ -69,7 +70,8 @@ export class FilmComponent implements OnInit{
   ngOnInit(): void {
     this.cinemas = [];
     this.auditoriums = [];
-    this.screenings = [];
+    this.screenings2d = [];
+    this.screenings3d = [];
     this.loaded = false;
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
     if (user) {
@@ -121,7 +123,8 @@ export class FilmComponent implements OnInit{
 
   cinemaSelected() {
     this.auditoriums = [];
-    this.screenings = [];
+    this.screenings2d = [];
+    this.screenings3d = [];
     this.selectForm.get('day')?.reset();
     this.selectedDay = undefined;
     const cinema = this.selectForm.get('cinemaId')?.value as string;
@@ -138,25 +141,40 @@ export class FilmComponent implements OnInit{
   }
 
   daySelected() {
-    this.screenings = [];
+    this.screenings2d = [];
+    this.screenings3d = [];
     this.selectedDay = this.selectForm.get('day')?.value as Date;
 
     if (this.selectedDay) {
       if (this.auditoriums) {
         this.auditoriums.forEach(auditorium => {
           if (this.chosenFilm) {
-            this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDay(auditorium.id, this.chosenFilm.id, this.selectedDay?.getTime() as number).subscribe(data => {
-              const screenings = data;
+            this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDayAndType(auditorium.id, this.chosenFilm.id, this.selectedDay?.getTime() as number, '2D').subscribe(data => {
+              const screenings2d = data;
 
-              screenings.forEach(screening => {
-                this.screenings.push(screening);
+              screenings2d.forEach(screening => {
+                this.screenings2d.push(screening);
               });
 
               // növekvő sorrendbe rendezzük a tömben szereplő vetítéseket a time adattag szerint
-              this.screenings.sort((a, b) => a.time - b.time);
+              this.screenings2d.sort((a, b) => a.time - b.time);
               const currentTime = new Date().getTime();
               // csak azokat a vetítéseket tartjuk meg, amelyek vetítési ideje - 30 perc a jelenlegi időhöz képest a jövőben lesz
-              this.screenings = this.screenings.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
+              this.screenings2d = this.screenings2d.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
+            });
+
+            this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDayAndType(auditorium.id, this.chosenFilm.id, this.selectedDay?.getTime() as number, '3D').subscribe(data => {
+              const screenings3d = data;
+
+              screenings3d.forEach(screening => {
+                this.screenings3d.push(screening);
+              });
+
+              // növekvő sorrendbe rendezzük a tömben szereplő vetítéseket a time adattag szerint
+              this.screenings3d.sort((a, b) => a.time - b.time);
+              const currentTime = new Date().getTime();
+              // csak azokat a vetítéseket tartjuk meg, amelyek vetítési ideje - 30 perc a jelenlegi időhöz képest a jövőben lesz
+              this.screenings3d = this.screenings3d.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
             });
           }
         });

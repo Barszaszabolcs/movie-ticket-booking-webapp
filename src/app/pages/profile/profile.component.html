@@ -44,6 +44,8 @@
                         </div>
                         <div fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
                             <p class="font-medium">{{ticket.film_title}}</p>
+                            <p class="font-medium" *ngIf="ticket.screening_type === '3D'">({{ticket.screening_type}}{{ticket.glasses ? ' + szemüveg' : ''}})</p>
+                            <p class="font-medium" *ngIf="ticket.screening_type === '2D'">({{ticket.screening_type}})</p>
                             <p class="font-medium">{{ticket.cinema}} {{ticket.auditorium_number}}. terem</p>
                             <p class="font-medium">{{convertSeat(ticket.chosen_seat)}}</p>
                             <p class="font-medium">{{ticket.screening_time | date: 'yyyy.MM.dd. HH:mm'}}</p>

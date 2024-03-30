@@ -2,7 +2,7 @@
     <div class="w-full h-fit bg-white" fxLayout="row" fxLayoutAlign="space-around center">
         <div class="w-4/5 h-fit" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="chosenSeats.length === 0">
             <div class="w-full h-full m-2" fxLayout="column" fxLayoutAlign="start center" fxFlex="1 1 33%">
-                <h1 class="text-3xl font-semibold">{{film?.title}}</h1>
+                <h1 class="text-3xl font-semibold text-center">{{film?.title}} ({{screening?.type}}/{{screening?.language}})</h1>
                 <div class="m-0 p-0" *ngIf="cinema" fxLayout="row" fxLayoutAlign="start center">
                     <mat-icon>location_on</mat-icon>
                     <p class="text-2xl font-medium">{{cinema.town}}</p>
@@ -11,7 +11,7 @@
                 <p class="text-xl">{{auditorium?.hall_number}}. terem</p>
             </div>
             <div class="container w-full h-full" fxFlex="1 1 67%">
-                <form class="w-full h-full my-14 pl-3" [formGroup]="bookingForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center">
+                <form class="w-full h-full my-14 pl-3" [formGroup]="bookingForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center" *ngIf="screening?.type === '2D'">
                     <div class="booking-form_first-conatiner w-full mb-3 pb-8 text-xl" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px" (change)="paymentSelected()">
                         <span>
                             <input type="radio" id="no_pay" [value]="false" formControlName="pay">
@@ -63,6 +63,99 @@
                                     <td fxFlex="1 1 20%">100 Ft</td>
                                     <td fxFlex="1 1 20%">
                                         <input type="number" min="0" max="10" formControlName="elderly" value="0">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <span>
+                        <button mat-raised-button color="primary" class="mt-5" type="submit">Tovább</button>
+                    </span>
+                </form>
+                <form class="w-full h-full my-14 pl-3" [formGroup]="booking3dForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center" *ngIf="screening?.type === '3D'">
+                    <div class="booking-form_first-conatiner w-full mb-3 pb-8 text-xl" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px" (change)="paymentSelected()">
+                        <span>
+                            <input type="radio" id="no_pay" [value]="false" formControlName="pay">
+                            <label class="ml-2" for="no_pay">Lefoglalás</label>
+                        </span>
+                        <span>
+                            <input type="radio" id="pay" [value]="true" formControlName="pay">
+                            <label class="ml-2" for="pay">Fizetés</label>
+                        </span>
+                    </div>
+                    <div class="third-table w-full" formGroupName="ticket_count">
+                        <table class="w-full text-left">
+                            <thead class="w-full">
+                                <tr class="w-full">
+                                    <th fxFlex="1 1 40%">TÍPUS</th>
+                                    <th fxFlex="1 1 20%">ÁR</th>
+                                    <th *ngIf="pay" fxFlex="1 1 20%">KÉNYELMI DÍJ</th>
+                                    <th fxFlex="1 1 20%">DARAB</th>
+                                </tr>
+                            </thead>
+                            <tbody class="w-full">
+                                <tr class="w-full">
+                                    <td fxFlex="1 1 40%">Felnőtt, teljes árú jegy</td>
+                                    <td fxFlex="1 1 20%">2400 Ft</td>
+                                    <td fxFlex="1 1 20%" *ngIf="pay">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="full" value="0">
+                                    </td>
+                                </tr>
+                                <tr class="w-full">
+                                    <td fxFlex="1 1 40%">Felnőtt, teljes árú jegy + szemüveg</td>
+                                    <td fxFlex="1 1 20%">2800 Ft</td>
+                                    <td fxFlex="1 1 20%" *ngIf="pay">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="full_glasses" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Diákjegy</td>
+                                    <td fxFlex="1 1 20%">2000 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="student" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Diákjegy + szemüveg</td>
+                                    <td fxFlex="1 1 20%">2200 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="student_glasses" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Jegy fogyatékkal élők számára</td>
+                                    <td fxFlex="1 1 20%">1800 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="special" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Jegy fogyatékkal élők számára + szemüveg</td>
+                                    <td fxFlex="1 1 20%">2000 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="special_glasses" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Nyugdíjas jegy</td>
+                                    <td fxFlex="1 1 20%">1900 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="elderly" value="0">
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pay" class="w-full">
+                                    <td fxFlex="1 1 40%">Nyugdíjas jegy + szemüveg</td>
+                                    <td fxFlex="1 1 20%">2100 Ft</td>
+                                    <td fxFlex="1 1 20%">100 Ft</td>
+                                    <td fxFlex="1 1 20%">
+                                        <input type="number" min="0" max="10" formControlName="elderly_glasses" value="0">
                                     </td>
                                 </tr>
                             </tbody>

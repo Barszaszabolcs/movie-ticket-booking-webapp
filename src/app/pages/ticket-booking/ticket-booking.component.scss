@@ -56,3 +56,36 @@ input[type="number"] {
 .personal-infos, .screening-infos, .payment-infos {
     border-bottom: 2px solid lightgray;
 }
+
+.third-table tbody tr:first-child {
+    border-top: 4px solid #ffc000;
+}
+  
+.third-table tbody tr:last-child {
+    border-bottom: 4px solid #ffc000;
+}
+
+.third-table tbody tr:nth-child(2){
+    border-top: 1px dashed black;
+}
+
+.third-table tbody tr:nth-child(3){
+    border-top: 1px dashed black;
+    border-bottom: 1px dashed black;
+}
+
+.third-table tbody tr:nth-child(4){
+    border-bottom: 1px dashed black;
+}
+
+.third-table tbody tr:nth-child(5){
+    border-bottom: 1px dashed black;
+}
+
+.third-table tbody tr:nth-child(6){
+    border-bottom: 1px dashed black;
+}
+
+.third-table tbody tr:nth-child(7) {
+    border-bottom: 1px dashed black;
+}
