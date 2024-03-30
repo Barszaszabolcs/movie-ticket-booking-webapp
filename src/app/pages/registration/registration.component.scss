@@ -1,0 +1,33 @@
+.box {
+    position: relative;
+    border-radius: 14px; 
+    overflow: hidden;
+}
+
+.box::before {
+    content: '';
+    position: absolute;
+    width: 210%;
+    height: 227%;
+    background: linear-gradient(0deg, transparent, transparent, #ffc000, #ffc000, #ffc000);
+    z-index: 0;
+    transform-origin: bottom right;
+    animation: animate 3s linear infinite;
+}
+
+@keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+form {
+    inset: 4px;
+    background: #222;
+    border-radius: 14px;
+    z-index: 2;
+}
+
+h1 {
+    font-weight: 500;
+    letter-spacing: 0.1em;
+}
