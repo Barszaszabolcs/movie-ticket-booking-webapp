@@ -19,7 +19,7 @@ export class FilmService {
   }
 
   loadFilmMeta(): Observable<Array<Film>> {
-    return this.angularFirestore.collection<Film>(this.collectionName).valueChanges();
+    return this.angularFirestore.collection<Film>(this.collectionName, ref => ref.orderBy('title', 'asc')).valueChanges();
   }
 
   loadFilmMetaById(id: string) {
@@ -27,7 +27,7 @@ export class FilmService {
   }
 
   loadFilmMetaByGenre(genre: string) {
-    return this.angularFirestore.collection<Film>(this.collectionName, ref => ref.where('genres', 'array-contains', genre)).valueChanges();
+    return this.angularFirestore.collection<Film>(this.collectionName, ref => ref.where('genres', 'array-contains', genre).orderBy('title', 'asc')).valueChanges();
   }
 
   loadCoverImage(coverUrl: string) {

@@ -1,26 +1,13 @@
 <div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="w-full my-10" fxLayout="column" fxLayoutAlign="space-around center">
-        <div class="w-4/5 h-full" *ngIf="allFilms" fxLayout="row" fxLayoutAlign="space-around center">
-            <div>
-                <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
-            </div>
-            <div *ngFor="let film of allFilms.slice(presentIndex, presentEndIndex)">
-                <div class="image-container w-full h-full rounded-lg">
-                    <img class="w-[112px] h-[168px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}" (click)="chooseFilm(film.id)">
-                </div>
-            </div>
-            <div>
-                <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < allFilms.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
-            </div>
-        </div>
         <div class="w-4/5 h-full my-7">
-            <form class="w-full" [formGroup]="searchForm" (ngSubmit)="onSearch()" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-                <button mat-raised-button class="mb-6" color="primary" type="submit">Keresés<mat-icon class="ml-1">search</mat-icon></button>
-                <mat-form-field>
+            <form class="w-full bg-white rounded-lg" [formGroup]="searchForm" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                <mat-icon class="ml-1">search</mat-icon>
+                <mat-form-field class="mt-5">
                     <mat-label for="title">Cím:</mat-label>
                     <input matInput color="primary" type="text" formControlName="title">
                 </mat-form-field>
-                <mat-form-field>
+                <mat-form-field class="mt-5">
                     <mat-label for="genre">Műfaj:</mat-label>
                     <mat-select formControlName="genre">
                         <mat-option [value]="all"></mat-option>
@@ -29,11 +16,19 @@
                 </mat-form-field>
             </form>
         </div>
-        <div class="w-9/12" *ngIf="films">
-            <div class="mb-10 w-full grid grid-cols-7 grid-flow-row gap-1 justify-items-center">
-                <div class="w-full" *ngFor="let film of films">
-                    <img class="w-[112px] h-[168px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}" (click)="chooseFilm(film.id)">
+        <div *ngIf="films" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
+            <div *ngIf="films.length > 6">
+                <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
+                <div *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+                    <div class="image-container w-full h-full rounded-lg">
+                        <img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}" (click)="chooseFilm(film.id)">
+                    </div>
                 </div>
+            </div>
+            <div *ngIf="films.length > 6">
+                <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
             </div>
         </div>
         <div class="w-4/5" *ngIf="films && films.length === 0">

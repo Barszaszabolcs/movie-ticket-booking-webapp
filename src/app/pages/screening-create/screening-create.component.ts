@@ -31,9 +31,7 @@ export class ScreeningCreateComponent implements OnInit{
   all = '';
 
   // a keresés eredményét tároló tömb
-  films?: Array<Film>;
-  // összes film
-  allFilms: Array<Film> = [];
+  films: Array<Film> = [];
 
   // mozi ahol az admin dolgozik
   cinema?: Cinema;
@@ -106,14 +104,31 @@ export class ScreeningCreateComponent implements OnInit{
       }
     });
 
-    this.allFilms = [];
+    this.films = []
     this.loadedCoverImages = [];
-    this.filmService.loadFilmMeta().subscribe((data: Array<Film>) => {
-      this.allFilms = data;
 
-      if (this.allFilms) {
-        for (let index = 0; index < this.allFilms.length; index++) {
-          this.filmService.loadCoverImage(this.allFilms[index].cover_url).pipe(take(1)).subscribe(data => {
+    this.searchForm.valueChanges.subscribe(_ => {
+      const title = this.searchForm.get('title')?.value as string;
+      const genre = this.searchForm.get('genre')?.value as string;
+      this.presentIndex = 0;
+      this.presentEndIndex = 6;
+      if (genre === 'all' || !genre) {
+        this.filmService.loadFilmMeta().subscribe(data => {
+          this.films = data.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+        });
+      } else {
+        this.filmService.loadFilmMetaByGenre(genre).subscribe(data => {
+          this.films = data.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+        });
+      }
+    });
+
+    this.filmService.loadFilmMeta().subscribe((data: Array<Film>) => {
+      this.films = data;
+
+      if (this.films) {
+        for (let index = 0; index < this.films.length; index++) {
+          this.filmService.loadCoverImage(this.films[index].cover_url).pipe(take(1)).subscribe(data => {
             if (!(this.loadedCoverImages.includes(data))) {
               this.loadedCoverImages.push(data);
             }
@@ -145,7 +160,7 @@ export class ScreeningCreateComponent implements OnInit{
   }
 
   nextButton() {
-    if (this.presentEndIndex >= this.allFilms.length) {
+    if (this.presentEndIndex >= this.films.length) {
     } else {
       this.presentIndex += 2;
       this.presentEndIndex += 2;
@@ -211,7 +226,7 @@ export class ScreeningCreateComponent implements OnInit{
     return hoursArray;
   }
 
-  onSearch() {
+  /*onSearch() {
     if (this.searchForm.valid) {
       let title = this.searchForm.get('title')?.value as string;
       let genre = this.searchForm.get('genre')?.value as string;
@@ -235,7 +250,7 @@ export class ScreeningCreateComponent implements OnInit{
         this.films = undefined;
       }
     }
-  }
+  }*/
   
   auditoriumSelected() {
     this.screeningForm.get('day')?.reset();

@@ -3,13 +3,13 @@
         <ng-image-slider [images]="imageObject" [infinite]="true" [imageSize]="{width: '99.3%', height: '50%'}" [slideImage]="1" [animationSpeed]="1.5" [imagePopup]="false" [autoSlide]="5"></ng-image-slider>
     </div>
     <div class="w-4/5 h-full my-7">
-        <form class="w-full" [formGroup]="searchForm" (ngSubmit)="onSearch()" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-            <button mat-raised-button class="mb-6" color="primary" type="submit">Keresés<mat-icon class="ml-1">search</mat-icon></button>
-            <mat-form-field>
+        <form class="w-full bg-white rounded-lg" [formGroup]="searchForm" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+            <mat-icon class="ml-1">search</mat-icon>
+            <mat-form-field class="mt-5">
                 <mat-label for="title">Cím:</mat-label>
                 <input matInput color="primary" type="text" formControlName="title">
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field class="mt-5">
                 <mat-label for="genre">Műfaj:</mat-label>
                 <mat-select formControlName="genre">
                     <mat-option [value]="all"></mat-option>
@@ -22,7 +22,7 @@
         <div *ngIf="films.length > 6">
             <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
         </div>
-        <div [ngClass]="films.length <= 6 ? 'ml-20' : ''" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
             <div class="card" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
                 <div class="front w-full h-full rounded-lg">
                     <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>

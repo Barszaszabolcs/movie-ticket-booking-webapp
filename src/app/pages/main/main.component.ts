@@ -44,6 +44,22 @@ export class MainComponent implements OnInit{
     this.loadedSliderImages = [];
     this.imageObject = [];
 
+    this.searchForm.valueChanges.subscribe(_ => {
+      const title = this.searchForm.get('title')?.value as string;
+      const genre = this.searchForm.get('genre')?.value as string;
+      this.presentIndex = 0;
+      this.presentEndIndex = 6;
+      if (genre === 'all' || !genre) {
+        this.filmService.loadFilmMeta().subscribe(data => {
+          this.films = data.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+        });
+      } else {
+        this.filmService.loadFilmMetaByGenre(genre).subscribe(data => {
+          this.films = data.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
+        });
+      }
+    });
+
     this.filmService.loadFilmMeta().subscribe((data: Array<Film>) => {
       this.films = data;
       this.allFilms = data;
@@ -81,7 +97,7 @@ export class MainComponent implements OnInit{
     return this.loadedCoverImages.find(coverUrl => coverUrl.includes(film.cover_url.split(".")[0].split("/")[1]));
   }
 
-  onSearch() {
+  /*onSearch() {
     if (this.searchForm.valid) {
       let title = this.searchForm.get('title')?.value as string;
       let genre = this.searchForm.get('genre')?.value as string;
@@ -105,7 +121,7 @@ export class MainComponent implements OnInit{
         this.films = [];
       }
     }
-  }
+  }*/
 
   nextButton() {
     if (this.presentEndIndex >= this.films?.length) {
