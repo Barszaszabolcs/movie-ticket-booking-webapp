@@ -47,8 +47,8 @@ function convertSeats(seat) {
 function formatScreeningTime(screeningTime) {
     const dateObj = new Date(screeningTime);
     
-    // Hozzáadunk egy órát
-    dateObj.setHours(dateObj.getHours() + 1);
+    // Hozzáadunk két órát
+    dateObj.setHours(dateObj.getHours() + 2);
     
     const options = {
         weekday: 'long',
@@ -109,4 +109,74 @@ exports.addSuperadminRole = functions.https.onCall((data, context) => {
     }).catch(error => {
         return error;
     });
+});
+
+const nodemailer = require('nodemailer');
+const environment = require('./environments/environment.json');
+
+exports.sendEmailNotification = functions.https.onCall((data, context) => {
+    const user = data.user;
+    const tickets = data.tickets;
+
+    let authData = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: environment.SENDER_EMAIL,
+            pass: environment.SENDER_PASSWORD
+        }
+    });
+
+    authData.sendMail({
+        from: 'no-reply@movie-ticket-booking-webapp.com',
+        to: user.email,
+        subject: 'Mozijegy rendelés',
+        html: `
+        <html>
+            <head>
+                <style>
+                    table {
+                        font-family: Arial, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        text-align: center;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Kedves ${user.name.firstname} ${user.name.lastname}!</h1>
+                <p>Ez itt a mozijegy rendelésének visszaigazolása:</p>
+                <table>
+                    <tr>
+                        <th>Film címe</th>
+                        <th>Jegy típusa</th>
+                        <th>Ár</th>
+                        <th>Város</th>
+                        <th>Terem szám</th>
+                        <th>Vetítés ideje</th>
+                        <th>Foglalt szék</th>
+                    </tr>
+                    ${tickets.map(ticket => `
+                        <tr>
+                            <td>${ticket.film_title}(${ticket.screening_type})</td>
+                            <td>${ticket.type}</td>
+                            <td>${ticket.price} Ft</td>
+                            <td>${ticket.cinema}</td>
+                            <td>${ticket.auditorium_number}.</td>
+                            <td>${formatScreeningTime(ticket.screening_time)}</td>
+                            <td>${convertSeats(ticket.chosen_seat)}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            </body>
+        </html>
+    `
+    }).then(_ => console.log('email sent successfully')).catch(error => console.log(error));
 });

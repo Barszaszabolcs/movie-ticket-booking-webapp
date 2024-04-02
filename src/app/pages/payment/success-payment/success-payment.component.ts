@@ -8,6 +8,7 @@ import { Screening } from '../../../shared/models/Screening';
 import { UserService } from '../../../shared/services/user.service';
 import { TicketService } from '../../../shared/services/ticket.service';
 import { ScreeningService } from '../../../shared/services/screening.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
 @Component({
   selector: 'app-success-payment',
@@ -26,7 +27,8 @@ export class SuccessPaymentComponent implements OnInit{
 
   constructor(
     private userService: UserService, private ticketService: TicketService,
-    private screeningService: ScreeningService, private toastr: ToastrService) {}
+    private screeningService: ScreeningService, private toastr: ToastrService,
+    private functions: AngularFireFunctions) {}
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
@@ -58,8 +60,17 @@ export class SuccessPaymentComponent implements OnInit{
                   this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
                 });
               });
-              this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-              localStorage.removeItem('tickets');
+              const sendEmailNotification = this.functions.httpsCallable('sendEmailNotification');
+              const data = sendEmailNotification({
+                user: this.user,
+                tickets: this.tickets
+              });
+              data.toPromise().then(_ => {
+                this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+                localStorage.removeItem('tickets');
+              }).catch(error => {
+                this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+              });
             }
           });
         }

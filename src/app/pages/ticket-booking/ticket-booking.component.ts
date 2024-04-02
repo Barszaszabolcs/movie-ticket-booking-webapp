@@ -22,6 +22,7 @@ import { CinemaService } from '../../shared/services/cinema.service';
 import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
 import { AuditoriumService } from '../../shared/services/auditorium.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
 
 @Component({
@@ -83,7 +84,8 @@ export class TicketBookingComponent implements OnInit{
     private auditoriumService: AuditoriumService, private filmService: FilmService,
     private cinemaService: CinemaService, private ticketService: TicketService,
     private dialog: MatDialog, private toastr: ToastrService,
-    private router: Router, private http: HttpClient) {}
+    private router: Router, private http: HttpClient,
+    private functions: AngularFireFunctions) {}
   
   ngOnInit(): void {
     this.tickets = [];
@@ -304,8 +306,17 @@ export class TicketBookingComponent implements OnInit{
           this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
         });
       });
-      this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-      this.router.navigateByUrl('/main');
+      const sendEmailNotification = this.functions.httpsCallable('sendEmailNotification');
+      const data = sendEmailNotification({
+        user: this.user,
+        tickets: this.finishedTickets
+      });
+      data.toPromise().then(_ => {
+        this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+        this.router.navigateByUrl('/main');
+      }).catch(error => {
+        this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+      });
     } else {
       this.onCheckout();
     }
