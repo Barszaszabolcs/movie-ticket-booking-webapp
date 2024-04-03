@@ -12,6 +12,7 @@ import { UserService } from '../../shared/services/user.service';
 import { PrizeService } from '../../shared/services/prize.service';
 import { TicketService } from '../../shared/services/ticket.service';
 import { ScreeningService } from '../../shared/services/screening.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
 @Component({
   selector: 'app-profile',
@@ -36,7 +37,8 @@ export class ProfileComponent implements OnInit{
   constructor(
     private userService: UserService, private ticketService: TicketService,
     private screeningService: ScreeningService, private prizeService: PrizeService,
-    private toastr: ToastrService, private dialog: MatDialog) {}
+    private toastr: ToastrService, private dialog: MatDialog,
+    private functions: AngularFireFunctions) {}
 
   ngOnInit(): void {
     this.allTickets = [];
@@ -112,11 +114,21 @@ export class ProfileComponent implements OnInit{
         screening = data[0];
 
         if (screening) {
+          const deletedTicket = ticket;
           this.ticketService.delete(ticket.id).then(_ => {
             screening.occupied_seats = screening.occupied_seats.filter(seat => seat !== ticket.chosen_seat);
 
             this.screeningService.update(screening).then(_ => {
-              this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
+              const sendEmailNotification = this.functions.httpsCallable('sendEmailNotificationAfterCancellation');
+              const data = sendEmailNotification({
+                user: this.user,
+                ticket: deletedTicket
+              });
+              data.toPromise().then(_ => {
+                this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
+              }).catch(error => {
+                this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
+              });
             }).catch(error => {
               this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
             });

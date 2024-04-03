@@ -180,3 +180,66 @@ exports.sendEmailNotification = functions.https.onCall((data, context) => {
     `
     }).then(_ => console.log('email sent successfully')).catch(error => console.log(error));
 });
+
+exports.sendEmailNotificationAfterCancellation = functions.https.onCall((data, context) => {
+    const user = data.user;
+    const ticket = data.ticket;
+
+    let authData = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: environment.SENDER_EMAIL,
+            pass: environment.SENDER_PASSWORD
+        }
+    });
+
+    authData.sendMail({
+        from: 'no-reply@movie-ticket-booking-webapp.com',
+        to: user.email,
+        subject: 'Foglalás lemondva',
+        html: `
+        <html>
+            <head>
+                <style>
+                    table {
+                        font-family: Arial, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        text-align: center;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Kedves ${user.name.firstname} ${user.name.lastname}!</h1>
+                <p>Ezt a foglalást mondta le:</p>
+                <table>
+                    <tr>
+                        <th>Film címe</th>
+                        <th>Jegy típusa</th>
+                        <th>Város</th>
+                        <th>Terem szám</th>
+                        <th>Vetítés ideje</th>
+                        <th>Foglalt szék</th>
+                    </tr>
+                    <tr>
+                        <td>${ticket.film_title}(${ticket.screening_type})</td>
+                        <td>${ticket.type}</td>
+                        <td>${ticket.cinema}</td>
+                        <td>${ticket.auditorium_number}.</td>
+                        <td>${formatScreeningTime(ticket.screening_time)}</td>
+                        <td>${convertSeats(ticket.chosen_seat)}</td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    `
+    }).then(_ => console.log('email sent successfully')).catch(error => console.log(error));
+});
