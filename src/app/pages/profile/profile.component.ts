@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PrizeComponent } from './prize/prize.component';
-import { take } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { MatDialog } from '@angular/material/dialog';
+import { take } from 'rxjs';
+
 import { ToastrService } from 'ngx-toastr';
 
 import { User } from '../../shared/models/User';
@@ -11,8 +15,8 @@ import { Screening } from '../../shared/models/Screening';
 import { UserService } from '../../shared/services/user.service';
 import { PrizeService } from '../../shared/services/prize.service';
 import { TicketService } from '../../shared/services/ticket.service';
+import { CommentService } from '../../shared/services/comment.service';
 import { ScreeningService } from '../../shared/services/screening.service';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
 @Component({
   selector: 'app-profile',
@@ -34,11 +38,27 @@ export class ProfileComponent implements OnInit{
 
   loadedImages: Array<string> = [];
 
+  updateFirstname = false;
+  updateLastname = false;
+  updateUsername = false;
+
+  oldFirstname = '';
+  oldLastname = '';
+  oldUsername = '';
+
+  updatePassword = false;
+
+  passwordForm= this.createForm({
+    password: '',
+    passwordAgain: ''
+  });
+
   constructor(
     private userService: UserService, private ticketService: TicketService,
     private screeningService: ScreeningService, private prizeService: PrizeService,
-    private toastr: ToastrService, private dialog: MatDialog,
-    private functions: AngularFireFunctions) {}
+    private commentService: CommentService, private toastr: ToastrService,
+    private dialog: MatDialog, private functions: AngularFireFunctions,
+    private formBuilder: FormBuilder, private angularFireAuth: AngularFireAuth) {}
 
   ngOnInit(): void {
     this.allTickets = [];
@@ -54,6 +74,9 @@ export class ProfileComponent implements OnInit{
       this.user = data[0];
 
       if (this.user) {
+        this.oldFirstname = this.user.name.firstname;
+        this.oldLastname = this.user.name.lastname;
+        this.oldUsername = this.user.username;
         this.ticketService.getByUserId(this.user.id, 'all').subscribe(data => {
           this.allTickets = data;
         });
@@ -165,9 +188,120 @@ export class ProfileComponent implements OnInit{
   getPrizeImage(id: string): string | undefined {
     const prize = this.prizes.find(prize => prize.id.includes(id));
     if (prize) {
-      return this.loadedImages.find(image_url => image_url.includes(prize.image_url.split(".")[0].split("/")[1]));
+      return this.loadedImages.find(image_url => image_url.includes(prize.image_url.split('.')[0].split('/')[1]));
     } else {
       return undefined;
     }
+  }
+
+  letFirstnameUpdate() {
+    this.updateFirstname = true;
+    this.oldFirstname = this.user?.name.firstname as string;
+  }
+
+  letLastnameUpdate() {
+    this.updateLastname = true;
+    this.oldLastname = this.user?.name.lastname as string;
+  }
+
+  letUsernameUpdate() {
+    this.updateUsername = true;
+    this.oldUsername = this.user?.username as string;
+  }
+
+  cancel() {
+    if (this.user) {
+      if (this.updateFirstname) {
+        this.updateFirstname = false;
+        this.user.name.firstname = this.oldFirstname;
+      } else if (this.updateLastname) {
+        this.updateLastname = false;
+        this.user.name.lastname = this.oldLastname;
+      } else if (this.updateUsername) {
+        this.updateUsername = false;
+        this.user.username = this.oldUsername;
+      }
+    }
+  }
+
+  firstnameUpdate() {
+    if (confirm('Biztosan módosítani szeretnéd a keresztnevedet?') && this.user) {
+      this.updateFirstname = false;
+      this.userService.update(this.user).then(_ => {
+        this.toastr.success('Keresztnév sikeresen megváltoztatva!', 'Adat módosítás');
+      }).catch(error => {
+        this.toastr.error('Sikertelen keresztnév változtatás!', 'Adat módosítás');
+      });
+    }
+  }
+
+  lastnameUpdate() {
+    if (confirm('Biztosan módosítani szeretnéd a vezetéknevedet?') && this.user) {
+      this.updateLastname = false;
+      this.userService.update(this.user).then(_ => {
+        this.toastr.success('Vezetéknév sikeresen megváltoztatva!', 'Adat módosítás');
+      }).catch(error => {
+        this.toastr.error('Sikertelen vezetéknév változtatás!', 'Adat módosítás');
+      });
+    }
+  }
+
+  usernameUpdate() {
+    if (confirm('Biztosan módosítani szeretnéd a felhasználónevedet?') && this.user) {
+      this.updateUsername = false;
+      this.userService.update(this.user).then(_ => {
+        this.commentService.getCommentsByUserId(this.user?.id as string).subscribe(data => {
+          data.forEach(comment => {
+            comment.username = this.user?.username as string;
+            this.commentService.update(comment).catch(error => {
+              this.toastr.error('Sikertelen felhasználónév változtatás!', 'Adat módosítás');
+            });
+          });
+        });
+        this.toastr.success('Felhasználónév sikeresen megváltoztatva!', 'Adat módosítás');
+      }).catch(error => {
+        this.toastr.error('Sikertelen felhasználónév változtatás!', 'Adat módosítás');
+      });
+    }
+  }
+
+  letPasswordUpdate() {
+    this.updatePassword = true;
+  }
+
+  createForm(model: any) {
+    let formGroup = this.formBuilder.group(model);
+    formGroup.get('password')?.addValidators([Validators.required, Validators.minLength(6)]);
+    formGroup.get('paswwordAgain')?.addValidators([Validators.required, Validators.minLength(6)]);
+    return formGroup;
+  }
+
+  cancelPasswordUpdate() {
+    this.updatePassword = false;
+  }
+
+  passwordUpdate() {
+    if(this.updatePassword){
+      if(this.passwordForm.valid && this.passwordForm.get('password')?.value === this.passwordForm.get('password')?.value){
+        this.angularFireAuth.currentUser.then(user => {
+          return user?.updatePassword(this.passwordForm.get('password')?.value as string);
+        }).then(() => {
+          this.passwordForm.get('password')?.reset();
+          this.passwordForm.get('passwordAgain')?.reset();
+          this.toastr.success('Sikeres jelszó változtatás!', 'Jelszó változtatás');
+          this.updatePassword = false; 
+        }).catch(() => {
+          this.toastr.error('Sikertelen jelszó változtatás!', 'Jelszó változtatás');
+        });
+      } else {
+        if (this.passwordForm.get('password')?.value !== this.passwordForm.get('password')?.value) {
+          this.toastr.error('A két jelszó nem egyezik', 'Jelszó változtatás');
+        } else {
+          this.toastr.error('A jelszónak legalább 6 karakter hosszúnak kell lennie!', 'Jelszó változtatás');
+        }
+      }
+    } else {
+      this.updatePassword = true;
+    } 
   }
 }

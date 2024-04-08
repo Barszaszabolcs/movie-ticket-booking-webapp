@@ -2,18 +2,74 @@
     <div class="w-4/5">
         <div class="bg-[#ffc000] mr-2 my-3 py-5 rounded-lg font-medium" fxFlex="1 1 33%" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
             <img class="rounded-full" src="../../../assets/img/profilkep.jpg" width="75%" height="auto" alt="profilkép">
-            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" *ngIf="user">
                 <mat-icon>person</mat-icon>
-                <p>{{user?.name?.firstname}} {{user?.name?.lastname}}</p>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                        <p style="max-width: 75px; overflow-x: auto" *ngIf="!updateFirstname && updateUsername || updateLastname">{{user.name.firstname}}</p>
+                        <input class="w-1/2" *ngIf="updateFirstname" type="text" value="{{user.name.firstname}}" [(ngModel)]="user.name.firstname">
+                        <button style="max-width: 150px; overflow-x: auto;" *ngIf="!updateLastname && !updateFirstname && !updateUsername" (click)="letFirstnameUpdate()">
+                            {{user.name.firstname}}
+                        </button>
+                        <button *ngIf="updateFirstname" (click)="firstnameUpdate()">
+                            <mat-icon>save</mat-icon>
+                        </button>
+                        <button *ngIf="updateFirstname" (click)="cancel()">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                        <p style="max-width: 75px; overflow-x: auto" *ngIf="!updateLastname && updateUsername || updateFirstname">{{user.name.lastname}}</p>
+                        <input class="w-1/2" *ngIf="updateLastname" type="text" value="{{user.name.lastname}}" [(ngModel)]="user.name.lastname">
+                        <button style="max-width: 150px; overflow-x: auto;" *ngIf="!updateLastname && !updateFirstname && !updateUsername" (click)="letLastnameUpdate()">
+                            {{user.name.lastname}}
+                        </button>
+                        <button *ngIf="updateLastname" (click)="lastnameUpdate()">
+                            <mat-icon>save</mat-icon>
+                        </button>
+                        <button *ngIf="updateLastname" (click)="cancel()">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" *ngIf="user">
                 <mat-icon>account_circle</mat-icon>
-                <p>{{user?.username}}</p>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <p *ngIf="!updateUsername">{{user.username}}</p>
+                    <input *ngIf="updateUsername" type="text" value="{{user.username}}" [(ngModel)]="user.username">
+                    <button *ngIf="!updateLastname && !updateFirstname && !updateUsername" (click)="letUsernameUpdate()">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button *ngIf="updateUsername" (click)="usernameUpdate()">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                    <button *ngIf="updateUsername" (click)="cancel()">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </div>
             </div>
             <div class="w-full" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <mat-icon>mail_outline</mat-icon>
                 <p>{{user?.email}}</p>
             </div>
+            <div *ngIf="!updatePassword">
+                <a class="text-[#2C2C2C] hover:text-[#fe7a00] active:text-[#FF0000] cursor-pointer" (click)="letPasswordUpdate()">Jelszó váltás</a>
+            </div>
+            <form *ngIf="updatePassword" [formGroup]="passwordForm" (ngSubmit)="passwordUpdate()" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <mat-form-field>
+                    <mat-label for="password">Új jelszó:</mat-label>
+                    <input matInput type="password" formControlName="password">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label for="passwordAgain">Új jelszó megint:</mat-label>
+                    <input matInput type="password" formControlName="passwordAgain">
+                </mat-form-field>
+                <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">
+                    <button mat-raised-button color="warn" (click)="cancelPasswordUpdate()">Mégse</button>
+                    <button mat-raised-button color="accent" type="submit">Mentés</button>
+                </div>
+            </form>
         </div>
         <div class="bg-[#d9d9d9] my-3 rounded-lg pb-2" fxFlex="1 1 66%" *ngIf="tickets">
             <div class="w-full" fxLayout="row" fxLayoutAlign="space-between center">

@@ -24,6 +24,10 @@ export class CommentService {
     return this.angularFirestore.collection<Comment>(this.collectionName, ref => ref.where('filmId', '==', filmId).orderBy('date', 'desc')).valueChanges();
   }
 
+  getCommentsByUserId(userId: string){
+    return this.angularFirestore.collection<Comment>(this.collectionName, ref => ref.where('userId', '==', userId).orderBy('date', 'desc')).valueChanges();
+  }
+
   getCommentByFilmIdAndUserId(filmId: string, userId: string) {
     return this.angularFirestore.collection<Comment>(this.collectionName, ref => ref.where('filmId', '==', filmId).where('userId', '==', userId)).valueChanges();
   }
