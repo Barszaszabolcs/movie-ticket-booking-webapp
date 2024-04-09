@@ -32,6 +32,8 @@ export class ProfileComponent implements OnInit{
   expiredTickets: Array<Ticket> = [];
   tickets: Array<Ticket> = [];
 
+  loadedQRCodes: Array<string> = [];
+
   currentDate = new Date().getTime();
 
   prizes: Array<Prize> = [];
@@ -67,6 +69,7 @@ export class ProfileComponent implements OnInit{
     this.tickets = [];
     this.prizes = [];
     this.loadedImages = [];
+    this.loadedQRCodes = [];
     this.currentDate = new Date().getTime();
 
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
@@ -79,6 +82,16 @@ export class ProfileComponent implements OnInit{
         this.oldUsername = this.user.username;
         this.ticketService.getByUserId(this.user.id, 'all').subscribe(data => {
           this.allTickets = data;
+
+          if (this.allTickets) {
+            for (let index = 0; index < this.allTickets.length; index++) {
+              this.ticketService.loadQRCode('images/qrcodes/' + this.allTickets[index].id + '.jpeg').pipe(take(1)).subscribe(data => {
+                if (!(this.loadedQRCodes.includes(data))) {
+                  this.loadedQRCodes.push(data);
+                }
+              });
+            }
+          }
         });
 
         this.ticketService.getByUserId(this.user.id, 'active').subscribe(data => {
@@ -303,5 +316,9 @@ export class ProfileComponent implements OnInit{
     } else {
       this.updatePassword = true;
     } 
+  }
+
+  getQRCode(ticket: Ticket): string | undefined {
+    return this.loadedQRCodes.find(codeUrl => codeUrl.includes(ticket.id));
   }
 }

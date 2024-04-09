@@ -113,8 +113,7 @@
                             </span>
                         </div>
                         <div fxFlex="1 1 25%" fxLayout="row" fxLayoutAlign="space-around center">
-                            <p class="text-xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
-                            <mat-icon class="mt-1 -ml-4" color="primary">local_movies</mat-icon>
+                            <img [src]="getQRCode(ticket)">
                         </div>
                     </mat-card-content>
                 </mat-card>

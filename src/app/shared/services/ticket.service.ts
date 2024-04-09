@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Ticket } from '../models/Ticket';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +10,23 @@ export class TicketService {
 
   collectionName = 'Tickets';
 
-  constructor(private angularFirestore: AngularFirestore) { }
+  constructor(private angularFirestore: AngularFirestore, private fireStorage: AngularFireStorage) { }
 
   create(ticket: Ticket) {
-    ticket.id = this.angularFirestore.createId();
-    return this.angularFirestore.collection<Ticket>(this.collectionName).doc(ticket.id).set(ticket);
-  }
+    //ticket.id = this.angularFirestore.createId();
+    //return this.angularFirestore.collection<Ticket>(this.collectionName).doc(ticket.id).set(ticket);
 
+    // Üres objektum létrehozása 
+    return this.angularFirestore.collection(this.collectionName).add({}).then(docRef => {
+      // Id kinyerése, és order dokumentum id beállítása
+      ticket.id = docRef.id;
+      // Frissítjük az order dokumentumot
+      return docRef.update(ticket).then(_ => {
+        // Order id visszaadása
+        return ticket.id;
+      });
+    });
+  }
   getByUserId(userId: string, mode: string) {
     const currentDate = new Date().getTime();
     if (mode === 'active') {
@@ -33,5 +44,9 @@ export class TicketService {
 
   delete(id: string) {
     return this.angularFirestore.collection<Ticket>(this.collectionName).doc(id).delete();
+  }
+
+  loadQRCode(imageUrl: string) {
+    return this.fireStorage.ref(imageUrl).getDownloadURL();
   }
 }
