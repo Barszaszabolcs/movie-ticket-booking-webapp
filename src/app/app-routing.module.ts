@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { AuthGuard } from './shared/services/guards/auth.guard';
 import { AdminGuard } from './shared/services/guards/admin.guard';
+import { StripeGuard } from './shared/services/guards/stripe.guard';
+import { FilmPageGuard } from './shared/services/guards/film-page.guard';
 import { SuperadminGuard } from './shared/services/guards/superadmin.guard';
 import { ReverseAuthGuard } from './shared/services/guards/reverse-auth.guard';
-import { StripeGuard } from './shared/services/guards/stripe.guard';
+import { TicketBookingPageGuard } from './shared/services/guards/ticket-booking-page.guard';
 
 const routes: Routes = [
   {
@@ -13,12 +16,13 @@ const routes: Routes = [
   },
   {
     path: 'film',
-    loadChildren: () => import('./pages/film/film.module').then(m => m.FilmModule)
+    loadChildren: () => import('./pages/film/film.module').then(m => m.FilmModule),
+    canActivate: [FilmPageGuard]
   },
   { 
     path: 'ticket-booking',
     loadChildren: () => import('./pages/ticket-booking/ticket-booking.module').then(m => m.TicketBookingModule),
-    canActivate: [AuthGuard]
+    canActivate: [TicketBookingPageGuard]
   },
   /*{
     path: 'cinema',
@@ -43,22 +47,22 @@ const routes: Routes = [
   {
     path: 'screening-create',
     loadChildren: () => import('./pages/screening-create/screening-create.module').then(m => m.ScreeningCreateModule),
-    canActivate: [AuthGuard, AdminGuard]
+    canActivate: [AdminGuard]
   },
   { 
     path: 'auditorium-create',
     loadChildren: () => import('./pages/auditorium-create/auditorium-create.module').then(m => m.AuditoriumCreateModule),
-    canActivate: [AuthGuard, AdminGuard]
+    canActivate: [AdminGuard]
   },
   {
     path: 'film-create',
     loadChildren: () => import('./pages/film-create/film-create.module').then(m => m.FilmCreateModule),
-    canActivate: [AuthGuard, SuperadminGuard]
+    canActivate: [SuperadminGuard]
   },
   { 
     path: 'list-users',
     loadChildren: () => import('./pages/list-users/list-users.module').then(m => m.ListUsersModule),
-    canActivate: [AuthGuard, SuperadminGuard]
+    canActivate: [SuperadminGuard]
   },
   { 
     path: 'cancel-payment',

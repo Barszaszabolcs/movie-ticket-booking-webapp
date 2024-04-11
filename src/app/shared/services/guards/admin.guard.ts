@@ -18,23 +18,13 @@ export class AdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
-      const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
-      this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
-        this.user = data[0];
+      const admin = localStorage.getItem('admin');
 
-        if (this.user) {
-          if (this.user.role === 'admin') {
-            this.answer = true;
-          } else {
-            this.answer = false;
-            this.router.navigate(['/main']);
-          }
-        } else {
-          this.router.navigate(['/login']);
-        }
-      });
-
-      return this.answer;
+      if (admin) {
+        return true;
+      } else {
+        return this.router.parseUrl('/main');
+      }
   }
   
 }

@@ -51,13 +51,13 @@
         <div class="ml-3" *ngIf="screenings2d.length > 0" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="15px">
             <p class="text-xl font-semibold">2D</p>
             <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-                <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings2d" [routerLink]="'/ticket-booking/' + screening.id">{{screening.time | date:'HH:mm'}}</button>
+                <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings2d" (click)="goToScreening(screening.id)">{{screening.time | date:'HH:mm'}}</button>
             </div>
         </div>
         <div class="ml-3" *ngIf="screenings3d.length > 0" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="15px">
             <p class="text-xl font-semibold">3D</p>
             <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
-                <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings3d" [routerLink]="'/ticket-booking/' + screening.id">{{screening.time | date:'HH:mm'}}</button>
+                <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings3d" (click)="goToScreening(screening.id)">{{screening.time | date:'HH:mm'}}</button>
             </div>
         </div>
     </div>

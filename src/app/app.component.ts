@@ -52,12 +52,18 @@ export class AppComponent implements OnInit{
             if (this.user.role === 'admin') {
               this.isAdmin = true;
               this.isSuperadmin = false;
+              localStorage.setItem('admin', JSON.stringify(true));
+              localStorage.removeItem('superadmin');
             } else if (this.user.role === 'superadmin') {
               this.isSuperadmin = true;
               this.isAdmin = false;
+              localStorage.removeItem('admin');
+              localStorage.setItem('superadmin', JSON.stringify(true));
             } else {
               this.isAdmin = false;
               this.isSuperadmin = false;
+              localStorage.removeItem('admin');
+              localStorage.removeItem('superadmin');
             }
           }
         });
@@ -87,6 +93,8 @@ export class AppComponent implements OnInit{
       this.toastr.success('Sikeres kijelentkezés!', 'Kijelentkezés');
       localStorage.setItem('user', JSON.stringify(null));
       localStorage.setItem('tickets', JSON.stringify([]));
+      localStorage.removeItem('superadmin');
+      localStorage.removeItem('admin');
       this.navigate();
     }).catch(error => {
       console.error(error);

@@ -18,23 +18,13 @@ export class SuperadminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
-      const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
-      this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
-        this.user = data[0];
+      const superadmin = localStorage.getItem('superadmin');
 
-        if (this.user) {
-          if (this.user.role === 'superadmin') {
-            this.answer = true;
-          } else {
-            this.answer = false;
-            this.router.navigate(['/main']);
-          }
-        } else {
-          this.router.navigate(['/login']);
-        }
-      });
-
-      return this.answer;
+      if (superadmin) {
+        return true;
+      } else {
+        return this.router.parseUrl('/main');
+      }
   }
   
 }

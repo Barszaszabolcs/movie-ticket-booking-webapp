@@ -2,16 +2,16 @@
     <div>
         <button *ngIf="films.length > 6" mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
     </div>
-    <div class="card" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+    <div class="card cursor-pointer" *ngFor="let film of films.slice(presentIndex, presentEndIndex)" (click)="goToFilm(film.id)">
         <div class="front w-full h-full rounded-lg">
-            <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>
+            <img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}">
         </div>
-        <a class="back rounded-lg" [routerLink]="'/film/' + film.id">
+        <div class="back rounded-lg">
             <p class="w-full p-1 text-center font-medium">{{film.title}}</p>
             <p class="p-1 text-sm italic">Korhatár: {{film.age_limit}}</p>
             <p class="p-1 text-sm italic">Hossz: {{film.movie_length}} perc</p>
             <p class="p-1 text-sm italic">Rendező(k): {{film.director}}</p>
-        </a>
+        </div>
     </div>
     <div>
         <button *ngIf="films.length > 6" mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>

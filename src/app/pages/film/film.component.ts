@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommentEditPopupComponent } from './comment-edit-popup/comment-edit-popup.component';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
@@ -64,7 +64,8 @@ export class FilmComponent implements OnInit{
     private toastr: ToastrService, private filmService: FilmService, 
     private commentService: CommentService, private userService: UserService,
     private screeningService: ScreeningService, private cinemaService: CinemaService,
-    private auditoriumService: AuditoriumService, private dialog: MatDialog) {
+    private auditoriumService: AuditoriumService, private dialog: MatDialog,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -291,5 +292,10 @@ export class FilmComponent implements OnInit{
     popup.afterClosed().subscribe(_ => {
       this.loaded = false;
     });
+  }
+
+  goToScreening(id: string) {
+    localStorage.setItem('ticketBookingPageAvaliable', JSON.stringify(true));
+    this.router.navigate(['/ticket-booking/' + id]);
   }
 }

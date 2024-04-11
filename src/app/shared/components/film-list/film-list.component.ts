@@ -1,5 +1,6 @@
 import { Component, Input} from '@angular/core';
 import { Film } from '../../models/Film';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-film-list',
@@ -12,6 +13,8 @@ export class FilmListComponent{
 
   presentIndex = 0;
   presentEndIndex = 6;
+
+  constructor(private router: Router) {}
 
   getCoverUrl(film: Film): string | undefined {
     return this.loadedCoverImages.find(coverUrl => coverUrl.includes(film.cover_url.split(".")[0].split("/")[1]));
@@ -27,11 +30,16 @@ export class FilmListComponent{
   }
 
   previousButton() {
-      if (this.presentIndex <= 0) {
-        console.log("Visszafele nincs több film!")
-      } else {
-        this.presentIndex -= 2;
-        this.presentEndIndex -= 2;
-      }
+    if (this.presentIndex <= 0) {
+      console.log("Visszafele nincs több film!")
+    } else {
+      this.presentIndex -= 2;
+      this.presentEndIndex -= 2;
+    }
+  }
+
+  goToFilm(id: string) {
+    localStorage.setItem('filmPageAvaliable', JSON.stringify(true));
+    this.router.navigate(['/film/' + id]);
   }
 }
