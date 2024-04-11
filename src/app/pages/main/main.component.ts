@@ -6,6 +6,7 @@ import { Genres } from '../../shared/constants/constants';
 import { Film } from '../../shared/models/Film';
 import { SliderImage } from '../../shared/models/Slider-image';
 import { FilmService } from '../../shared/services/film.service';
+import { ScreeningService } from '../../shared/services/screening.service';
 import { ImageSliderService } from '../../shared/services/image-slider.service';
 
 @Component({
@@ -18,12 +19,16 @@ export class MainComponent implements OnInit{
   genres = Genres;
   all = '';
 
-  presentIndex = 0;
-  presentEndIndex = 6;
-
   films: Array<Film> = [];
   allFilms: Array<Film> = [];
   loadedCoverImages: Array<string> = [];
+
+  actionFilms: Array<Film> = [];
+  dramaFilms: Array<Film> = [];
+  animatedFilms: Array<Film> = [];
+  horrorFilms: Array<Film> = [];
+  onShowFilms: Array<Film> = [];
+  specialFilms: Array<Film> = [];
 
   images?: Array<SliderImage>;
   loadedSliderImages: Array<string> = [];
@@ -35,10 +40,17 @@ export class MainComponent implements OnInit{
     genre: new FormControl('')
   });
 
-  constructor(private filmService: FilmService, private imageSliderService: ImageSliderService) {}
+  constructor(
+    private filmService: FilmService, private imageSliderService: ImageSliderService,
+    private screeningService: ScreeningService) {}
 
   ngOnInit(): void {
     this.films = [];
+    this.actionFilms = [];
+    this.dramaFilms = [];
+    this.animatedFilms = [];
+    this.onShowFilms = [];
+    this.specialFilms = [];
     this.loadedCoverImages = [];
     this.images = [];
     this.loadedSliderImages = [];
@@ -47,8 +59,6 @@ export class MainComponent implements OnInit{
     this.searchForm.valueChanges.subscribe(_ => {
       const title = this.searchForm.get('title')?.value as string;
       const genre = this.searchForm.get('genre')?.value as string;
-      this.presentIndex = 0;
-      this.presentEndIndex = 6;
       if (genre === 'all' || !genre) {
         this.filmService.loadFilmMeta().subscribe(data => {
           this.films = data.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
@@ -91,53 +101,49 @@ export class MainComponent implements OnInit{
     });
 
     this.searchForm.get('title')?.addValidators([Validators.maxLength(200)]);
-  }
 
-  getCoverUrl(film: Film): string | undefined {
-    return this.loadedCoverImages.find(coverUrl => coverUrl.includes(film.cover_url.split(".")[0].split("/")[1]));
-  }
+    this.filmService.loadFilmMetaByGenre('Akció').subscribe((data: Array<Film>) => {
+      this.actionFilms = data;
+    });
 
-  /*onSearch() {
-    if (this.searchForm.valid) {
-      let title = this.searchForm.get('title')?.value as string;
-      let genre = this.searchForm.get('genre')?.value as string;
-  
-      this.films = this.allFilms;
-  
-      if (title === '' && genre === '') {
-        this.films = this.allFilms;
-  
-      } else if (title !== '' && genre === '') {
-        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
-  
-      } else if (title === '' && genre !== '') {
-        this.films = this.films.filter(film => film.genres.includes(genre));
-  
-      } else if (title !== '' && genre !== '') {
-        this.films = this.films.filter(film => film.genres.includes(genre));
-        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
-  
-      } else {
-        this.films = [];
-      }
-    }
-  }*/
+    this.filmService.loadFilmMetaByGenre('Animáció').subscribe((data: Array<Film>) => {
+      this.animatedFilms = data;
+    });
 
-  nextButton() {
-    if (this.presentEndIndex >= this.films?.length) {
-      console.log("Előrefele nincs több film");
-    } else {
-      this.presentIndex += 2;
-      this.presentEndIndex += 2;
-    }
-  }
+    this.filmService.loadFilmMetaByGenre('Dráma').subscribe((data: Array<Film>) => {
+      this.dramaFilms = data;
+    });
 
-  previousButton() {
-      if (this.presentIndex <= 0) {
-        console.log("Visszafele nincs több film!")
-      } else {
-        this.presentIndex -= 2;
-        this.presentEndIndex -= 2;
-      }
+    this.filmService.loadFilmMetaByGenre('Horror').subscribe((data: Array<Film>) => {
+      this.horrorFilms = data;
+    });
+
+    this.screeningService.getFutureScreenings().subscribe(data => {
+      this.onShowFilms = [];
+      data.forEach(screening => {
+        this.filmService.loadFilmMetaById(screening.filmId).pipe(take(1)).subscribe(data => {
+          const film = data[0]
+          if (film) {
+            if (!(this.onShowFilms.find(f => f.id === film.id))) {
+              this.onShowFilms.push(film);
+            }
+          }
+        });
+      });
+    });
+
+    this.screeningService.get3dScreenings().subscribe(data => {
+      this.specialFilms = [];
+      data.forEach(screening => {
+        this.filmService.loadFilmMetaById(screening.filmId).pipe(take(1)).subscribe(data => {
+          const film = data[0]
+          if (film) {
+            if (!(this.specialFilms.find(f => f.id === film.id))) {
+              this.specialFilms.push(film);
+            }
+          }
+        });
+      });
+    });
   }
 }

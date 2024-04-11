@@ -18,64 +18,46 @@
             </mat-form-field>
         </form>
     </div>
-    <div *ngIf="films" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
-        <div *ngIf="films.length > 6">
-            <button mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="23px">
-            <div class="card" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
-                <div class="front w-full h-full rounded-lg">
-                    <a class="w-full h-auto" [routerLink]="'/film/' + film.id"><img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}"></a>
-                </div>
-                <a class="back rounded-lg" [routerLink]="'/film/' + film.id">
-                    <p class="w-full p-1 text-center font-medium">{{film.title}}</p>
-                    <p class="p-1 text-sm italic">Korhatár: {{film.age_limit}}</p>
-                    <p class="p-1 text-sm italic">Hossz: {{film.movie_length}} perc</p>
-                    <p class="p-1 text-sm italic">Rendező(k): {{film.director}}</p>
-                </a>
-            </div>
-        </div>
-        <div *ngIf="films.length > 6">
-            <button mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
-        </div>
+    <div class="w-full mb-10" *ngIf="films.length > 0">
+        <app-film-list [films]="films" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5" *ngIf="films.length === 0">
         <p class="w-full mb-10 text-center text-white text-2xl">Nincsen ilyen film még!</p>
     </div>
-    <div class="w-4/5 mb-5 mt-10">
+    <div class="w-4/5 mb-5 mt-10" *ngIf="onShowFilms.length > 0">
         <h2 class="text-2xl text-white">Műsoron</h2>
     </div>
-    <div class="w-full mb-10">
-        <app-on-show-films-list></app-on-show-films-list>
+    <div class="w-full mb-10" *ngIf="onShowFilms.length > 0">
+        <app-film-list [films]="onShowFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="w-4/5 mb-5" *ngIf="specialFilms.length > 0">
         <h2 class="text-2xl text-white">Prémium formátumok (3D)</h2>
     </div>
-    <div class="w-full mb-10">
-        <app-special-effect-films-list></app-special-effect-films-list>
+    <div class="w-full mb-10" *ngIf="specialFilms.length > 0">
+        <app-film-list [films]="specialFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5 mb-5">
         <h2 class="text-2xl text-white">Akció filmek</h2>
     </div>
     <div class="w-full mb-10">
-        <app-film-list [genre]="'Akció'"></app-film-list>
+        <app-film-list [films]="actionFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5 mb-5">
         <h2 class="text-2xl text-white">Drámák</h2>
     </div> 
     <div class="w-full mb-10">
-        <app-film-list [genre]="'Dráma'"></app-film-list>
+        <app-film-list [films]="dramaFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5 mb-5">
         <h2 class="text-2xl text-white">Animációs filmek</h2>
     </div>
     <div class="w-full mb-10">
-        <app-film-list [genre]="'Animáció'"></app-film-list>
+        <app-film-list [films]="animatedFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5 mb-5">
         <h2 class="text-2xl text-white">Horror filmek</h2>
     </div>
     <div class="w-full mb-10">
-        <app-film-list [genre]="'Horror'"></app-film-list>
+        <app-film-list [films]="horrorFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
 </div>

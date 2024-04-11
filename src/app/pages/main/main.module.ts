@@ -14,16 +14,12 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 
 import { FilmListComponent } from '../../shared/components/film-list/film-list.component';
-import { OnShowFilmsListComponent } from '../../shared/components/on-show-films-list/on-show-films-list.component';
-import { SpecialEffectFilmsListComponent } from '../../shared/components/special-effect-films-list/special-effect-films-list.component';
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    FilmListComponent,
-    OnShowFilmsListComponent,
-    SpecialEffectFilmsListComponent
+    FilmListComponent
   ],
   imports: [
     CommonModule,
