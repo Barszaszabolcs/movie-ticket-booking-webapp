@@ -4,6 +4,7 @@ import { AuthGuard } from './shared/services/guards/auth.guard';
 import { AdminGuard } from './shared/services/guards/admin.guard';
 import { SuperadminGuard } from './shared/services/guards/superadmin.guard';
 import { ReverseAuthGuard } from './shared/services/guards/reverse-auth.guard';
+import { StripeGuard } from './shared/services/guards/stripe.guard';
 
 const routes: Routes = [
   {
@@ -61,11 +62,13 @@ const routes: Routes = [
   },
   { 
     path: 'cancel-payment',
-    loadChildren: () => import('./pages/payment/cancel-payment/cancel-payment.module').then(m => m.CancelPaymentModule)
+    loadChildren: () => import('./pages/payment/cancel-payment/cancel-payment.module').then(m => m.CancelPaymentModule),
+    canActivate: [StripeGuard]
   },
   { 
     path: 'success-payment',
-    loadChildren: () => import('./pages/payment/success-payment/success-payment.module').then(m => m.SuccessPaymentModule)
+    loadChildren: () => import('./pages/payment/success-payment/success-payment.module').then(m => m.SuccessPaymentModule),
+    canActivate: [StripeGuard]
   },
   {
     path: '',

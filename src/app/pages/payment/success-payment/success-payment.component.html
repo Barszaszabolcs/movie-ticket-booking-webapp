@@ -1,15 +1,25 @@
 <div class="w-full h-screen bg-black" fxLayout="column" fxLayoutAlign="space-around center">
-    <mat-card class="container w-1/4 rounded-lg" style="background-color: white;" fxLayout="column" fxLayoutAlign="space-around center">
-        <mat-card-header class="w-full mb-3" fxLayout="column" fxLayoutAlign="space-around center">
-            <mat-card-title class="w-full text-xl font-semibold">Sikeres foglalás!</mat-card-title>
+    <mat-card class="w-full h-1/2 rounded-lg" style="background-color: white;" fxLayout="column" fxLayoutAlign="space-around center">
+        <mat-card-header class="w-1/2 h-full mb-3" fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-card-title class="w-full text-3xl font-semibold">Foglalását sikeresen rögzítettük!</mat-card-title>
         </mat-card-header>
-        <mat-card-content class="w-full text-center">
-            <div class="w-full">
-                <span>Ha bármi kérdésed van, keress minket ezen az e-mail címen: 
-                    <a href="mailto:angolszabi@gmail.com" class="font-medium underline">angolszabi@gmail.com</a>
-                </span>
+        <mat-card-content class="w-1/2">
+            <div class="w-full" fxLayout="column" fxLayoutAlign="center center" >
+                <div fxLayout="row" fxLayoutAlign="center center" >
+                    <div class="w-fit">
+                        <img class="w-5/6 h-5/6" src="../../../../assets/img/check_mark.png">
+                    </div>
+                    <div class="w-fit text-justify text-xl">
+                        <p>A megadott címre küldtünk egy visszaigazoló email-t, kérjük ellenőrizze. Kérjük a jegyeit vegye át az előadás kezdete előtt minimum 30 perccel.</p>
+                    </div>
+                </div>
+                <div class="mt-5 text-center text-xl">
+                    <span>Ha bármi kérdése van, keressen minket ezen az e-mail címen: 
+                        <a href="mailto:angolszabi@gmail.com" class="font-medium underline">angolszabi@gmail.com</a>
+                    </span>
+                </div>
             </div>
-            <div class="w-full mt-3">
+            <div class="w-full mt-3 text-center">
                 <button mat-raised-button color="primary" routerLink="/main">Vissza a főoldalra!</button>
             </div>
         </mat-card-content>

@@ -321,7 +321,11 @@ export class TicketBookingComponent implements OnInit{
       });
       data.toPromise().then(_ => {
         this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
-        this.router.navigateByUrl('/main');
+        localStorage.setItem('stripeUrl', 'true');
+        this.finishedTickets = [];
+        this.chosenSeats = [];
+        localStorage.setItem('tickets', JSON.stringify(this.finishedTickets));
+        this.router.navigateByUrl('/success-payment');
       }).catch(error => {
         this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
       });
@@ -331,7 +335,9 @@ export class TicketBookingComponent implements OnInit{
   }
 
   cancel() {
-    this.router.navigateByUrl('/main');
+    this.finishedTickets = [];
+    this.chosenSeats = [];
+    localStorage.setItem('tickets', JSON.stringify(this.finishedTickets));
   }
 
   onCheckout() {
@@ -343,8 +349,10 @@ export class TicketBookingComponent implements OnInit{
       stripe?.redirectToCheckout({
         sessionId: res.id
       });
+      localStorage.setItem('stripeUrl', 'true');
     });
   }
+
   async generateQRCode(text: string): Promise<string> {
     try {
       const qrCodeDataUrl = await QRCode.toDataURL(text);
