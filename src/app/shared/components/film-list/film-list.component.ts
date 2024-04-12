@@ -1,20 +1,39 @@
-import { Component, Input} from '@angular/core';
-import { Film } from '../../models/Film';
+import { Component, Input, OnInit} from '@angular/core';
+import { deleteObject, getStorage, ref } from '@angular/fire/storage';
 import { Router } from '@angular/router';
+
+import { ToastrService } from 'ngx-toastr';
+
+import { Film } from '../../models/Film';
+import { AuthService } from '../../services/auth.service';
+import { FilmService } from '../../services/film.service';
 
 @Component({
   selector: 'app-film-list',
   templateUrl: './film-list.component.html',
   styleUrls: ['./film-list.component.scss']
 })
-export class FilmListComponent{
+export class FilmListComponent implements OnInit{
   @Input() films!: Array<Film>;
+  @Input() onShowfilms?: Array<Film>;
   @Input() loadedCoverImages!: Array<string>;
 
   presentIndex = 0;
   presentEndIndex = 6;
 
-  constructor(private router: Router) {}
+  isLoggedIn?: any;
+  isSuperadmin?: any;
+  
+  constructor(
+    private router: Router, private authService: AuthService,
+    private filmService: FilmService, private toastr: ToastrService) {}
+
+  ngOnInit(): void {
+    this.authService.isUserLoggedIn().subscribe(data => {
+      this.isLoggedIn = data;
+      this.isSuperadmin = localStorage.getItem('superadmin');
+    });
+  }
 
   getCoverUrl(film: Film): string | undefined {
     return this.loadedCoverImages.find(coverUrl => coverUrl.includes(film.cover_url.split(".")[0].split("/")[1]));
@@ -41,5 +60,30 @@ export class FilmListComponent{
   goToFilm(id: string) {
     localStorage.setItem('filmPageAvaliable', JSON.stringify(true));
     this.router.navigate(['/film/' + id]);
+  }
+
+  canDelete(film: Film): Film | undefined {
+    if (this.onShowfilms) {
+      return this.onShowfilms.find(inFilm => inFilm.id === film.id);
+    } else {
+      return undefined;
+    }
+  }
+
+  deleteFilm(film: Film) {
+    if (confirm('Biztosan törölni szeretnéd a(z) "' + film.title + '" című filmet?')) {
+      this.filmService.delete(film.id).then(_ => {
+        const storage = getStorage();
+        const file = ref(storage, film.cover_url);
+  
+        deleteObject(file).then(() => {
+          this.toastr.success('Film sikeresen törölve!', 'Film törlés');
+        }).catch((error) => {
+          this.toastr.error('Sikertelen film törlés!', 'Film törlés');
+        });
+      }).catch(error => {
+        this.toastr.error('Sikertelen film törlés!', 'Film törlés');
+      });
+    }
   }
 }

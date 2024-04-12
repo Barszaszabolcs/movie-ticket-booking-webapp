@@ -37,4 +37,8 @@ export class FilmService {
   update(film: Film){
     return this.angularFirestore.collection<Film>(this.collectionName).doc(film.id).set(film);
   }
+
+  delete(id: string) {
+    return this.angularFirestore.collection<Film>(this.collectionName).doc(id).delete();
+  }
 }

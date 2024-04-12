@@ -2,11 +2,14 @@
     <div>
         <button *ngIf="films.length > 6" mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
     </div>
-    <div class="card cursor-pointer" *ngFor="let film of films.slice(presentIndex, presentEndIndex)" (click)="goToFilm(film.id)">
-        <div class="front w-full h-full rounded-lg">
+    <div class="card cursor-pointer" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
+        <div class="button-container" *ngIf="onShowfilms && isLoggedIn && isSuperadmin && !canDelete(film)">
+            <button mat-fab color="warn" (click)="deleteFilm(film)"><mat-icon>delete</mat-icon></button>
+        </div>
+        <div class="front w-full h-full rounded-lg" (click)="goToFilm(film.id)">
             <img class="w-[160px] h-[240px] rounded-lg" [src]="getCoverUrl(film)" alt="{{film.title}}">
         </div>
-        <div class="back rounded-lg">
+        <div class="back rounded-lg" (click)="goToFilm(film.id)">
             <p class="w-full p-1 text-center font-medium">{{film.title}}</p>
             <p class="p-1 text-sm italic">Korhatár: {{film.age_limit}}</p>
             <p class="p-1 text-sm italic">Hossz: {{film.movie_length}} perc</p>

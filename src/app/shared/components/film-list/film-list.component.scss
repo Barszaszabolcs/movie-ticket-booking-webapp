@@ -25,3 +25,10 @@
     background-image: radial-gradient(#fae700, #fe7a00);
     color: black;
 }
+
+.button-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}

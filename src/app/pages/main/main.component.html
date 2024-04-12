@@ -19,7 +19,7 @@
         </form>
     </div>
     <div class="w-full mb-10" *ngIf="films.length > 0">
-        <app-film-list [films]="films" [loadedCoverImages]="loadedCoverImages"></app-film-list>
+        <app-film-list [films]="films" [onShowfilms]="onShowFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
     <div class="w-4/5" *ngIf="films.length === 0">
         <p class="w-full mb-10 text-center text-white text-2xl">Nincsen ilyen film még!</p>
