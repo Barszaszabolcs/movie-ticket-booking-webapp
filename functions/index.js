@@ -135,47 +135,95 @@ exports.sendEmailNotification = functions.https.onCall((data, context) => {
         <html>
             <head>
                 <style>
-                    table {
+                    body {
                         font-family: Arial, sans-serif;
+                        font-size: 1.1em;
+                    }
+                    table {
                         border-collapse: collapse;
                         width: 100%;
                     }
                     th, td {
-                        border: 1px solid #dddddd;
-                        text-align: center;
                         padding: 8px;
                     }
+                    td {
+                        border-bottom: 1px dashed black;
+                    }
+
                     th {
-                        background-color: #f2f2f2;
+                        border-bottom: 4px solid #ffc000;
+                        text-align: center;
+                    }
+                    tbody {
+                        border-bottom: 4px solid #ffc000;
+                    }
+                    tbody td {
+                        text-align: center;
+                    }
+                    .price {
+                        width: 100%;
+                        text-align: right;
+                    }
+                    .container {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .logo {
+                        color: #ffc000;
+                        font-weight: bolder;
+                        font-size: 1.2em;
                     }
                 </style>
             </head>
             <body>
-                <h1>Kedves ${user.name.firstname} ${user.name.lastname}!</h1>
-                <p>Ez itt a mozijegy rendelésének visszaigazolása:</p>
+                <div class="container">
+                    <div>
+                        <h2>Kedves ${user.name.firstname} ${user.name.lastname}!</h2>
+                        <p>Köszönjük, hogy a CAMPUS CINEMA-t választotta! Ez itt a foglalásának visszaigazolása.</p>
+                        <p><b>Kérjük jegyeit az előadás kezdete előtt minimum 30 perccel vegye át a pénztárnál!</b></p>
+                        <p><b>Kérjük a kedvezményes jegyekhez hozza magával a megfelelő igazolványokat!</b></p>
+                    </div>
+                    <div class="logo">
+                        <h2>CAMPUS CINEMA</h2>
+                    </div>
+                </div>
                 <table>
-                    <tr>
-                        <th>Film címe</th>
-                        <th>Jegy típusa</th>
-                        <th>Ár</th>
-                        <th>Város</th>
-                        <th>Terem szám</th>
-                        <th>Vetítés ideje</th>
-                        <th>Foglalt szék</th>
-                    </tr>
-                    ${tickets.map(ticket => `
+                    <thead>
                         <tr>
-                            <td>${ticket.film_title}(${ticket.screening_type})</td>
-                            <td>${ticket.type}</td>
-                            <td>${ticket.price} Ft</td>
-                            <td>${ticket.cinema}</td>
-                            <td>${ticket.auditorium_number}.</td>
-                            <td>${formatScreeningTime(ticket.screening_time)}</td>
-                            <td>${convertSeats(ticket.chosen_seat)}</td>
+                            <th>Film címe</th>
+                            <th>Jegy típusa</th>
+                            <th>Ár</th>
+                            <th>Város</th>
+                            <th>Terem szám</th>
+                            <th>Vetítés ideje</th>
+                            <th>Foglalt szék</th>
                         </tr>
-                    `).join('')}
+                    </thead>
+                    <tbody>
+                        ${tickets.map(ticket => `
+                            <tr>
+                                <td>${ticket.film_title}(${ticket.screening_type})</td>
+                                <td>${ticket.type}</td>
+                                <td>${ticket.price} Ft</td>
+                                <td>${ticket.cinema}</td>
+                                <td>${ticket.auditorium_number}.</td>
+                                <td>${formatScreeningTime(ticket.screening_time)}</td>
+                                <td>${convertSeats(ticket.chosen_seat)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
                 </table>
             </body>
+            <div class="price">
+                <h2>Teljes összeg: ${tickets.reduce((total, ticket) => total + ticket.price, 0)} Ft</h2>
+            </div>
+            <div>
+                <p>Jó szórakozást!</p>
+            </div>
+            <div>
+                <p>Üdvözlettel:</p>
+                <b>Campus Cinema</b>
+            </div>
         </html>
     `
     }).then(_ => console.log('email sent successfully')).catch(error => console.log(error));
@@ -202,6 +250,10 @@ exports.sendEmailNotificationAfterCancellation = functions.https.onCall((data, c
         <html>
             <head>
                 <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        font-size: 1.1em;
+                    }
                     table {
                         font-family: Arial, sans-serif;
                         border-collapse: collapse;
@@ -215,11 +267,27 @@ exports.sendEmailNotificationAfterCancellation = functions.https.onCall((data, c
                     th {
                         background-color: #f2f2f2;
                     }
+                    .container {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .logo {
+                        color: #ffc000;
+                        font-weight: bolder;
+                        font-size: 1.2em;
+                    }
                 </style>
             </head>
             <body>
-                <h1>Kedves ${user.name.firstname} ${user.name.lastname}!</h1>
-                <p>Ezt a foglalást mondta le:</p>
+                <div class="container">
+                    <div>
+                        <h2>Kedves ${user.name.firstname} ${user.name.lastname}!</h2>
+                        <p>Köszönjük, hogy a CAMPUS CINEMA-t választotta! Ez itt az egyik foglalás lemondásának visszaigazolása.</p>
+                    </div>
+                    <div class="logo">
+                        <h2>CAMPUS CINEMA</h2>
+                    </div>
+                </div>
                 <table>
                     <tr>
                         <th>Film címe</th>
@@ -238,6 +306,10 @@ exports.sendEmailNotificationAfterCancellation = functions.https.onCall((data, c
                         <td>${convertSeats(ticket.chosen_seat)}</td>
                     </tr>
                 </table>
+                <div>
+                    <p>Üdvözlettel:</p>
+                    <b>Campus Cinema</b>
+                </div>
             </body>
         </html>
     `
