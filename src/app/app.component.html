@@ -1,49 +1,46 @@
-<mat-sidenav-container>
+<mat-sidenav-container style="background-color: black;">
   <mat-sidenav #sidenav>
     <app-menu (selectedPage)="changePage($event)" [currentPage]="page" (onCloseSidenav)="onClose($event, sidenav)" [loggedInUser]="loggedInUser" [isAdmin]="isAdmin" [isSuperadmin]="isSuperadmin" (onLogout)="logout($event)"></app-menu>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar class="bg-black text-white">
+    <mat-toolbar class="bg-black text-white my-2">
       <div fxHide.gt-xs>
         <button mat-icon-button (click)="onToggleSidenav(sidenav)">
           <mat-icon>menu</mat-icon>
         </button>
       </div>
       <div fxLayout fxLayoutAlign="space-around start" >
-        <p class="mr-2 text-2xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
-        <mat-icon class="mt-1" color="primary">local_movies</mat-icon>
+        <p class="mr-2 text-4xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
+        <mat-icon class="mt-2" style="scale: 150%;" color="primary">local_movies</mat-icon>
       </div>
       <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
         <ul fxLayout fxLayoutGap="10px" class="list-none p-0 m-0">
           <li *ngIf="!(loggedInUser)">
-            <a routerLink="/login" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Bejelentkezés</a>
+            <a routerLink="/login" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Bejelentkezés</a>
           </li>
           <li *ngIf="loggedInUser">
             <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]" (click)="logout()">Kijelentkezés</a>
           </li>
           <li *ngIf="!(loggedInUser)">
-            <a routerLink="/registration" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Regisztráció</a>
+            <a routerLink="/registration" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Regisztráció</a>
           </li>
           <li *ngIf="loggedInUser">
-            <a routerLink="/profile" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Profil</a>
+            <a routerLink="/profile" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Profil</a>
           </li>
           <li>
-            <a routerLink="/main" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
-          </li>
-          <!--<li *ngIf="loggedInUser">
-            <a routerLink="/cinema" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
-          </li>-->
-          <li *ngIf="loggedInUser && isAdmin">
-            <a routerLink="/screening-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
+            <a routerLink="/main" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Főoldal</a>
           </li>
           <li *ngIf="loggedInUser && isAdmin">
-            <a routerLink="/auditorium-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Terem létrehozás</a>
+            <a routerLink="/screening-create" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Vetítés létrehozás</a>
+          </li>
+          <li *ngIf="loggedInUser && isAdmin">
+            <a routerLink="/auditorium-create" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Terem létrehozás</a>
           </li>
           <li *ngIf="loggedInUser && isSuperadmin">
-            <a routerLink="/film-create" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
+            <a routerLink="/film-create" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Film létrehozás</a>
           </li>
           <li *ngIf="loggedInUser && isSuperadmin">
-            <a routerLink="/list-users" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Felhasználók</a>
+            <a routerLink="/list-users" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Felhasználók</a>
           </li>
           <li *ngIf="loggedInUser && isSuperadmin">
             <a (click)="createCinema()" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00] cursor-pointer">Mozi létrehozás</a>

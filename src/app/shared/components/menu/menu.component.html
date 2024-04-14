@@ -19,10 +19,6 @@
         <mat-icon>home</mat-icon>
         <span>Főoldal</span>
     </a>
-    <!--<a mat-list-item routerLink="/cinema" (click)="close()" *ngIf="loggedInUser">
-        <mat-icon>movie</mat-icon>
-        <span>Főoldal</span>
-    </a>-->
     <a mat-list-item routerLink="/screening-create" (click)="close()" *ngIf="loggedInUser && isAdmin">
         <mat-icon>video_label</mat-icon>
         <mat-icon>create</mat-icon>

@@ -24,11 +24,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ticket-booking/ticket-booking.module').then(m => m.TicketBookingModule),
     canActivate: [TicketBookingPageGuard]
   },
-  /*{
-    path: 'cinema',
-    loadChildren: () => import('./pages/cinema/cinema.module').then(m => m.CinemaModule),
-    canActivate: [AuthGuard]
-  },*/
   { 
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
