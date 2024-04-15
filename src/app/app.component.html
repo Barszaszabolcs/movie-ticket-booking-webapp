@@ -8,7 +8,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar class="bg-black text-white my-2">
-      <div fxHide.gt-xs>
+      <div fxHide.gt-sm>
         <button mat-icon-button (click)="onToggleSidenav(sidenav)">
           <mat-icon>menu</mat-icon>
         </button>
@@ -17,7 +17,7 @@
         <p class="mr-2 text-4xl text-[#ffc000] font-bold">CAMPUS CINEMA</p> 
         <mat-icon class="mt-2" style="scale: 150%;" color="primary">local_movies</mat-icon>
       </div>
-      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.sm fxHide.xs>
         <ul fxLayout fxLayoutGap="10px" class="list-none p-0 m-0">
           <li *ngIf="!(loggedInUser)">
             <a routerLink="/login" routerLinkActive="active" class="text-xl hover:text-[#ffc000] active:text-[#fe7a00]">Bejelentkezés</a>

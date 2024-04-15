@@ -1,3 +1,29 @@
 .active {
     color: #ffc000;
 }
+
+
+@media only screen and (min-height: 930px) and (min-width: 1470px) {
+    a {
+        font-size: 2.25rem;
+    }
+
+    p {
+        font-size: 200%;
+    }
+
+    mat-icon {
+        scale: 200%;
+        margin-right: 10px;
+    }
+}
+
+@media only screen and (max-height: 790px) and (max-width: 390px) {
+    p {
+        font-size: 75%;
+    }
+
+    mat-icon {
+        scale: 90%;
+    }
+}
