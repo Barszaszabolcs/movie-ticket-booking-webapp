@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginComponent {
 
+  loading = false;
+
   loginForm = this.createForm({
     email: '',
     password: ''
@@ -28,23 +30,28 @@ export class LoginComponent {
   }
 
   login() {
+    this.loading = true;
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.get('email')?.value as string, this.loginForm.get('password')?.value as string).then(_ => {
         this.toastr.success('Sikeres bejelentkezés!', 'Bejelentkezés');
         this.authService.isUserLoggedIn().subscribe(user => {
           this.loggedInUser = user;
           localStorage.setItem('user', JSON.stringify(this.loggedInUser));
+          this.loading = false;
           this.navigate();
         }, error => {
           console.error(error);
           localStorage.setItem('user', JSON.stringify(null));
+          this.loading = false;
         });
       }).catch(error => {
         this.toastr.error('Rossz jelszó vagy email!', 'Bejelentkezés');
+        this.loading = false;
         console.error(error);
       });
     } else {
       this.toastr.error('Sikertelen bejelentkezés!', 'Bejelentkezés');
+      this.loading = false;
     }
   }
 

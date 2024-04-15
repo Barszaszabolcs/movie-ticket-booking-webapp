@@ -17,6 +17,9 @@ import { AuthService } from './shared/services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+
+  loading = false;
+
   title = 'movie-ticket-booking-webapp';
   page = '';
 
@@ -89,15 +92,18 @@ export class AppComponent implements OnInit{
   }
 
   logout(_?: boolean) {
+    this.loading = true;
     this.authService.logout().then(_ => {
       this.toastr.success('Sikeres kijelentkezés!', 'Kijelentkezés');
       localStorage.setItem('user', JSON.stringify(null));
       localStorage.setItem('tickets', JSON.stringify([]));
       localStorage.removeItem('superadmin');
       localStorage.removeItem('admin');
+      this.loading = false;
       this.navigate();
     }).catch(error => {
       console.error(error);
+      this.loading = false;
     });
   }
 

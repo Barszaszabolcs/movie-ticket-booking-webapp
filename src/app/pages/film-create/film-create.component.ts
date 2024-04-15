@@ -16,6 +16,8 @@ import { environment } from '../../../environments/environment';
 })
 export class FilmCreateComponent implements OnInit{
 
+  loading = false;
+
   coverImageFile?: any;
   coverImageFilePath?: string;
 
@@ -96,6 +98,8 @@ export class FilmCreateComponent implements OnInit{
 
   async createFilm() {
 
+    this.loading = true;
+
     let genreArray = this.filmForm.get('chosenGenres') as FormArray;
 
     if (this.filmForm.valid && this.coverImageFile && genreArray.length > 0 && genreArray.length <= 6 && this.isGenerated) {
@@ -130,26 +134,33 @@ export class FilmCreateComponent implements OnInit{
       } catch(error) {
         console.error(error);
         this.toastr.error('Sikertelen képfeltöltés!', 'Film létrehozás');
+        this.loading = false;
       }
 
       await this.filmService.create(filmObject).then(_ => {
         this.toastr.success('Sikeres film létrehozás!', 'Film létrehozás');
         filmObject.genres.length = 0;
         this.filmForm.reset();
+        this.loading = false;
       }).catch(error => {
         console.error(error);
         this.toastr.error('Sikertelen film létrehozás!', 'Film létrehozás');
         filmObject.genres.length = 0;
+        this.loading = false;
       });
     } else {
       if (genreArray.length === 0) {
         this.toastr.error('Egy műfajt legalább ki kell választani!', 'Film létrehozás');
+        this.loading = false;
       } else if (genreArray.length > 6) {
         this.toastr.error('Egy filmnek maximum 6 műfaja lehet!', 'Film létrehozás');
+        this.loading = false;
       } else {
         if (this.isGenerated) {
           this.toastr.error('Sikertelen film létrehozás!', 'Film létrehozás');
+          this.loading = false;
         }
+        this.loading = false;
       }
     }
   }

@@ -1,3 +1,7 @@
+<span class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</span>
+
 <div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="bg-[#9d9d9d] rounded-lg w-1/2 my-10">
         <form class="mx-20 my-10" [formGroup]="filmForm" (ngSubmit)="createFilm()" fxLayout="column" fxLayoutAlign="space-around center">

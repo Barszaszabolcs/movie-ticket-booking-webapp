@@ -25,6 +25,8 @@ import { ScreeningService } from '../../shared/services/screening.service';
 })
 export class ProfileComponent implements OnInit{
 
+  loading = false;
+
   user?: User;
 
   allTickets: Array<Ticket> = [];
@@ -140,10 +142,9 @@ export class ProfileComponent implements OnInit{
 
   deleteTicket(ticket: Ticket) {
     let text = 'Biztosan leakarja mondani a:\n' + ticket.film_title + ' című film ' + ticket.cinema + ' ' + ticket.auditorium_number + '.terem ' + this.formatScreeningTime(ticket.screening_time) + ' órai vetítésre foglalt, ' + ticket.type + ' ' + this.convertSeat(ticket.chosen_seat) + ' jegyet?';
-
+    
     if (confirm(text)) {
-      console.log(ticket.id);
-
+      this.loading = true;
       let screening: Screening;
 
       this.screeningService.getById(ticket.screeningId).pipe(take(1)).subscribe(data => {
@@ -162,11 +163,14 @@ export class ProfileComponent implements OnInit{
               });
               data.toPromise().then(_ => {
                 this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
+                this.loading = false;
               }).catch(error => {
                 this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
+                this.loading = false;
               });
             }).catch(error => {
               this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
+              this.loading = false;
             });
           });
         }
@@ -261,6 +265,7 @@ export class ProfileComponent implements OnInit{
 
   usernameUpdate() {
     if (confirm('Biztosan módosítani szeretnéd a felhasználónevedet?') && this.user) {
+      this.loading = true;
       this.updateUsername = false;
       this.userService.update(this.user).then(_ => {
         this.commentService.getCommentsByUserId(this.user?.id as string).subscribe(data => {
@@ -268,12 +273,15 @@ export class ProfileComponent implements OnInit{
             comment.username = this.user?.username as string;
             this.commentService.update(comment).catch(error => {
               this.toastr.error('Sikertelen felhasználónév változtatás!', 'Adat módosítás');
+              this.loading = false;
             });
           });
         });
         this.toastr.success('Felhasználónév sikeresen megváltoztatva!', 'Adat módosítás');
+        this.loading = false;
       }).catch(error => {
         this.toastr.error('Sikertelen felhasználónév változtatás!', 'Adat módosítás');
+        this.loading = false;
       });
     }
   }
@@ -294,6 +302,7 @@ export class ProfileComponent implements OnInit{
   }
 
   passwordUpdate() {
+    this.loading = true;
     if(this.updatePassword){
       if(this.passwordForm.valid && this.passwordForm.get('password')?.value === this.passwordForm.get('password')?.value){
         this.angularFireAuth.currentUser.then(user => {
@@ -302,19 +311,24 @@ export class ProfileComponent implements OnInit{
           this.passwordForm.get('password')?.reset();
           this.passwordForm.get('passwordAgain')?.reset();
           this.toastr.success('Sikeres jelszó változtatás!', 'Jelszó változtatás');
+          this.loading = false;
           this.updatePassword = false; 
         }).catch(() => {
           this.toastr.error('Sikertelen jelszó változtatás!', 'Jelszó változtatás');
+          this.loading = false;
         });
       } else {
         if (this.passwordForm.get('password')?.value !== this.passwordForm.get('password')?.value) {
           this.toastr.error('A két jelszó nem egyezik', 'Jelszó változtatás');
+          this.loading = false;
         } else {
           this.toastr.error('A jelszónak legalább 6 karakter hosszúnak kell lennie!', 'Jelszó változtatás');
+          this.loading = false;
         }
       }
     } else {
       this.updatePassword = true;
+      this.loading = false;
     } 
   }
 

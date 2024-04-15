@@ -21,6 +21,8 @@ import * as QRCode from 'qrcode';
 })
 export class SuccessPaymentComponent implements OnInit{
 
+  loading = false;
+
   user?: User;
 
   screening?: Screening;
@@ -38,11 +40,12 @@ export class SuccessPaymentComponent implements OnInit{
     const user = JSON.parse(localStorage.getItem('user') as string) as firebase.default.User;
     this.userService.getById(user.uid).pipe(take(1)).subscribe(data => {
       this.user = data[0];
-
+      
       if (this.user) {
         this.tickets = JSON.parse(localStorage.getItem('tickets')!);
         
         if (this.tickets.length > 0) {
+          this.loading = true;
           this.tickets.forEach(ticket => {
             this.pay_amount += (ticket.price + 100);
           });
@@ -63,10 +66,12 @@ export class SuccessPaymentComponent implements OnInit{
                     this.screening?.occupied_seats.push(ticket.chosen_seat);
                     this.screeningService.update(this.screening as Screening).catch(error => {
                       this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+                      this.loading = false;
                     });
                   }
                 }).catch(error => {
                   this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+                  this.loading = false;
                 });
               });
               const sendEmailNotification = this.functions.httpsCallable('sendEmailNotification');
@@ -76,9 +81,11 @@ export class SuccessPaymentComponent implements OnInit{
               });
               data.toPromise().then(_ => {
                 this.toastr.success('Sikeres foglalás!', 'Jegyfoglalás');
+                this.loading = false;
                 localStorage.removeItem('tickets');
               }).catch(error => {
                 this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+                this.loading = false;
               });
             }
           });

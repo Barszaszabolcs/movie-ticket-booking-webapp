@@ -21,6 +21,8 @@ import { Genres } from '../../shared/constants/constants';
   styleUrls: ['./screening-create.component.scss']
 })
 export class ScreeningCreateComponent implements OnInit{
+
+  loading = false;
   
   // bejelentkezett admin
   user?: User;
@@ -227,32 +229,6 @@ export class ScreeningCreateComponent implements OnInit{
 
     return hoursArray;
   }
-
-  /*onSearch() {
-    if (this.searchForm.valid) {
-      let title = this.searchForm.get('title')?.value as string;
-      let genre = this.searchForm.get('genre')?.value as string;
-
-      this.films = this.allFilms;
-
-      if (title === '' && genre === '') {
-        this.films = undefined;
-
-      } else if (title !== '' && genre === '') {
-        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
-
-      } else if (title === '' && genre !== '') {
-        this.films = this.films.filter(film => film.genres.includes(genre));
-
-      } else if (title !== '' && genre !== '') {
-        this.films = this.films.filter(film => film.genres.includes(genre));
-        this.films = this.films.filter(film => film.title.toLowerCase().includes(title.toLowerCase()));
-
-      } else {
-        this.films = undefined;
-      }
-    }
-  }*/
   
   auditoriumSelected() {
     this.screeningForm.get('day')?.reset();
@@ -291,6 +267,7 @@ export class ScreeningCreateComponent implements OnInit{
   }
 
   createScreening() {
+    this.loading = true;
     if (this.screeningForm.valid) {
       if (this.chosenFilm) {
         const day: number = new Date(this.screeningForm.get('day')?.value as Date).getTime();
@@ -312,17 +289,21 @@ export class ScreeningCreateComponent implements OnInit{
         this.screeningService.create(screening).then(_ => {
           this.toastr.success('Sikeres vetítés létrehozás!', 'Vetítés létrehozás');
           this.screeningForm.reset();
+          this.loading = false;
           this.chosenFilm = undefined;
           this.selectedDay = undefined;
           this.selectedAuditorium = undefined;
         }).catch(error => {
           this.toastr.error('Sikertelen vetítés létrehozás!', 'Vetítés létrehozás');
+          this.loading = false;
         });
       } else {
         this.toastr.error('Ki kell választani egy filmet!', 'Vetítés létrehozás');
+        this.loading = false;
       }
     } else {
       this.toastr.error('Sikertelen vetítés létrehozás!', 'Vetítés létrehozás');
+      this.loading = false;
     }
   }
 }

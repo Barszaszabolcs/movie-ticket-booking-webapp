@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SeatSelectorComponent } from './seat-selector/seat-selector.component';
 import { SharedPipesModule } from '../../shared/pipes/shared-pipes/shared-pipes.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SharedPipesModule } from '../../shared/pipes/shared-pipes/shared-pipes.
     ReactiveFormsModule,
     FlexLayoutModule,
     MatDialogModule,
-    SharedPipesModule
+    SharedPipesModule,
+    MatProgressSpinnerModule
   ]
 })
 export class TicketBookingModule { }

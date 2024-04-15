@@ -16,6 +16,8 @@ import { AdminCreatePopupComponent } from './admin-create-popup/admin-create-pop
   styleUrls: ['./list-users.component.scss']
 })
 export class ListUsersComponent implements OnInit {
+
+  loading = false;
   
   user?: User;
 
@@ -93,6 +95,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   makeModerator(user: User) {
+    this.loading = true;
     const addModeratorRole = this.functions.httpsCallable('addModeratorRole');
     const data = addModeratorRole({ email: user.email });
     data.toPromise().then(result => {
@@ -100,9 +103,13 @@ export class ListUsersComponent implements OnInit {
         user.role = 'moderator';
         this.userService.update(user).then(_ => {
           this.toastr.success('A ' + user.email + ' e-mail című felhasználó mostár moderátor!', 'Moderátor választás');
+          this.loading = false;;
         }).catch(error => {
           this.toastr.error('Sikertelen moderátor létrehozás', 'Moderátor választás');
+          this.loading = false;
         });
+      } else {
+        this.loading = false;
       }
     });
   }
@@ -118,6 +125,7 @@ export class ListUsersComponent implements OnInit {
     });
 
     popup.afterClosed().subscribe(data => {
+      this.loading = true;
       this.chosenCinema = data;
 
       if (this.chosenCinema) {
@@ -129,12 +137,15 @@ export class ListUsersComponent implements OnInit {
             user.cinemaId = this.chosenCinema?.id as string;
             this.userService.update(user).then(_ => {
               this.toastr.success('A ' + user.email + ' e-mail című felhasználó mostár a ' + this.chosenCinema?.town + ' mozi adminja!', 'Admin választás');
+              this.loading = false;
             }).catch(error => {
               this.toastr.error('Sikertelen admin létrehozás', 'Admin választás');
+              this.loading = false;
             });
           }
         });
       }
+      this.loading = false;
     });
   }
 

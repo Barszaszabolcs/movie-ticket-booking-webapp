@@ -14,6 +14,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 
 import { FilmListComponent } from '../../shared/components/film-list/film-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { FilmListComponent } from '../../shared/components/film-list/film-list.c
     MatSelectModule,
     MatOptionModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
   ]
 })
 export class MainModule { }

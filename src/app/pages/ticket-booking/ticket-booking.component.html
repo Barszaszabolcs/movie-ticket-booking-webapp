@@ -1,3 +1,7 @@
+<span class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</span>
+
 <div class="bg-black h-screen" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="w-full h-fit bg-white" fxLayout="row" fxLayoutAlign="space-around center">
         <div class="w-4/5 h-fit" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="chosenSeats.length === 0">

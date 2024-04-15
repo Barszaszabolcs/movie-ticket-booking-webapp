@@ -23,6 +23,8 @@ export class FilmListComponent implements OnInit{
 
   isLoggedIn?: any;
   isSuperadmin?: any;
+
+  loading = false;
   
   constructor(
     private router: Router, private authService: AuthService,
@@ -72,17 +74,21 @@ export class FilmListComponent implements OnInit{
 
   deleteFilm(film: Film) {
     if (confirm('Biztosan törölni szeretnéd a(z) "' + film.title + '" című filmet?')) {
+      this.loading = true;
       this.filmService.delete(film.id).then(_ => {
         const storage = getStorage();
         const file = ref(storage, film.cover_url);
   
         deleteObject(file).then(() => {
           this.toastr.success('Film sikeresen törölve!', 'Film törlés');
+          this.loading = false;
         }).catch((error) => {
           this.toastr.error('Sikertelen film törlés!', 'Film törlés');
+          this.loading = false;
         });
       }).catch(error => {
         this.toastr.error('Sikertelen film törlés!', 'Film törlés');
+        this.loading = false;
       });
     }
   }

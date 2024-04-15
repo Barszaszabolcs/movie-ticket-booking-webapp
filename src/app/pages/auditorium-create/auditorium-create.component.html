@@ -1,3 +1,7 @@
+<span class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</span>
+
 <div class="bg-black" fxLayout="row" fxLayoutAlign="space-around center">
     <div class="bg-white rounded-lg w-1/2 my-10" fxLayout="row" fxLayoutAlign="space-around center">
         <form class="mx-20 my-10 w-full" [formGroup]="auditoriumForm" (ngSubmit)="createAuditorium()" fxLayout="column" fxLayoutAlign="space-around center">

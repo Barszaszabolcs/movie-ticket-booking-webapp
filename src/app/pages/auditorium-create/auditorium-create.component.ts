@@ -18,6 +18,8 @@ import { Router } from '@angular/router';
 })
 export class AuditoriumCreateComponent implements OnInit{
 
+  loading = false;
+
   user?: User;
   cinema?: Cinema;
   auditoriums: Array<Auditorium> = [];
@@ -103,6 +105,7 @@ export class AuditoriumCreateComponent implements OnInit{
   }
 
   createAuditorium(): void {
+    this.loading = true;
     if (this.auditoriumForm.valid) {
       const rowArray = this.auditoriumForm?.get('rows') as FormArray;
       let auditorium: Auditorium = {
@@ -123,12 +126,15 @@ export class AuditoriumCreateComponent implements OnInit{
       console.log(auditorium);
       this.auditoriumService.create(auditorium).then(_ => {
         this.toastr.success('Terem sikeresen létrehozva!', 'Terem létrehozás');
+        this.loading = false;
         this.router.navigateByUrl('/main');
       }).catch(error => {
         this.toastr.error('Sikertelen terem létrehozás!', 'Terem létrehozás');
+        this.loading = false;
       });
     } else {
       this.toastr.error('Egy sorban 3-20 szék lehet!', 'Terem létrehozás');
+      this.loading = false;
     }
   }
 }

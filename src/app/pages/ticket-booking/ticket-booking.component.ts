@@ -35,6 +35,8 @@ import * as QRCode from 'qrcode';
 })
 export class TicketBookingComponent implements OnInit{
 
+  loading = false;
+
   user?: User;
 
   screeningId: string = '';
@@ -294,6 +296,7 @@ export class TicketBookingComponent implements OnInit{
   }
 
   async finishOrder() {
+    this.loading = true;
     if (!this.pay) {  
       this.finishedTickets.forEach(ticket => {
         ticket.date = new Date().getTime();
@@ -308,10 +311,12 @@ export class TicketBookingComponent implements OnInit{
             this.screeningService.update(this.screening as Screening).then(_ => {
             }).catch(error => {
               this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+              this.loading = false;
             });
           }
         }).catch(error => {
           this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+          this.loading = false;
         });
       });
       const sendEmailNotification = this.functions.httpsCallable('sendEmailNotification');
@@ -325,9 +330,11 @@ export class TicketBookingComponent implements OnInit{
         this.finishedTickets = [];
         this.chosenSeats = [];
         localStorage.setItem('tickets', JSON.stringify(this.finishedTickets));
+        this.loading = false;
         this.router.navigateByUrl('/success-payment');
       }).catch(error => {
         this.toastr.error('Sikertelen foglalás!', 'Jegyfoglalás');
+        this.loading = false;
       });
     } else {
       this.onCheckout();
@@ -349,6 +356,7 @@ export class TicketBookingComponent implements OnInit{
       stripe?.redirectToCheckout({
         sessionId: res.id
       });
+      this.loading = false;
       localStorage.setItem('stripeUrl', 'true');
     });
   }

@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent {
+
+  loading = false;
   
   registerForm = this.createForm({
     email: '',
@@ -42,9 +44,11 @@ export class RegistrationComponent {
   }
 
   onSubmit() {
+    this.loading = true;
     if (this.registerForm.valid) {
       if (this.registerForm.get('password')?.value !== this.registerForm.get('passwordAgain')?.value) {
         this.toastr.error('A két jelszó nem egyezik!', 'Regisztráció');
+        this.loading = false;
       } else {
         this.authService.signup(this.registerForm.get('email')?.value as string, this.registerForm.get('password')?.value as string).then(cred => {
           const user: User = {
@@ -60,18 +64,22 @@ export class RegistrationComponent {
           }
           this.userService.create(user).then(_ => {
             this.toastr.success('Sikeres regisztráció!', 'Regisztráció');
+            this.loading = false;
             this.router.navigateByUrl('/main');
           }).catch(error => {
             console.error(error);
             this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');
+            this.loading = false;
           })
         }).catch(error => {
           console.error(error);
           this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');
+          this.loading = false;
         });
       }
     } else {
       this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');
+      this.loading = false;
     }
   }
   

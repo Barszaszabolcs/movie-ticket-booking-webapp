@@ -1,3 +1,7 @@
+<span class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</span>
+
 <mat-sidenav-container style="background-color: black;">
   <mat-sidenav #sidenav>
     <app-menu (selectedPage)="changePage($event)" [currentPage]="page" (onCloseSidenav)="onClose($event, sidenav)" [loggedInUser]="loggedInUser" [isAdmin]="isAdmin" [isSuperadmin]="isSuperadmin" (onLogout)="logout($event)"></app-menu>

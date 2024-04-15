@@ -1,3 +1,7 @@
+<span class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</span>
+
 <div class="text-center h-screen w-full bg-black" fxLayout="column" fxLayoutAlign="space-around center">
     <div class="box w-1/2 h-5/6" fxLayout="column" fxLayoutAlign="space-around center">
         <form class="text-center w-[99%] h-[99%]" fxLayout="column" fxLayoutAlign="center center" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
