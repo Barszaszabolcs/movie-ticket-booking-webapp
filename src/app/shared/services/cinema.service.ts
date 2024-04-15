@@ -18,7 +18,7 @@ export class CinemaService {
   }
 
   getAll(): Observable<Array<Cinema>> {
-    return this.angularFirestore.collection<Cinema>(this.collectionName).valueChanges();
+    return this.angularFirestore.collection<Cinema>(this.collectionName, ref => ref.orderBy('town', 'asc')).valueChanges();
   }
 
   getById(id: string){

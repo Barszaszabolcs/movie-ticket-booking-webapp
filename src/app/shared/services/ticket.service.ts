@@ -30,11 +30,11 @@ export class TicketService {
   getByUserId(userId: string, mode: string) {
     const currentDate = new Date().getTime();
     if (mode === 'active') {
-      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '>', currentDate).orderBy('screening_time', 'asc')).valueChanges();
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '>', currentDate).orderBy('screening_time', 'asc').orderBy('film_title', 'asc').orderBy('chosen_seat', 'asc')).valueChanges();
     } else if (mode === 'expired') {
-      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '<=', currentDate).orderBy('screening_time', 'desc')).valueChanges();
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).where('screening_time', '<=', currentDate).orderBy('screening_time', 'desc').orderBy('film_title', 'asc').orderBy('chosen_seat', 'asc')).valueChanges();
     } else {
-      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).orderBy('screening_time', 'desc')).valueChanges();
+      return this.angularFirestore.collection<Ticket>(this.collectionName, ref => ref.where('userId', '==', userId).orderBy('screening_time', 'desc').orderBy('film_title', 'asc').orderBy('chosen_seat', 'asc')).valueChanges();
     }
   }
 
