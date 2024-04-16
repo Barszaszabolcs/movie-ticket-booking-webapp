@@ -24,40 +24,40 @@
     <div class="w-4/5" *ngIf="films.length === 0">
         <p class="w-full mb-10 text-center text-white text-2xl">Nincsen ilyen film még!</p>
     </div>
-    <div class="w-4/5 mb-5 mt-10" *ngIf="onShowFilms.length > 0">
+    <div class="text-container w-4/5 mb-5 mt-10" *ngIf="onShowFilms.length > 0">
         <h2 class="text-2xl text-white">Műsoron</h2>
     </div>
-    <div class="w-full mb-10" *ngIf="onShowFilms.length > 0">
+    <div class="list-container w-full mb-10" *ngIf="onShowFilms.length > 0">
         <app-film-list [films]="onShowFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5" *ngIf="specialFilms.length > 0">
+    <div class="text-container w-4/5 mb-5" *ngIf="specialFilms.length > 0">
         <h2 class="text-2xl text-white">Prémium formátumok (3D)</h2>
     </div>
-    <div class="w-full mb-10" *ngIf="specialFilms.length > 0">
+    <div class="list-container w-full mb-10" *ngIf="specialFilms.length > 0">
         <app-film-list [films]="specialFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="text-container w-4/5 mb-5">
         <h2 class="text-2xl text-white">Akció filmek</h2>
     </div>
-    <div class="w-full mb-10">
+    <div class="list-container w-full mb-10">
         <app-film-list [films]="actionFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="text-container w-4/5 mb-5">
         <h2 class="text-2xl text-white">Drámák</h2>
     </div> 
-    <div class="w-full mb-10">
+    <div class="list-container w-full mb-10">
         <app-film-list [films]="dramaFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="text-container w-4/5 mb-5">
         <h2 class="text-2xl text-white">Animációs filmek</h2>
     </div>
-    <div class="w-full mb-10">
+    <div class="list-container w-full mb-10">
         <app-film-list [films]="animatedFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
-    <div class="w-4/5 mb-5">
+    <div class="text-container w-4/5 mb-5">
         <h2 class="text-2xl text-white">Horror filmek</h2>
     </div>
-    <div class="w-full mb-10">
+    <div class="list-container w-full mb-10">
         <app-film-list [films]="horrorFilms" [loadedCoverImages]="loadedCoverImages"></app-film-list>
     </div>
 </div>
