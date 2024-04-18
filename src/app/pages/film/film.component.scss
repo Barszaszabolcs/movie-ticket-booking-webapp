@@ -6,3 +6,440 @@ input[type="radio"]:checked + label {
     color: #ffa700;
     outline: none;
 }
+
+
+@media only screen and (max-height: 776px) and (max-width: 320px) {
+    p {
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    h1 {
+        font-size: 15px;
+        line-height: 1;
+    }
+
+    h2 {
+        font-size: 13.5px;
+        line-height: 1;
+    }
+
+    img {
+        height: 300px;
+        width: 200px;
+    }
+
+    mat-card {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .info-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-container > * {
+        flex: 1;
+    }
+    
+    .info-container > p {
+        max-width: 24%;
+    }
+    
+    .info-container > star-rating {
+        max-width: 52%;
+        width: fit-content;
+    }
+    
+    .info-container > div {
+        max-width: 24%;
+    }
+
+    .info-container mat-icon {
+        transform: scale(0.9);
+        margin-right: 2px;
+        overflow: visible;
+    }
+
+    .own-comments-container > mat-card, .own-comments-container > h2 {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+
+    .other-comments-container, .own-comments-container {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .other-comments-container > h2 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .other-comments-container > mat-card {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 7px;
+        margin-top: 0;
+    }
+
+    .comment-content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .day-buttons-container > label {
+        font-size: 10px;
+        margin-right: 1px;
+        margin-left: 1px;
+    }
+
+    .screening-time-container {
+        width: 95%;
+    }
+
+    .screening-time-container button{
+        font-size: 10px;
+        width: 20px;
+        height: 15px;
+        margin: 2px;
+    }
+}
+
+@media only screen and (min-width: 321px) and (max-height: 776px) and (max-width: 375px) {
+    p {
+        font-size: 13px;
+        line-height: 1;
+    }
+
+    h1 {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    h2 {
+        font-size: 14.5px;
+        line-height: 1;
+    }
+
+    img {
+        height: 300px;
+        width: 200px;
+    }
+
+    mat-card {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .info-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-container > * {
+        flex: 1;
+    }
+    
+    .info-container > p {
+        max-width: 24%;
+    }
+    
+    .info-container > star-rating {
+        max-width: 52%;
+        width: fit-content;
+    }
+    
+    .info-container > div {
+        max-width: 24%;
+    }
+
+    .info-container mat-icon {
+        transform: scale(0.9);
+        margin-right: 2px;
+        overflow: visible;
+    }
+
+    .own-comments-container > mat-card, .own-comments-container > h2 {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+
+    .other-comments-container, .own-comments-container {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .other-comments-container > h2 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .other-comments-container > mat-card {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 7px;
+        margin-top: 0;
+    }
+
+    .comment-content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .day-buttons-container > label {
+        font-size: 11px;
+        margin-right: 1px;
+        margin-left: 1px;
+    }
+
+    .screening-time-container {
+        width: 95%;
+    }
+
+    .screening-time-container button{
+        font-size: 11px;
+        width: 20px;
+        height: 15px;
+        margin: 2px;
+    }
+}
+
+@media only screen and (min-width: 376px) and (max-height: 776px) and (max-width: 425px) {
+    p {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    h1 {
+        font-size: 17px;
+        line-height: 1;
+    }
+
+    h2 {
+        font-size: 15.5px;
+        line-height: 1;
+    }
+
+    mat-card {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .info-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-container > * {
+        flex: 1;
+    }
+    
+    .info-container > p {
+        max-width: 24%;
+    }
+    
+    .info-container > star-rating {
+        max-width: 52%;
+        width: fit-content;
+    }
+    
+    .info-container > div {
+        max-width: 24%;
+    }
+
+    .info-container mat-icon {
+        transform: scale(0.9);
+        margin-right: 2px;
+        overflow: visible;
+    }
+
+    .own-comments-container > mat-card, .own-comments-container > h2 {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+
+    .other-comments-container, .own-comments-container {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .other-comments-container > h2 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .other-comments-container > mat-card {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 7px;
+        margin-top: 0;
+    }
+
+    .comment-content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .day-buttons-container > label {
+        font-size: 12px;
+        margin-right: 1px;
+        margin-left: 1px;
+    }
+
+    .screening-time-container {
+        width: 95%;
+    }
+
+    .screening-time-container button{
+        font-size: 12px;
+        width: 20px;
+        height: 15px;
+        margin: 2px;
+    }
+}
+
+@media only screen and (min-width: 426px) and (max-height: 776px) and (max-width: 1024px) {
+    .film-container p {
+        font-size: 17px;
+    }
+
+    .film-container h1 {
+        font-size: 21px;
+    }
+
+    img {
+        height: 450px;
+        width: 324px;
+    }
+
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .info-container > p {
+        width: 100%;
+        margin-left: 10px;
+    }
+}
+
+@media only screen and (min-height: 1200px) and (min-width: 2000px) {
+    
+    img {
+        height: 700px;
+        width: 500px;
+    }
+    
+    p {
+        font-size: 36px;
+        line-height: 1.5;
+    }
+
+    h1 {
+        font-size: 46px;
+    }
+
+    h2 {
+        font-size: 42px;
+    }
+
+    h3 {
+        font-size: 40px;
+    }
+
+    .info-container > star-rating {
+        transform: scale(2);
+        margin-left: 80px;
+        margin-top: 40px;
+    }
+
+    .info-container > mat-icon {
+        transform: scale(1.5);
+    }
+
+    .comments-button {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .screening-time-container > form > mat-form-field  {
+        font-size: 40px;
+    }
+
+    mat-option {
+        font-size: 240%;
+    }
+
+    .day-buttons-container > label {
+        font-size: 44px;
+    }
+
+    .screening-time-container button {
+        font-size: 38px;
+        padding: 30px;
+    }
+
+    .comment-content-container_buttons {
+        transform: scale(1.8);
+    }
+
+    .comment-form > mat-form-field {
+        font-size: 40px;
+    }
+
+    .comment-form star-rating {
+        transform: scale(1.8);
+        margin-right: 100px;
+    }
+
+    .comment-form button {
+        font-size: 38px;
+        padding: 30px;
+    }
+}

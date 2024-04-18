@@ -1,11 +1,11 @@
 <div class="h-full bg-black" fxLayout="column" fxLayoutAlign="space-around center" *ngIf="chosenFilm">
-    <mat-card class="w-4/5 h-5/6 m-3" fxLayout style="background-color: black;">
-        <div class="h-full w-full" fxLayout="column" fxFlex="1 1 33%">
-            <mat-card-content fxLayout="column" fxLayoutAlign="center center" >
-                <div class="w-full mb-5">
-                    <p class="text-left text-white mr-2" fxFlex="1 1 30%" fxFlexAlign="center">Korhatár: {{chosenFilm.age_limit}}</p>
-                    <star-rating [value]="averageRating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="#9d9d9d" size="22px" [readonly]="true" fxFlex="1 1 40%"></star-rating>
-                    <div fxFlex="1 1 30%" fxLayout="row" fxLayoutAlign="end center">
+    <mat-card class="film-container w-4/5 h-5/6 m-3" fxLayout.gt-sm="row" style="background-color: black;">
+        <div class="h-full w-full" fxLayout="column" fxFlex.gt-sm="1 1 33%">
+            <mat-card-content fxLayout="column" fxLayoutAlign="center center">
+                <div class="info-container w-full mb-5">
+                    <p class="text-left text-white mr-2" fxFlex.gt-md="1 1 30%" fxFlexAlign="center">Korhatár: {{chosenFilm.age_limit}}</p>
+                    <star-rating [value]="averageRating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="#9d9d9d" size="22px" [readonly]="true" fxFlex.gt-md="1 1 40%"></star-rating>
+                    <div fxFlex.gt-md="1 1 30%" fxLayout="row" fxLayoutAlign.gt-md="end center">
                         <mat-icon style="color: white;">access_time</mat-icon>
                         <p class="ml-1 text-white">{{chosenFilm.movie_length}} perc</p>
                     </div>
@@ -13,7 +13,7 @@
                 <img class="border-solid border-4 border-white rounded-md shadow-[0px_0px_9px_1px_rgba(0,0,0,0.75)] shadow-[#ffc000]" [src]="coverUrl" alt="{{chosenFilm.title}}">
             </mat-card-content>
         </div>
-        <div fxFlex="1 1 67%">
+        <div fxFlex.gt-sm="1 1 67%">
             <mat-card-header class="my-3 w-full">
                 <h1 class="w-full text-center text-white text-4xl">{{chosenFilm.title}}</h1>
             </mat-card-header>
@@ -32,8 +32,8 @@
             </mat-card-content>
         </div>
     </mat-card>
-    <div class="bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="column" fxLayoutAlign="space-around start" *ngIf="user">
-        <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout="row" fxLayoutAlign="start start">
+    <div class="screening-time-container bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="column" fxLayoutAlign="space-around start" *ngIf="user">
+        <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start">
             <mat-form-field>
                 <mat-label for="cinemaId">Mozi: </mat-label>
                 <mat-select formControlName="cinemaId" (selectionChange)="cinemaSelected()">
@@ -41,7 +41,7 @@
                 </mat-select>
             </mat-form-field>
             <div *ngIf="chosenCinema" (change)="daySelected()">
-                <span *ngFor="let date of week; let i = index">
+                <span class="day-buttons-container" *ngFor="let date of week; let i = index">
                     <input type="radio" [id]="'day' + i" [value]="date" formControlName="day">
                     <label class="ml-2 text-xl font-medium" [for]="'day' + i">{{ i === 0 ? 'Ma' : date | hungarianDateFormat}}</label>
                 </span>
@@ -50,19 +50,19 @@
         </form>
         <div class="ml-3" *ngIf="screenings2d.length > 0" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="15px">
             <p class="text-xl font-semibold">2D</p>
-            <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+            <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap.gt-sm="40px">
                 <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings2d" (click)="goToScreening(screening.id)">{{screening.time | date:'HH:mm'}}</button>
             </div>
         </div>
         <div class="ml-3" *ngIf="screenings3d.length > 0" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="15px">
             <p class="text-xl font-semibold">3D</p>
-            <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+            <div class="mb-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap.gt-sm="40px">
                 <button mat-raised-button class="w-fit h-auto" color="primary" *ngFor="let screening of screenings3d" (click)="goToScreening(screening.id)">{{screening.time | date:'HH:mm'}}</button>
             </div>
         </div>
     </div>
     <div class="w-4/5 mb-8" *ngIf="!loaded">
-        <button mat-raised-button class="w-full text-white font-medium" style="background-color: #9d9d9d; color: white;" (click)="getComments()">
+        <button mat-raised-button class="comments-button w-full text-white font-medium" style="background-color: #9d9d9d; color: white;" (click)="getComments()">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
                 <mat-icon style="scale: 200%; color: white;">keyboard_arrow_down</mat-icon>
                 <p class="text-xl">Vélemények</p>
@@ -71,13 +71,13 @@
         </button>
     </div>
     <div class="w-4/5 mb-8" *ngIf="loaded">
-        <button mat-raised-button class="w-full" style="background-color: #9d9d9d;" (click)="hideComments()"><mat-icon style="scale: 200%; color: white;">keyboard_arrow_up</mat-icon></button>
+        <button mat-raised-button class="comments-button w-full" style="background-color: #9d9d9d;" (click)="hideComments()"><mat-icon style="scale: 200%; color: white;">keyboard_arrow_up</mat-icon></button>
     </div>
     <div class="w-4/5 mb-8" *ngIf="loaded && !user && comments.length === 0">
         <h1 class="w-full text-center text-white text-3xl font-bold">Még nincsen komment ehhez a filmhez!</h1>
     </div>
     <div class="w-4/5 mb-10 bg-[#434343] rounded-lg" *ngIf="loaded">
-        <form class="w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()" *ngIf="!ownComment && user">
+        <form class="comment-form w-full p-5" fxLayout="column" fxLayoutAlign="space-around end" [formGroup]="commentsForm" (ngSubmit)="addComment()" *ngIf="!ownComment && user">
             <mat-form-field class="mt-2 w-full">
                 <mat-label for="username">Felhasználónév: </mat-label>
                 <input matInput class="w-11/12" type="text" readonly="true" [value]="user.username"/>
@@ -91,17 +91,17 @@
                 <button mat-raised-button class="w-full" color="primary" type="submit">Megjegyzés</button>
             </span>
         </form>
-        <div class="mt-5" *ngIf="user && ownComment">
+        <div class="own-comments-container mt-5" *ngIf="user && ownComment">
             <h2 class="ml-5 text-2xl text-white font-medium">SAJÁT VÉLEMÉNY:</h2>
             <mat-card class="m-5" style="background-color: #9d9d9d;">
-                <mat-card-content>
-                    <div fxFlex="1 1 85%">
+                <mat-card-content class="comment-content-container">
+                    <div fxFlex.gt-sm="1 1 85%" fxFlex.md="1 1 70%">
                         <h3 class="text-xl text-black font-semibold">{{ ownComment.username }}</h3>
                         <p class="mt-2 text-black font-medium">{{ ownComment.comment }}</p>
                         <p class="mt-2 text-black text-sm">{{ ownComment.date | dateFormat }} <span *ngIf="ownComment.moderatorId !== ''">moderated</span></p>
                     </div>
-                    <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" fxFlex="1 1 15%">
-                        <star-rating [value]="ownComment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true"></star-rating>
+                    <div class="comment-content-container_buttons w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="15px" fxFlex.gt-sm="1 1 15%"  fxFlex.md="1 1 30%">
+                        <star-rating [value]="ownComment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" fxFlex="1 1 15%"></star-rating>
                         <div class="w-full"  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
                             <button mat-fab color="warn" style="scale: 85%;" (click)="deleteComment(ownComment)"><mat-icon>delete</mat-icon></button>
                             <button mat-fab style="scale: 85%; background-color: cornflowerblue;" (click)="edit(ownComment)" *ngIf="ownComment.moderatorId === ''"><mat-icon>edit</mat-icon></button>
@@ -110,16 +110,16 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="mt-5" *ngIf="comments.length > 0">
+        <div class="other-comments-container mt-5" *ngIf="comments.length > 0">
             <h2 class="ml-5 text-2xl text-white font-medium">MÁSOK VÉLEMÉNYE:</h2>
             <mat-card class="m-5" *ngFor="let comment of comments" style="background-color: #9d9d9d;">
-                <mat-card-content>
-                    <div fxFlex="1 1 85%">
+                <mat-card-content class="comment-content-container">
+                    <div fxFlex.gt-sm="1 1 85%" fxFlex.md="1 1 70%">
                         <h3 class="text-xl text-black font-semibold">{{ comment.username }}</h3>
                         <p class="mt-2 text-black font-medium">{{ comment.comment }}</p>
                         <p class="mt-2 text-black text-sm">{{ comment.date | dateFormat }} <span *ngIf="comment.moderatorId !== ''">moderated</span></p>
                     </div>
-                    <div class="w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" fxFlex="1 1 15%">
+                    <div class="comment-content-container_buttons w-full" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="15px" fxFlex.gt-sm="1 1 15%" fxFlex.md="1 1 30%">
                         <star-rating [value]="comment.rating" [totalstars]="5" checkedcolor="gold" uncheckedcolor="black" size="26px" [readonly]="true" fxFlex="1 1 15%"></star-rating>
                         <div class="w-full"  fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="isModerator">
                             <button mat-fab color="warn" style="scale: 85%;" (click)="deleteComment(comment)"><mat-icon>delete</mat-icon></button>
