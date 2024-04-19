@@ -3,27 +3,85 @@
 }
 
 
-@media only screen and (min-height: 930px) and (min-width: 1470px) {
-    a {
-        font-size: 2.25rem;
+@media only screen and (max-width: 600px) {
+    .menu-icon {
+        transform: scale(1.5);
+        margin-bottom: 2px;
     }
 
-    p {
-        font-size: 200%;
+    .logo > p {
+        font-size: 20px;
     }
 
-    mat-icon {
-        scale: 200%;
-        margin-right: 10px;
+    .logo > mat-icon {
+        transform: scale(0.8);
+    }
+
+    footer p {
+        font-size: 13px;
+    }
+
+    footer mat-icon {
+        transform: scale(0.9);
     }
 }
 
-@media only screen and (max-height: 790px) and (max-width: 390px) {
-    p {
-        font-size: 75%;
+@media only screen and (min-width: 601px) and (max-width: 960px) {
+    .menu-icon {
+        transform: scale(2);
+        margin-bottom: 3px;
     }
 
-    mat-icon {
-        scale: 90%;
+    .logo {
+        margin-left: 15px;
+    }
+}
+
+@media only screen and (min-width: 961px) and (max-width: 1199px) {
+    a {
+        font-size: 18px;
+    }
+
+    footer p {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    a {
+        font-size: 23px;
+    }
+
+    footer p {
+        font-size: 18px;
+    }
+}
+
+@media only screen and (min-width: 1650px) {
+    a {
+        font-size: 35px;
+    }
+
+    footer p {
+        font-size: 30px;
+    }
+
+    footer mat-icon {
+        transform: scale(1.5);
+        margin-right: 10px;
+    }
+
+    .logo > p {
+        font-size: 45px;
+    }
+
+    .logo > mat-icon {
+        transform: scale(1.3);
+        margin-left: 10px;
+    }
+
+    mat-toolbar {
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 }
