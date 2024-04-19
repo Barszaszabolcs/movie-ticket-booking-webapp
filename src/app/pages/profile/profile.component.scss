@@ -15,3 +15,247 @@
 .mat-button-toggle-checked {
     filter: brightness(90%);
 }
+
+.user-text {
+    max-width: 75px;
+    overflow-x: auto
+}
+
+@media only screen and (max-height: 776px) and (max-width: 320px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ticket-container h1 {
+        font-size: 17px;
+        margin-right: -10px;
+    }
+
+    mat-button-toggle-group {
+        width: 160px;
+        font-size: 11px;
+        margin: 0;
+    }
+
+    .ticket-container mat-card-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    mat-card-content > div:nth-child(2), mat-card-content > div:nth-child(3) {
+        grid-row: 1;
+    }
+
+    mat-card-content > div:nth-child(1), mat-card-content > div:nth-child(4) {
+        grid-row: 2;
+    }
+
+    .ticket-container mat-card-content p {
+        font-size: 11.5px;
+    }
+
+    .ticket-container mat-card-content button {
+        font-size: 12px;
+        height: 25px;
+        width: 55px;
+    }
+
+    .username-container input {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 321px) and (max-height: 776px) and (max-width: 375px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ticket-container h1 {
+        font-size: 19px;
+        margin-right: -10px;
+    }
+
+    mat-button-toggle-group {
+        width: 170px;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .ticket-container mat-card-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    mat-card-content > div:nth-child(2), mat-card-content > div:nth-child(3) {
+        grid-row: 1;
+    }
+
+    mat-card-content > div:nth-child(1), mat-card-content > div:nth-child(4) {
+        grid-row: 2;
+    }
+
+    .ticket-container mat-card-content p {
+        font-size: 13px;
+    }
+
+    .ticket-container mat-card-content button {
+        font-size: 14px;
+        height: 30px;
+        width: 80px;
+    }
+
+    .username-container input {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 376px) and (max-height: 776px) and (max-width: 600px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ticket-container h1 {
+        font-size: 21px;
+        margin-right: -25px;
+    }
+
+    mat-button-toggle-group {
+        width: 180px;
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .ticket-container mat-card-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    mat-card-content > div:nth-child(2), mat-card-content > div:nth-child(3) {
+        grid-row: 1;
+    }
+
+    mat-card-content > div:nth-child(1), mat-card-content > div:nth-child(4) {
+        grid-row: 2;
+    }
+
+    .ticket-container mat-card-content p {
+        font-size: 14px;
+    }
+
+    .ticket-container mat-card-content button {
+        font-size: 15px;
+        height: 35px;
+        width: 80px;
+    }
+
+    .username-container input {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-height: 776px) and (max-width: 850px) {
+
+    .username-container input {
+        width: 50%;
+    }
+
+    .content-container {
+        width: 95%;
+    }
+
+    .ticket-container mat-card-content p {
+        font-size: 14px;
+    }
+
+    .ticket-container mat-card-content button {
+        font-size: 14px;
+        height: 35px;
+        width: 80px;
+    }
+}
+
+@media only screen and (min-width: 1600px) and (min-height: 1500px) and (max-width: 3000px) {
+    .container img {
+        height: 500px;
+        width: 500px;
+    }
+
+    .container p, .container button{
+        font-size: 45px;
+        max-width: 95%;
+        margin-left: 25px;
+    }
+
+    .container input {
+        width: 50%;
+        height: 40px;
+        margin-left: 20px;
+        font-size: 30px;
+    }
+    
+    .user-text {
+        max-width: 95%;
+        overflow: visible;
+        margin-left: 25px;
+    }
+
+    .container mat-icon {
+        transform: scale(2.3);
+    }
+
+    .container form button {
+        padding: 40px;
+    }
+
+    .container form mat-form-field {
+        font-size: 30px;
+        width: 75%;
+    }
+
+    .password-change-link {
+        font-size: 40px;
+    }
+
+    .ticket-container h1 {
+        font-size: 45px;
+        margin: 20px;
+    }
+
+    mat-button-toggle-group {
+        font-size: 35px;
+        align-items: center;
+        margin-left: -50px;
+    }
+
+    mat-button-toggle {
+        padding: 20px;
+    }
+
+    .scroll {
+        margin-top: 30px;
+        height: 50em;
+        max-height: 50em;
+        overflow-y: auto;
+    }
+
+    .ticket-container p {
+        font-size: 35px;
+    }
+
+    .ticket-container button {
+        font-size: 35px;
+        padding: 30px;
+    }
+}
