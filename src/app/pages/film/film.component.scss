@@ -8,7 +8,7 @@ input[type="radio"]:checked + label {
 }
 
 
-@media only screen and (max-height: 776px) and (max-width: 320px) {
+@media only screen and (max-width: 320px) {
     p {
         font-size: 12px;
         line-height: 1;
@@ -121,7 +121,7 @@ input[type="radio"]:checked + label {
     }
 }
 
-@media only screen and (min-width: 321px) and (max-height: 776px) and (max-width: 375px) {
+@media only screen and (min-width: 321px) and (max-width: 375px) {
     p {
         font-size: 13px;
         line-height: 1;
@@ -234,7 +234,7 @@ input[type="radio"]:checked + label {
     }
 }
 
-@media only screen and (min-width: 376px) and (max-height: 776px) and (max-width: 425px) {
+@media only screen and (min-width: 376px) and (max-width: 425px) {
     p {
         font-size: 14px;
         line-height: 1;
@@ -342,7 +342,7 @@ input[type="radio"]:checked + label {
     }
 }
 
-@media only screen and (min-width: 426px) and (max-height: 776px) and (max-width: 1024px) {
+@media only screen and (min-width: 426px) and (max-width: 1024px) {
     .film-container p {
         font-size: 17px;
     }
@@ -369,7 +369,7 @@ input[type="radio"]:checked + label {
     }
 }
 
-@media only screen and (min-height: 1200px) and (min-width: 2000px) {
+@media only screen and (min-width: 2000px) {
     
     img {
         height: 700px;
