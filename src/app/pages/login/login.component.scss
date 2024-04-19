@@ -32,133 +32,65 @@ h1 {
     letter-spacing: 0.1em;
 }
 
-@media only screen and (max-height: 432px) and (max-width: 640px) {
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+@media only screen and (max-height: 776px) and (max-width: 320px) {
+    .box {
+        width: 85%;
     }
 
-    h1 {
-        font-size: 0.9rem;
-        margin: 0;
-    }
-
-    a, mat-label {
-        font-size: 70%;
-        margin: 0;
-    }
-
-    mat-form-field, input, button {
-        transform: scale(0.6);
-        margin: -15px;
+    .box h1 {
+        font-size: 24px;
     }
 }
 
-@media only screen and (min-height: 432px) and (min-width: 640px) and (max-height: 576px) and (max-width: 854px) {
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+@media only screen and (min-width: 321px) and (max-height: 776px) and (max-width: 375px) {
+    .box {
+        width: 80%;
     }
 
-    h1 {
-        font-size: 1rem;
-        margin: 0;
-    }
-
-    a, mat-label {
-        font-size: 80%;
-        margin: 0;
-    }
-
-    mat-form-field, input, button {
-        transform: scale(0.7);
-        margin: -10px;
+    .box h1 {
+        font-size: 26px;
     }
 }
 
-@media only screen and (min-height: 576px) and (min-width: 854px) and (max-height: 691px) and (max-width: 1024px) {
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+@media only screen and (min-width: 376px) and (max-height: 776px) and (max-width: 600px) {
+    .box {
+        width: 80%;
     }
 
-    h1 {
-        font-size: 1.2rem;
-        margin: 0;
-    }
-
-    a, mat-label {
-        font-size: 80%;
-        margin: 0;
-    }
-
-    mat-form-field, input, button {
-        transform: scale(0.8);
-        margin: 0;
+    .box h1 {
+        font-size: 29px;
     }
 }
 
-@media only screen and (min-height: 1078px) and (min-width: 1600px) and (max-height: 1300px) and (max-width: 1930px) {
+@media only screen and (min-width: 601px) and (max-height: 776px) and (max-width: 900px) {
     .box {
         width: 65%;
     }
 
-    a {
-        font-size: 130%;
-    }
-
-    mat-label {
-        font-size: 180%;
-        margin: 5px;
-    }
-
-    h1 {
-        font-size: 280%;
-    }
-
-    input {
-        padding: 25px;
-    }
-
-    button {
-        font-size: 180%;
-        padding: 40px;
+    .box h1 {
+        font-size: 33px;
     }
 }
- 
-@media only screen and (min-height: 1300px) and (min-width: 1930px) {
+
+@media only screen and (min-height: 1500px) and (min-width: 1600px) {
     .box {
         width: 65%;
     }
 
-    a {
-        font-size: 200%;
+    .box h1 {
+        font-size: 60px;
     }
 
-    mat-label {
-        font-size: 250%;
+    .box a {
+        font-size: 35px;
     }
 
-    h1 {
-        font-size: 350%;
+    .box button {
+        font-size: 40px;
+        padding: 35px;
     }
 
-    input {
-        padding: 40px;
-    }
-
-    button {
-        font-size: 250%;
-        padding: 50px;
-    }
-
-    mat-form-field input {
-        font-size: 50px;
+    .box mat-form-field {
+        font-size: 30px;
     }
 }
