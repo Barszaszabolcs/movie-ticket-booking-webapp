@@ -3,7 +3,7 @@
 </span>
 
 <div class="w-full h-full" *ngIf="films" fxLayout="row" fxLayoutAlign="space-around center">
-    <div>
+    <div class="arrow-left">
         <button *ngIf="films.length > 6" mat-fab class="rotate-180" [ngStyle]="{'opacity': presentIndex > 0 ? '1' : '0.5'}" (click)="previousButton()"><mat-icon>play_arrow</mat-icon></button>
     </div>
     <div class="card cursor-pointer" *ngFor="let film of films.slice(presentIndex, presentEndIndex)">
@@ -20,7 +20,7 @@
             <p class="p-1 text-sm italic">Rendező(k): {{film.director}}</p>
         </div>
     </div>
-    <div>
+    <div class="arrow-right">
         <button *ngIf="films.length > 6" mat-fab (click)="nextButton()" [ngStyle]="{'opacity': presentEndIndex < films.length ? '1' : '0.5'}"><mat-icon>play_arrow</mat-icon></button>
     </div>
 </div>

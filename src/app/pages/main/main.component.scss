@@ -1,246 +1,38 @@
-@media only screen and (max-height: 346px) and (max-width: 512px) {
-    
-    mat-form-field {
-        font-size: 10px;
-        width: 120px;
-        height: 70px;
+@media only screen and (max-width: 600px) {
+    .form-container {
+        width: 90%;
     }
 
-    mat-option {
-        font-size: 10px;
+    .form-container mat-icon {
+        overflow: visible;
     }
 
-    mat-icon {
-        scale: 70%;
-    }
-
-    p, h2 {
-        font-size: 8px;
-    }
-    .text-container {
-        margin-bottom: 10px;
-    }
-
-    .list-container {
-        margin-bottom: 20px;
+    .form-container mat-form-field {
+        width: 40%;
+        margin-left: 5px;
     }
 }
 
-@media only screen and (min-height: 347px) and (min-width: 513px) and (max-height: 494px) and (max-width: 732px) {
-    
-    mat-form-field {
-        font-size: 70%;
-        width: 30%;
-    }
+@media only screen and (min-width: 1600px) {
 
-    mat-option {
-        font-size: 70%;
-    }
-
-    mat-icon {
-        scale: 70%;
-    }
-
-    p, h2 {
-        font-size: 10px;
-    }
-    .text-container {
-        margin-bottom: 12px;
-    }
-
-    .list-container {
-        margin-bottom: 24px;
-    }
-}
-
-@media only screen and (min-height: 495px) and (min-width: 733px) and (max-height: 576px) and (max-width: 854px) {
-    .card, img {
-        height: 168px;
-        width: 112px;
-    }
-
-    button {
-        height: 42px;
-        width: 42px;
-    }
-
-    mat-icon {
-        transform: scale(0.7);
-    }
-
-    p, h2 {
-        font-size: 12px;
-    }
-    .text-container {
-        margin-bottom: 14px;
-    }
-
-    .list-container {
-        margin-bottom: 28px;
-    }
-}
-
-@media only screen and (min-height: 577px) and (min-width: 855px) and (max-height: 691px) and (max-width: 1024px) {
-    .card, img {
-        height: 192px;
-        width: 128px;
-    }
-
-    button {
-        height: 48px;
-        width: 48px;
-    }
-
-    mat-icon {
-        transform: scale(0.8);
-    }
-
-    p, h2 {
-        font-size: 14px;
-    }
-    .text-container {
-        margin-bottom: 16px;
-    }
-
-    .list-container {
-        margin-bottom: 32px;
-    }
-}
-
-@media only screen and (min-height: 692px) and (min-width: 1025px) and (max-height: 785px) and (max-width: 1164px) {
-    .card, img {
-        height: 216px;
-        width: 144px;
-    }
-
-    button {
-        height: 54px;
-        width: 54px;
-    }
-
-    mat-icon {
-        transform: scale(0.9);
-    }
-
-    p, h2 {
-        font-size: 16px;
-    }
-
-    .text-container {
-        margin-bottom: 18px;
-    }
-
-    .list-container {
-        margin-bottom: 36px;
-    }
-}
-
-
-
-
-
-
-
-
-
-@media only screen and (min-height: 958px) and (min-width: 1422px) {
-    
-    mat-form-field {
-        font-size: 170%;
-        width: 23%;
-        margin-bottom: -20px;
-        margin-top: 20px;
-    }
-
-    mat-option {
-        font-size: 200%;
-    }
-
-    mat-icon {
-        scale: 200%;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    p, h2 {
-        font-size: 20px;
-    }
-}
-
-@media only screen and (min-height: 1078px) and (min-width: 1600px) {
-    p, h2 {
-        font-size: 22px;
-    }
-}
-
-@media only screen and (min-height: 1150px) and (min-width: 1706px) {
-    p, h2 {
-        font-size: 24px;
-    }
-}
-
-@media only screen and (min-height: 1294px) and (min-width: 1920px) {
-    p, h2 {
-        font-size: 26px;
-    }
-}
-
-@media only screen and (min-height: 1726px) and (min-width: 2560px) {
-    
-    mat-form-field {
-        font-size: 240%;
-        width: 30%;
-        margin-bottom: -30px;
-        margin-top: 30px;
-    }
-
-    mat-option {
-        font-size: 240%;
-    }
-
-    mat-icon {
-        scale: 270%;
-        margin-left: 30px;
-        margin-right: 30px;
-    }
-
-    p, h2 {
-        font-size: 31px;
-        margin-top: 55px;
-        margin-bottom: 25px;
-    }
-}
-
-@media only screen and (min-height: 2589px) and (min-width: 3840px) {
-    
-    mat-form-field {
-        font-size: 400%;
-        width: 30%;
-        margin-bottom: -40px;
+    .form-container mat-form-field {
+        width: 20%;
+        font-size: 30px;
         margin-top: 50px;
     }
 
     mat-option {
-        font-size: 270%;
+        font-size: 240%;
     }
 
-    mat-icon {
-        scale: 300%;
-        margin-left: 30px;
-        margin-right: 30px;
+    .form-container mat-icon {
+        transform: scale(1.5);
+        margin-left: 10px;
     }
 
-    p, h2 {
-        font-size: 45px;
-        margin-top: 60px;
-        margin-bottom: 40px;
-    }
-}
-
-@media only screen and (min-height: 3452px) and (min-width: 5120px) {
-    p, h2 {
-        font-size: 63px;
-        margin-top: 60px;
-        margin-bottom: 40px;
+    h2 {
+        font-size: 40px;
+        margin-top: 40px;
+        margin-bottom: 20px;
     }
 }
