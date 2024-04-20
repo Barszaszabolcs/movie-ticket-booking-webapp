@@ -2,11 +2,19 @@ input[type="radio"] {
     display: none;
 }
 
+input[type="radio"] + label {
+    cursor: pointer;
+}
+
 input[type="radio"]:checked + label {
     color: #ffa700;
     outline: none;
 }
 
+input[type="radio"]:disabled + label {
+    color: #7b7b7b;
+    cursor: default;
+}
 
 @media only screen and (max-width: 320px) {
     p {

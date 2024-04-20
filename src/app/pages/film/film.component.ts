@@ -37,6 +37,9 @@ export class FilmComponent implements OnInit{
   chosenCinema?: Cinema;
   auditoriums: Array<Auditorium> = [];
 
+  screenings: Array<Screening> = [];
+  allScreenings: Array<Screening> = [];
+
   screenings2d: Array<Screening> = [];
   screenings3d: Array<Screening> = [];
   
@@ -71,6 +74,8 @@ export class FilmComponent implements OnInit{
   ngOnInit(): void {
     this.cinemas = [];
     this.auditoriums = [];
+    this.allScreenings = [];
+    this.screenings = [];
     this.screenings2d = [];
     this.screenings3d = [];
     this.loaded = false;
@@ -94,6 +99,11 @@ export class FilmComponent implements OnInit{
             this.cinemas = data;
           });
           this.getAverageRating(this.chosenFilm);
+
+          this.screeningService.getFutureScreeningsByFilmId(this.chosenFilm.id).subscribe(data => {
+            this.allScreenings = data;
+            this.screenings = this.allScreenings;
+          })
         }
       });
     });
@@ -126,6 +136,7 @@ export class FilmComponent implements OnInit{
     this.auditoriums = [];
     this.screenings2d = [];
     this.screenings3d = [];
+    this.screenings = this.allScreenings;
     this.selectForm.get('day')?.reset();
     this.selectedDay = undefined;
     const cinema = this.selectForm.get('cinemaId')?.value as string;
@@ -136,6 +147,10 @@ export class FilmComponent implements OnInit{
       if (this.chosenCinema) {
         this.auditoriumService.getAuditoriumsByCinemaId(this.chosenCinema.id).subscribe(data => {
           this.auditoriums = data;
+
+          this.screenings = this.screenings.filter(screening => {
+            return this.auditoriums.some(auditorium => auditorium.id === screening.auditoriumId)
+          });
         });
       }
     });
@@ -148,37 +163,12 @@ export class FilmComponent implements OnInit{
 
     if (this.selectedDay) {
       if (this.auditoriums) {
-        this.auditoriums.forEach(auditorium => {
-          if (this.chosenFilm) {
-            this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDayAndType(auditorium.id, this.chosenFilm.id, this.selectedDay?.getTime() as number, '2D').subscribe(data => {
-              const screenings2d = data;
-
-              screenings2d.forEach(screening => {
-                this.screenings2d.push(screening);
-              });
-
-              // növekvő sorrendbe rendezzük a tömben szereplő vetítéseket a time adattag szerint
-              this.screenings2d.sort((a, b) => a.time - b.time);
-              const currentTime = new Date().getTime();
-              // csak azokat a vetítéseket tartjuk meg, amelyek vetítési ideje - 30 perc a jelenlegi időhöz képest a jövőben lesz
-              this.screenings2d = this.screenings2d.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
-            });
-
-            this.screeningService.getScreeningsByAuditoriumIdAndFilmIdAndDayAndType(auditorium.id, this.chosenFilm.id, this.selectedDay?.getTime() as number, '3D').subscribe(data => {
-              const screenings3d = data;
-
-              screenings3d.forEach(screening => {
-                this.screenings3d.push(screening);
-              });
-
-              // növekvő sorrendbe rendezzük a tömben szereplő vetítéseket a time adattag szerint
-              this.screenings3d.sort((a, b) => a.time - b.time);
-              const currentTime = new Date().getTime();
-              // csak azokat a vetítéseket tartjuk meg, amelyek vetítési ideje - 30 perc a jelenlegi időhöz képest a jövőben lesz
-              this.screenings3d = this.screenings3d.filter(screening => (screening.time - (30 * 60 * 1000)) > currentTime);
-            });
-          }
-        });
+        if (this.chosenFilm) {
+          const currentTime = new Date().getTime();
+          
+          this.screenings2d = this.screenings.filter(screening => screening.day === this.selectedDay?.getTime() && screening.type === '2D' && ((screening.time - (30 * 60 * 1000)) > currentTime));
+          this.screenings3d = this.screenings.filter(screening => screening.day === this.selectedDay?.getTime() && screening.type === '3D' && ((screening.time - (30 * 60 * 1000)) > currentTime));
+        }
       }
     }
   }
@@ -297,5 +287,9 @@ export class FilmComponent implements OnInit{
   goToScreening(id: string) {
     localStorage.setItem('ticketBookingPageAvaliable', JSON.stringify(true));
     this.router.navigate(['/ticket-booking/' + id]);
+  }
+
+  isDisabled(date: Date) {
+    return !this.screenings.some(screening => screening.day === date.getTime());
   }
 }

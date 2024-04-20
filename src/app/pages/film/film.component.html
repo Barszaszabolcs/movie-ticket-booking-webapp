@@ -14,8 +14,9 @@
             </mat-card-content>
         </div>
         <div fxFlex.gt-sm="1 1 67%">
-            <mat-card-header class="my-3 w-full">
+            <mat-card-header class="my-3 w-full" fxLayout="column" fxLayoutAlign="space-around center">
                 <h1 class="w-full text-center text-white text-4xl">{{chosenFilm.title}}</h1>
+                <h2 class="w-full mt-2 text-center text-[#ffc000] text-3xl" *ngIf="this.allScreenings.length === 0">(Hamarosan műsoron)</h2>
             </mat-card-header>
             <mat-card-content>
                 <p class="my-3 text-xl text-white">{{chosenFilm.summary}}</p>
@@ -32,7 +33,7 @@
             </mat-card-content>
         </div>
     </mat-card>
-    <div class="screening-time-container bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="column" fxLayoutAlign="space-around start" *ngIf="user">
+    <div class="screening-time-container bg-white w-4/5 h-fit my-10 rounded-lg" fxLayout="column" fxLayoutAlign="space-around start" *ngIf="user && this.allScreenings.length > 0">
         <form class="w-fit h-full m-3" [formGroup]="selectForm" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start">
             <mat-form-field>
                 <mat-label for="cinemaId">Mozi: </mat-label>
@@ -40,12 +41,14 @@
                   <mat-option *ngFor="let cinema of cinemas" [value]="cinema.id"> {{ cinema.town }}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <div *ngIf="chosenCinema" (change)="daySelected()">
-                <span class="day-buttons-container" *ngFor="let date of week; let i = index">
-                    <input type="radio" [id]="'day' + i" [value]="date" formControlName="day">
-                    <label class="ml-2 text-xl font-medium" [for]="'day' + i">{{ i === 0 ? 'Ma' : date | hungarianDateFormat}}</label>
-                </span>
-                <p class="ml-2">{{selectedDay | date: 'yyyy/MM/dd'}}</p>                
+            <div fxLayout="column" fxLayoutAlign="start start">
+                <div *ngIf="chosenCinema" (change)="daySelected()" fxLayout="row" fxLayoutAlign="start center">
+                    <fieldset [disabled]="isDisabled(date)" class="day-buttons-container" *ngFor="let date of week; let i = index">
+                        <input type="radio" [id]="'day' + i" [value]="date" formControlName="day">
+                        <label class="ml-2 text-xl font-medium" [for]="'day' + i">{{ i === 0 ? 'Ma' : date | hungarianDateFormat}}</label>
+                    </fieldset>
+                </div>
+                <p class="ml-2">{{selectedDay | date: 'yyyy/MM/dd'}}</p>        
             </div>
         </form>
         <div class="ml-3" *ngIf="screenings2d.length > 0" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="15px">
