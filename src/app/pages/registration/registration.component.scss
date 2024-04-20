@@ -15,6 +15,25 @@
     animation: animate 3s linear infinite;
 }
 
+.back-button {
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background-color: #7b7b7b;
+    cursor: pointer;
+    border-radius: 4px;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #9d9d9d;
+}
+
+.back-button:active {
+    background-color: #555555;
+}
+
 @keyframes animate {
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg);}
@@ -30,4 +49,99 @@ form {
 h1 {
     font-weight: 500;
     letter-spacing: 0.1em;
+}
+
+@media only screen and (max-width: 320px) {
+    .box {
+        width: 85%;
+    }
+
+    .box h1 {
+        font-size: 24px;
+        margin-bottom: -5px;
+    }
+
+    .button-container {
+        margin-top: -5px;
+    }
+}
+
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+    .box {
+        width: 80%;
+    }
+
+    .box h1 {
+        font-size: 26px;
+        margin-bottom: -5px;
+    }
+
+    .button-container {
+        margin-top: -5px;
+    }
+}
+
+@media only screen and (min-width: 376px) and (max-width: 600px) {
+    .box {
+        width: 80%;
+    }
+
+    .box h1 {
+        font-size: 29px;
+        margin-bottom: -5px;
+    }
+
+    .button-container {
+        margin-top: -5px;
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1100px) {
+    .box {
+        width: 65%;
+    }
+
+    .box h1 {
+        font-size: 33px;
+        margin-bottom: -5px;
+    }
+
+    .button-container {
+        margin-top: -5px;
+    }
+}
+
+@media only screen and (min-width: 1600px) {
+    .box {
+        width: 65%;
+    }
+
+    .box h1 {
+        font-size: 60px;
+    }
+
+    .box a {
+        font-size: 35px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .box button {
+        font-size: 40px;
+        padding: 35px;
+    }
+
+    .box mat-form-field {
+        font-size: 30px;
+    }
+
+    form > div {
+        width: 70%;
+    }
+
+    form > div > mat-form-field {
+        width: 45%;
+    }
 }
