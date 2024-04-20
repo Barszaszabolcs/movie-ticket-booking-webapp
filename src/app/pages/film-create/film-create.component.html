@@ -19,9 +19,9 @@
                     <mat-spinner color="accent" *ngIf="inProgress" style="width: 30px; opacity: 0.5;"></mat-spinner>
                     <textarea matInput cols="30" rows="10" formControlName="summary" [value]="this.summary"></textarea>
                 </mat-form-field>
-                <button mat-raised-button class="mb-5" color="primary" *ngIf="canGenerate && !isGenerated" (click)="generateSummary()">Összegzés generálása</button>
+                <a class="generate-button" *ngIf="canGenerate && !isGenerated" (click)="generateSummary()">Összegzés generálása</a>
             </div>
-            <mat-form-field class="w-full">
+            <mat-form-field class="w-full mt-5">
                 <mat-label for="age_limit">Korhatár: </mat-label>
                 <input matInput type="number" min="0" max="18" formControlName="age_limit" value="18">
             </mat-form-field>

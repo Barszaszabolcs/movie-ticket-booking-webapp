@@ -115,6 +115,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   makeAdmin(user: User) {
+    this.loading = true;
     var popup = this.dialog.open(AdminCreatePopupComponent, {
       width: '50%',
       height: '30%',
@@ -125,9 +126,8 @@ export class ListUsersComponent implements OnInit {
     });
 
     popup.afterClosed().subscribe(data => {
-      this.loading = true;
       this.chosenCinema = data;
-
+      
       if (this.chosenCinema) {
         const addAdminRole = this.functions.httpsCallable('addAdminRole');
         const data = addAdminRole({ email: user.email });
