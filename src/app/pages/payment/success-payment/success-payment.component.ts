@@ -99,7 +99,7 @@ export class SuccessPaymentComponent implements OnInit{
       const qrCodeDataUrl = await QRCode.toDataURL(text);
       return qrCodeDataUrl;
     } catch (error) {
-      console.error('Hiba a QR kód generálása közben:', error);
+      this.toastr.error('Hiba QR kód feltöltése közben!', 'Foglalás véglegesítése');
       return '';
     }
   }
@@ -114,7 +114,7 @@ export class SuccessPaymentComponent implements OnInit{
       snapshot => {
       },
       error => {
-        console.error('Hiba QR kód feltöltése közben:', error);
+        this.toastr.error('Hiba QR kód feltöltése közben!', 'Foglalás véglegesítése');
       }
     );
   }

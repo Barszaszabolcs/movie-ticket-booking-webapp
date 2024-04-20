@@ -2,6 +2,8 @@ import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { take } from 'rxjs';
 
+import { ToastrService } from 'ngx-toastr';
+
 import { Prize } from '../../../shared/models/Prize';
 import { Ticket } from '../../../shared/models/Ticket';
 import { PrizeService } from '../../../shared/services/prize.service';
@@ -35,7 +37,8 @@ export class PrizeComponent implements OnInit{
 
   constructor(
     private ticketService: TicketService, private prizeService: PrizeService,
-    private ref: MatDialogRef<PrizeComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {}
+    private ref: MatDialogRef<PrizeComponent>, @Inject(MAT_DIALOG_DATA) private data: any,
+    private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.prizes = [];
@@ -58,7 +61,7 @@ export class PrizeComponent implements OnInit{
             if (this.ticket) {
               this.ticket.prizeId = this.randomPrize.id;
               this.ticketService.update(this.ticket).catch(error => {
-                console.log(error);
+                this.toastr.error('Hiba történt a nyeremény beváltása közben!', 'Nyeremény beváltás');
               });
             }
           }
@@ -120,7 +123,7 @@ export class PrizeComponent implements OnInit{
   
       // Ellenőrizzük, hogy a háttérszín 80% eltünt-e már
       if (transparentPixelCount / (this.canvas.nativeElement.width * this.canvas.nativeElement.height) >= 0.8) {
-          console.log('A háttérszín 80%-a már eltűnt!');
+          
           //ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
           this.hideButton = false;
           context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);

@@ -72,7 +72,6 @@ export class AppComponent implements OnInit{
         });
       }
     }, error => {
-      console.error(error);
       localStorage.setItem('user', JSON.stringify(null));
     });
   }
@@ -102,7 +101,6 @@ export class AppComponent implements OnInit{
       this.loading = false;
       this.navigate();
     }).catch(error => {
-      console.error(error);
       this.loading = false;
     });
   }

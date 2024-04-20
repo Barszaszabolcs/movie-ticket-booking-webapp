@@ -231,11 +231,9 @@ export class FilmComponent implements OnInit{
         this.filmService.update(this.chosenFilm as Film).then(_ => {
           this.toastr.success('Sikeres filmértékelés!', 'Kommentálás');
         }).catch(error => {
-          console.error("SIKERTELEN FILMÉRTÉKELÉS: " + error);
           this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
         });
       }).catch(error => {
-        console.error('SIKERTELEN KOMMENTÁLÁS: ' + error);
         this.toastr.error('Sikertelen filmértékelés!', 'Kommentálás');
       });
     } else {

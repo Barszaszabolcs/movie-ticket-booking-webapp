@@ -67,12 +67,10 @@ export class RegistrationComponent {
             this.loading = false;
             this.router.navigateByUrl('/main');
           }).catch(error => {
-            console.error(error);
             this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');
             this.loading = false;
           })
         }).catch(error => {
-          console.error(error);
           this.toastr.error('Sikertelen regisztráció!', 'Regisztráció');
           this.loading = false;
         });

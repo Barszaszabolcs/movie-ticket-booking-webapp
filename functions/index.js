@@ -3,13 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const body_parser = require('body-parser');
 
+const environment = require('./environments/environment.json');
+
 const app = express();
 app.use(express.static('public'));
 app.use(body_parser.urlencoded({extended: false}));
 app.use(body_parser.json());
 app.use(cors({origin: true, credentials: true}));
 
-const stripe = require('stripe')('sk_test_51OpEKjFsVOqGvUD1uSipKGIKgUmXRSGzlC4ontHiogfiQwjCH8LFh5ZmUA9lY8a3EnS2rCi0ymuQGUEKDezmtwcD00pgNlVJTp');
+const stripe = require('stripe')(environment.STRIPE_SECRET_KEY);
 
 app.post('/checkout', async (req, res, next) => {
     try {
@@ -36,7 +38,7 @@ app.post('/checkout', async (req, res, next) => {
     }
 });
 
-exports.api = functions.https.onRequest(app);
+exports.callStripe = functions.https.onRequest(app);
 
 
 function convertSeats(seat) {
@@ -112,7 +114,6 @@ exports.addSuperadminRole = functions.https.onCall((data, context) => {
 });
 
 const nodemailer = require('nodemailer');
-const environment = require('./environments/environment.json');
 
 exports.sendEmailNotification = functions.https.onCall((data, context) => {
     const user = data.user;

@@ -123,7 +123,6 @@ export class AuditoriumCreateComponent implements OnInit{
           }
         } 
       }
-      console.log(auditorium);
       this.auditoriumService.create(auditorium).then(_ => {
         this.toastr.success('Terem sikeresen létrehozva!', 'Terem létrehozás');
         this.loading = false;

@@ -132,7 +132,6 @@ export class FilmCreateComponent implements OnInit{
       try {
         await fileUploadTask;
       } catch(error) {
-        console.error(error);
         this.toastr.error('Sikertelen képfeltöltés!', 'Film létrehozás');
         this.loading = false;
       }
@@ -143,7 +142,6 @@ export class FilmCreateComponent implements OnInit{
         this.filmForm.reset();
         this.loading = false;
       }).catch(error => {
-        console.error(error);
         this.toastr.error('Sikertelen film létrehozás!', 'Film létrehozás');
         filmObject.genres.length = 0;
         this.loading = false;
@@ -193,7 +191,6 @@ export class FilmCreateComponent implements OnInit{
       });
       
     } catch (error) {
-      console.error(error);
       this.isGenerated = false;
       this.inProgress = false;
     }

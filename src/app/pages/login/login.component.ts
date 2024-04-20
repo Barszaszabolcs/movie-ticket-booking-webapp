@@ -39,15 +39,13 @@ export class LoginComponent {
           localStorage.setItem('user', JSON.stringify(this.loggedInUser));
           this.loading = false;
           this.navigate();
-        }, error => {
-          console.error(error);
+        }, error => {          
           localStorage.setItem('user', JSON.stringify(null));
           this.loading = false;
         });
       }).catch(error => {
         this.toastr.error('Rossz jelszó vagy email!', 'Bejelentkezés');
         this.loading = false;
-        console.error(error);
       });
     } else {
       this.toastr.error('Sikertelen bejelentkezés!', 'Bejelentkezés');
