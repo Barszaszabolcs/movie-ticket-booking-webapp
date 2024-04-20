@@ -14,7 +14,13 @@
                 <p class="text-xl">{{screening?.time | date:'yyyy.MM.dd. HH:mm'}}</p>
                 <p class="text-xl">{{auditorium?.hall_number}}. terem</p>
             </div>
-            <div class="container w-full h-full" fxFlex="1 1 67%">
+            <div class="w-full h-full" fxFlex="1 1 67%" *ngIf="isFull">
+                <h1 class="text-center text-[#FF0000] font-medium text-4xl">Sajnos erre a vetítésre elfogytak a jegyek!</h1>
+                <div class="w-full mt-5" fxLayout="row" fxLayoutAlign="center center">
+                    <button mat-raised-button color="primary" routerLink="/main">Vissza a főoldalra!</button>
+                </div>
+            </div>
+            <div class="container w-full h-full" fxFlex="1 1 67%" *ngIf="!isFull">
                 <form class="w-full h-full my-14 pl-3" [formGroup]="bookingForm" (ngSubmit)="goToSeats()" fxLayout="column" fxLayoutAlign="space-around center" *ngIf="screening?.type === '2D'">
                     <div class="booking-form_first-conatiner w-full mb-3 pb-8 text-xl" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="40px" (change)="paymentSelected()">
                         <span>

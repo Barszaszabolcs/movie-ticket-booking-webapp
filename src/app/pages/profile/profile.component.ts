@@ -3,6 +3,7 @@ import { PrizeComponent } from './prize/prize.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { deleteObject, getStorage, ref } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
 
@@ -153,22 +154,30 @@ export class ProfileComponent implements OnInit{
         if (screening) {
           const deletedTicket = ticket;
           this.ticketService.delete(ticket.id).then(_ => {
-            screening.occupied_seats = screening.occupied_seats.filter(seat => seat !== ticket.chosen_seat);
-
-            this.screeningService.update(screening).then(_ => {
-              const sendEmailNotification = this.functions.httpsCallable('sendEmailNotificationAfterCancellation');
-              const data = sendEmailNotification({
-                user: this.user,
-                ticket: deletedTicket
-              });
-              data.toPromise().then(_ => {
-                this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
-                this.loading = false;
+            const storage = getStorage();
+            const file = ref(storage, '/images/qrcodes/' + deletedTicket.id + '.jpeg');
+      
+            deleteObject(file).then(() => {
+              screening.occupied_seats = screening.occupied_seats.filter(seat => seat !== deletedTicket.chosen_seat);
+  
+              this.screeningService.update(screening).then(_ => {
+                const sendEmailNotification = this.functions.httpsCallable('sendEmailNotificationAfterCancellation');
+                const data = sendEmailNotification({
+                  user: this.user,
+                  ticket: deletedTicket
+                });
+                data.toPromise().then(_ => {
+                  this.toastr.success('Sikeres lemondás!', 'Foglalás lemondás');
+                  this.loading = false;
+                }).catch(error => {
+                  this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
+                  this.loading = false;
+                });
               }).catch(error => {
                 this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
                 this.loading = false;
               });
-            }).catch(error => {
+            }).catch((error) => {
               this.toastr.error('Sikertelen lemondás!', 'Foglalás lemondás');
               this.loading = false;
             });

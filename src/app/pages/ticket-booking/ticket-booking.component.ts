@@ -83,6 +83,8 @@ export class TicketBookingComponent implements OnInit{
 
   paymentAmount = 0;
 
+  isFull = false;
+
   constructor(
     private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private screeningService: ScreeningService,
@@ -98,6 +100,7 @@ export class TicketBookingComponent implements OnInit{
     this.finishedTickets = [];
     this.printSeats = [];
     this.paymentAmount = 0;
+    this.isFull = false;
     this.activatedRoute.params.subscribe((param: any) => {
       this.screeningId = param.screeningId as string;
 
@@ -118,7 +121,11 @@ export class TicketBookingComponent implements OnInit{
             this.auditoriumService.getById(this.screening.auditoriumId).pipe(take(1)).subscribe(data => {
               this.auditorium = data[0];
 
-              if (this.auditorium) {
+              if (this.auditorium && this.screening) {
+                if (this.auditorium.seats.length === this.screening.occupied_seats.length) {
+                  this.isFull = true;
+                }
+
                 this.cinemaService.getById(this.auditorium.cinemaId).pipe(take(1)).subscribe(data => {
                   this.cinema = data[0];
                 });
