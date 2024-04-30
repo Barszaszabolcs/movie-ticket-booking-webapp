@@ -313,7 +313,7 @@ export class ProfileComponent implements OnInit{
   passwordUpdate() {
     this.loading = true;
     if(this.updatePassword){
-      if(this.passwordForm.valid && this.passwordForm.get('password')?.value === this.passwordForm.get('password')?.value){
+      if(this.passwordForm.valid && this.passwordForm.get('password')?.value === this.passwordForm.get('passwordAgain')?.value){
         this.angularFireAuth.currentUser.then(user => {
           return user?.updatePassword(this.passwordForm.get('password')?.value as string);
         }).then(() => {
@@ -327,7 +327,7 @@ export class ProfileComponent implements OnInit{
           this.loading = false;
         });
       } else {
-        if (this.passwordForm.get('password')?.value !== this.passwordForm.get('password')?.value) {
+        if (this.passwordForm.get('password')?.value !== this.passwordForm.get('passwordAgain')?.value) {
           this.toastr.error('A két jelszó nem egyezik', 'Jelszó változtatás');
           this.loading = false;
         } else {
