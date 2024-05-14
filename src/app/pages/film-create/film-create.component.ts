@@ -174,9 +174,13 @@ export class FilmCreateComponent implements OnInit{
       let completion = await openai.chat.completions.create({
         messages: [{ role: 'user', content: 'Generálj nekem egy maximum 600 karakteres összegzést a: ' + (this.filmForm.get('title')?.value as string) + ' című filmhez'}],
         model: 'gpt-3.5-turbo',
+        // A kimeneti szöveg változatosságának mértékét szabályozza, minél magasabb, annál változatosabb
         temperature: 0.95,
+        // A generált szöveg maximális hosszát korlátozza. 300 token ~= 225 szó
         max_tokens: 300,
+        // Több választási lehetőség
         top_p: 1.0,
+        // Ismétlődő és ritka szavak korlátozása, minél alacsonyabb, annál engedékenyebb
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
       }).then(response => {

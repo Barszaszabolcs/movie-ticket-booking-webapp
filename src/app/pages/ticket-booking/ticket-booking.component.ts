@@ -396,9 +396,11 @@ export class TicketBookingComponent implements OnInit{
   }
 
   createBlob(dataURI: string) {
+    // DataURL: "data:image/png;base64, base64 kód"
     const byteString = atob(dataURI.split(',')[1]);
     const typeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
     const arrayBuffer = new ArrayBuffer(byteString.length);
+    // Erre azért van szükség, hogy egyszerűen tudjuk dekódolni a base64 kódolt részt
     const uintArray = new Uint8Array(arrayBuffer);
     for (let i = 0; i < byteString.length; i++) {
       uintArray[i] = byteString.charCodeAt(i);

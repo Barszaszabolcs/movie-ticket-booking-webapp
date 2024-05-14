@@ -86,7 +86,7 @@ export class PrizeComponent implements OnInit{
   init() {
     var img = new Image();
     img.onload = () => {
-        // Rajzolás a canvas-ra, amikor a kép betöltődött
+        // Rajzolás a canvas-re, amikor a kép betöltődött
         context.drawImage(img, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     };
     img.src = '../assets/img/scratch.jpg';
@@ -100,7 +100,7 @@ export class PrizeComponent implements OnInit{
   mousemoveFunction(event: any) {
     if (this.isDragging) {
       this.scratch(event.offsetX, event.offsetY);
-      if (event.buttons === 1) { // csak akkor, ha az egérgomb le van nyomva
+      if (event.buttons === 1) { // Csak akkor, ha az egérgomb le van nyomva
         this.checkBackgroundColor();
       }
     }
@@ -111,6 +111,7 @@ export class PrizeComponent implements OnInit{
     if (!this.backgroundColorChecked) {
       
       const imageData = context.getImageData(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      // Minden egyes pixelhez tartalmazza a vörös, zöld, kék és alfa értékeket (RGBA)
       const data = imageData.data;
       let transparentPixelCount = 0;
   
@@ -124,7 +125,7 @@ export class PrizeComponent implements OnInit{
       // Ellenőrizzük, hogy a háttérszín 80% eltünt-e már
       if (transparentPixelCount / (this.canvas.nativeElement.width * this.canvas.nativeElement.height) >= 0.8) {
           
-          //ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
+          // Ha már "lekapartuk a 80%-ot, akkor felfedünk mindent"
           this.hideButton = false;
           context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
           this.celebrate();
@@ -170,6 +171,7 @@ export class PrizeComponent implements OnInit{
   }
 
   scratch(x: any, y: any) {
+    // Eltünteti/átlátszóvá teszi a canvas pixeleit
     context.globalCompositeOperation = "destination-out";
     context.beginPath();
     context.arc(x, y, 42, 0, 4 * Math.PI);

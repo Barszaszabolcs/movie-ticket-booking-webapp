@@ -5,6 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class HungarianDateFormatPipe implements PipeTransform {
 
+  // Teljes hosszában íratja ki magyarul a napokat ("Hétfő")
   transform(value: any, ...args: unknown[]): string {
     const date = new Date(value);
     const locale = 'hu-HU'; // Magyar nyelv kiválasztása

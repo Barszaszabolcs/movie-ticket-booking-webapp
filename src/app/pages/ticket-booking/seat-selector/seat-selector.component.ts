@@ -67,14 +67,14 @@ export class SeatSelectorComponent implements OnInit{
   
       // String tömb feldolgozása
       for (const str of stringArray) {
-        // Az előtag kinyerése (azaz a "/" előtti rész)
+        // Az előtag kinyerése (/ előtti rész)
         const prefix: string = str.split("/")[0];
   
-        // Ha még nem tároljuk az előtagot, létrehozzuk egy új sort a tömbben
+        // Ha még nem tároljuk az előtagot, akkor létrehozunk egy új sort a tömbben
         if (!prefixArray[Number(prefix)]) {
           prefixArray[Number(prefix)] = [str];
         } else {
-          // Ha már tároljuk az előtagot, hozzáadjuk az új stringet a meglévő sorhoz
+          // Ha már letároltuk az előtagot, hozzáadjuk az új stringet a meglévő sorhoz
           prefixArray[Number(prefix)].push(str);
         }
       }
@@ -107,13 +107,13 @@ export class SeatSelectorComponent implements OnInit{
     const countSpan = document.querySelector('.count') as HTMLElement;
     const chosen = document.querySelector('.chosen-seats') as HTMLElement;
 
-    // Ha a checkbox be van jelölve, növeljük a számot, különben csökkentsük
+    // Ha a checkbox be van jelölve, növeljük a számot, különben csökkentjük
     if (event.target.checked) {
       // Számként olvassuk be az aktuális értéket, adjunk hozzá 1-et és frissítsük a span tartalmát
       let currentCount = parseInt(countSpan.innerText);
       currentCount++;
       
-      // Megakadályozzuk, hogy több széket választhassanak ki, mint amennyi jegyet megadtak
+      // Megakadályozzuk, hogy több széket választhassanak ki, mint amennyi jegyet választottak
       if (currentCount > this.ticket_sum) {
         event.target.checked = false;
         currentCount--;
@@ -128,7 +128,7 @@ export class SeatSelectorComponent implements OnInit{
       currentCount--;
       countSpan.innerText = currentCount.toString();
 
-
+      // Kivesszük a tömbből azt a széket, amit visszavontak
       this.chosenSeats = this.chosenSeats.filter(seat => !(seat === event.target.value));
     }
 
